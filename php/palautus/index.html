@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lomake</title>
+</head>
+<body>
+    
+    <form method="post" action="php.php">
+        Etunimi: <br><input type="text" name="etunimi"> <br>
+
+        Sukunimi: <br><input type="text" name="sukunimi"> <br>
+        
+        Opiskelijanumero: <br>gr<input type="text" name="stunum"> <br>
+        
+        Ryhmätunnus: <br><input type="text" name="Team"> <br>
+        
+        Kurssin Nimi:<br>
+        <select name="CourseName">
+            <option value="tvt1">TVT1</option>
+            <option value="tvt2">TVT2</option>
+            <option value="tvt3">TVT3</option>
+            <option value="tvt4">TVT4</option>
+            <option value="tvt5">TVT5</option>
+        </select><br>
+        Valitse ajankohta: <br>
+        <input type="date" name="Date" value=""><br>
+
+        Opettajasi: <br>
+        <select name="Teacher">
+            <option value="t1">Jaakko</option>
+            <option value="t2">Teppo</option>
+            <option value="t3">Juhani</option>
+            <option value="t4">Mikko</option>
+            <option value="t5">Pete</option>
+        </select><br>
+        
+        <input type="Submit" name="lähetys" value="submit">
+    </form>
+
+</body>
+</html>

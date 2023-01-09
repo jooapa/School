@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jooaweb</title>
+    <style>
+        body{
+            color: rgb(255, 235, 254);
+            background-color: rgb(55, 55, 55);
+        }
+        h1{
+            text-align: center;
+            font-size: 50px;
+        }
+        a{
+            color: rgb(172, 0, 230);
+        }
+        #txt{
+            color: rgb(244, 29, 29);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    if (window.location.href.indexOf("?change=1") > -1) {
+      document.getElementById("txt").innerHTML = "something went Wrong :/";
+    }
+    if (window.location.href.indexOf("?change=2") > -1) {
+      document.getElementById("ti").innerHTML = "admin";
+      document.getElementById("ti").style.color = "#ff1515";
+    }
+  });
+</script>
+
+    <h1>Joo<span id="ti" style="color: aliceblue;">a</span>  web</h1>
+
+    links:<br>
+    <a href="/Files/phpMail/index.html">phpMail Sender</a>
+    <br>
+    <a href="/Files/jqueryteht2/index.html">Jquery Yrityssivu</a>
+    
+    <br><br>
+    &nbsp; <t id="txt"></t>
+    <form action="myPhP.php" method="get"> 
+
+        Username<input type="text" name="username"><br> 
+        Password <input type="text" name="password"><br> 
+        
+        <input type="submit" value="Log In"> 
+        
+        </form>
+
+
+</body>
+</html>
