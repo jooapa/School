@@ -8,7 +8,7 @@
 <?php
 
 if (isset($_POST['lähetys'])) {
-    $tetu = $_POST["arvo"];
+    $arvo = $_POST["arvo"];
 }
 $servername = "localhost";
 $username = "root";
@@ -17,15 +17,16 @@ $data = "data";
 
 $conn = new mysqli($servername, $username, $password, $data);
 
-$sql = "SELECT IF(tilausrivitaulu.tilausmaara * tuotetaulu.hinta > $tetu ,asiakastaulu.etunimi, Null) AS etunimi,
-IF(tilausrivitaulu.tilausmaara * tuotetaulu.hinta > $tetu ,asiakastaulu.email, Null) AS email
+$sql = "SELECT IF(tilausrivitaulu.tilausmaara * tuotetaulu.hinta > $arvo ,asiakastaulu.etunimi, Null)
+ AS etunimi,
+IF(tilausrivitaulu.tilausmaara * tuotetaulu.hinta > $arvo ,asiakastaulu.email, Null) AS email
 FROM `asiakastaulu`
 JOIN tilaustaulu
-ON asiakastaulu.id = tilaustaulu.asiakas_id
+    ON asiakastaulu.id = tilaustaulu.asiakas_id
 JOIN tilausrivitaulu
-ON tilaustaulu.id = tilausrivitaulu.tilaus_id
+    ON tilaustaulu.id = tilausrivitaulu.tilaus_id
 JOIN tuotetaulu
-ON tuotetaulu.id = tilausrivitaulu.tuote_id
+    ON tuotetaulu.id = tilausrivitaulu.tuote_id
 GROUP BY etunimi;";
 $result = $conn->query($sql);
 
