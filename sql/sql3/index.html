@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #txtbox{
+            width: 25px;
+        }
+        .codeDiv{
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            background-color: rgb(77, 77, 77);
+            color: aliceblue;
+            width: fit-content;
+        }
+        #asiakas-id{
+            width: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    1. Minkälaisella kyselyllä saat listattua kaikki tiettyyn henkilöön liittyvät tilaukset?<br>
+    <div class="codeDiv">
+        <span style="color: violet;">SELECT</span> etunimi, sukunimi, tuotetaulu.tuotenimi FROM asiakastaulu<br>
+        <span style="color: violet;">JOIN</span> tilaustaulu<br>
+        <span style="color: violet">ON</span> asiakastaulu.id = tilaustaulu.asiakas_id<br>
+        <span style="color: violet;">JOIN</span> tilausrivitaulu<br>
+        <span style="color: violet;">ON</span> tilausrivitaulu.tilaus_id = tilaustaulu.id<br>
+        <span style="color: violet;">JOIN</span> tuotetaulu<br>
+        <span style="color: violet;">ON</span> tuotetaulu.id = tilausrivitaulu.tuote_id<br>
+        <span style="color: violet;">WHERE</span> asiakastaulu.id = 27;<br>
+    </div>
+    <form method="post" action="php.php">  
+        <input id="asiakas-id" type="text" name="asiakas-id">
+        <input type="submit" name="1" value="Näytä db">
+    </form>
+    2. Minkälaisella kyselyllä saat haettua kaikki myydyt tietyn nimiset tuotteet?
+    <div class="codeDiv">
+        <span style="color: violet;">SELECT</span> tilaus_id,tilausmaara, tuotetaulu.tuotenimi, tuotetaulu.hinta <br> 
+        <span style="color: violet;">FROM</span> tilausrivitaulu<br>
+        <span style="color: violet;">JOIN</span> tuotetaulu<br>
+        <span style="color: violet;">ON</span> tuotetaulu.id = tilausrivitaulu.tuote_id;<br>
+    </div>
+    <form method="post" action="php.php">  
+        <input type="submit" name="2" value="Näytä db">
+    </form>
+    <br>
+    3. Miten voit päivittää jonkun asiakkaan osoitetiedot?
+    <br>
+    <div class="codeDiv">
+    <span style="color: violet;">UPDATE </span>asiakastaulu<br> 
+    <span style="color: violet;">SET</span> osoite = 'Mööpelikatu 55'<br> 
+    <span style="color: violet;">WHERE</span> id = 25;<br> 
+    </div>
+    25 Stella &nbsp; Jolkkonen &nbsp; stella.jolkkonen@ttkky.fi &nbsp; Viikintie 1 A  &nbsp;  &nbsp; &nbsp; 2130 &nbsp; ESPOO 
+    <br>--><br>
+    25 Stella &nbsp; Jolkkonen &nbsp; stella.jolkkonen@ttkky.fi &nbsp; Mööpelikatu 55 &nbsp; 2130 &nbsp; ESPOO
+    
+
+</body>
+</html>
