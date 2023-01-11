@@ -9,7 +9,7 @@
         html, body{
             margin: 0;
             padding: 0;
-            height: 200%;
+            height: 150%;
         }
         @font-face {
             font-family: Font;
@@ -85,10 +85,32 @@
         .subArticle{
             width: fit-content;
         }
+
+    .content{
+        display: grid;
+        grid-template:auto / 1fr 1fr 1fr;
+        background-color: #023059;
+        margin: 0px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        width: 100vw;
+        height: fit-content;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .content-img{
+        border: 5px solid rgb(0, 0, 0);
+        border-radius: 20px; 
+        height: 30vmax;
+        width: 20vmax;
+        object-fit: cover;
+        object-position: center;
+    }
         .contact-grid{
             display: grid;
             grid-gap: 10px;
-            grid-template: repeat(auto-fit, 186px);
+            grid-template: auto / 1fr 1fr 1fr;
             
             text-align: center;
         }
@@ -151,10 +173,12 @@
             </form>
         </div>
     </article>
-    <content>
-
-    </content>
-    <dic class="contact">
+    <div class="content">
+        <img class="content-img" src="Rengaskuvat/markus-spiske-xVj7IzrVXVk-unsplash.jpg">
+        <img class="content-img" src="Rengaskuvat/tekton-e6Wr8LaH-Q8-unsplash.jpg">
+        <img class="content-img" src="Rengaskuvat/pexels-andrea-piacquadio-3807649.jpg">
+    </div>
+    <div class="contact">
         <h1 style="text-align: center;">Yrityksen perustiedot:</h1>
         <h3 style="text-align: center;">Mustapään Auto Oy<br>
             Mustat Renkaat</h3>
@@ -176,10 +200,10 @@
                     <h2>040-7128158</h2>
                 </div>
                 <div class="contact-grid-3">
-                    <h2>myyntimies@mustatrenkaat.net</h2>
+                    <h2>myyntimies<br>@mustatrenkaat.net</h2>
                 </div>
             </div>
-        </div>
+    </div>
 
 </body>
 </html>
