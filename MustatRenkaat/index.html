@@ -23,6 +23,9 @@
                 transform: translate(0px,0px)
             }
         }
+        html{
+            scroll-behavior: smooth;
+        }
         body{ /*bodyn css*/
             color: aliceblue;
             background: rgb(1,35,38);
@@ -60,7 +63,8 @@
             color: aliceblue;
             background-color: #0123266d;
             padding: 8px;
-            width: 100%;
+            font-size: 24px;
+            width: 100vw;
             margin: 0px;
             border: 2px solid #00000055;
         }
@@ -73,6 +77,29 @@
             transition: 1s cubic-bezier(.21,1.29,.4,.99);
             background-color: #012326;
             padding-top: 20px;
+        }
+        input, select{
+            appearance: auto;
+            user-select: none;
+            white-space: pre;
+            align-items: flex-start;
+            text-align: center;
+            cursor: default;
+            box-sizing: border-box;
+            background-color: buttonface;
+            color: buttontext;
+            padding: 1px 6px;
+            border-width: 2px;
+            border-style: outset;
+            border-color: buttonborder;
+            border-image: initial;
+        }
+        select{
+            color: aliceblue;
+            background-color: #01232683;
+            width: 100vw;
+            font-size: 24px;
+            height: 35px;
         }
 
         .imageDiv-overlay{/*gradiantti logosta --> kuvaan*/
@@ -94,6 +121,15 @@
             width: auto;
             border-radius: 10px;
         }
+        .meista-container{ /*meustä kohtan parent*/
+            
+            background-color: #012326;
+            filter: brightness(0.9);
+        }
+        #headertext{
+            font-size: 24px;
+            
+        }
         .meista{ /*Yritykset tiedot div: css*/
             display: flex;
             width: 100vw;
@@ -108,6 +144,8 @@
         }
 
         .karttakuva-div{/*Karttakuva div: css*/
+            background-color: #012326;
+            filter: brightness(0.8);
             display: flex;
             position: inherit;
             justify-content: center;
@@ -145,7 +183,7 @@
                 flex-wrap: wrap;
             }
         }
-        @media only screen and (min-width: 1600px) {
+        @media only screen and (min-width: 1750px) {
             .image-grid{
             grid-template: auto / 1fr 1fr 1fr 1fr;
 
@@ -166,7 +204,7 @@
         }
         footer{
             display: block;
-            background: linear-gradient(180deg, rgba(1,35,38,1) 0%, rgba(2,48,89,1) 71%);
+            background: linear-gradient(180deg, rgb(0 28 30) 0%, rgba(2,48,89,1) 71%);
             width: 100vw;
             height: 100px;
             
@@ -191,9 +229,31 @@
         <img src="RengasKuvat/arseny-togulev-xTXIAVRI3rA-unsplash.jpg" style="width: 100vw;height: auto;">
         <div class="container-pre-logo">
             <div class="container-contain">
-                <button id="button-grid-1"><h1>Hae Renkaita</h1></button>
-                
-                <button id="button-grid-2"><h1>MEISTÄ</h1></button>
+                <div class="Searchdiv">
+                    <form action="">
+                        <input id="button-grid-1" type="text" name="" id="">
+                        <select id="cars" name="TireCompany" form="carform">
+                            <option value="volvo">Kaikki Yritykset</option>
+                            <option value="saab">Nokian</option>
+                            <option value="opel">Kumho</option>
+                            <option value="audi">Hankook</option>
+                          </select>
+                        <select id="cars" name="TireType" form="carform">
+                            <option value="volvo">Kaikki Tyypit</option>
+                            <option value="saab">Kesä</option>
+                            <option value="opel">Talvi</option>
+                            <option value="audi">Kitka</option>
+                          </select>
+                          <select id="cars" name="TireSize" form="carform">
+                            <option value="volvo">Kaikki Koot</option>
+                            <option value="saab">1</option>
+                            <option value="opel">2</option>
+                            <option value="audi">3</option>
+                          </select>
+                        <input id="button-grid-1" type="submit" value="Hae Renkaita">
+                    </form>
+                </div>
+                <button onclick="location.href='#meista-id'" id="button-grid-2">MEISTÄ</button>
             </div>
         </div>
         <div class="text1">
@@ -217,22 +277,25 @@
             <img class="gridimg" src="RengasKuvat/jairph-7pT4LWfORS0-unsplash.jpg">
         </div>
     </div>
-
-    <div class="meista">
-        
-        <div class="meista-1">
-            <h1 style="text-align: center;">LÖYDÄT MEIDÄT</h1>
-            <h2>Kosteenkatu 1, 86300 Oulainen</h2>
+    
+    <div class="meista-container" id="meista-id">
+        <div class="text1" id="headertext">
+            <h1>MEISTÄ</h1>
         </div>
-        <div class="meista-2">
-            <h1>PUHELIN</h1>
-            <h2>040-7128158</h2>
+        <div class="meista">
+            <div class="meista-1">
+                <h1 style="text-align: center;">LÖYDÄT MEIDÄT</h1>
+                <h2>Kosteenkatu 1, 86300 Oulainen</h2>
+            </div>
+            <div class="meista-2">
+                <h1>PUHELIN</h1>
+                <h2>040-7128158</h2>
+            </div>
+            <div class="meista-3">
+                <h1>EMAIL</h1>
+                <h2>myyntimies@mustatrenkaat.net</h2>
+            </div>
         </div>
-        <div class="meista-3">
-            <h1>EMAIL</h1>
-            <h2>myyntimies@mustatrenkaat.net</h2>
-        </div>
-        
         
     </div>
     <div class="karttakuva-div">
