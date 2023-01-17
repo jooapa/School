@@ -43,7 +43,7 @@
         .container-pre-logo{  /*Tämä sisältää napit*/
             background-color: #012840;   
             width: 100vw;
-            height: 280px; 
+            height: 320px; 
             min-width: 100vw; 
             min-width: 100vw;  
         }
@@ -58,7 +58,7 @@
         .text1{/*MAINOS TEXTI!!*/
             text-align: center;
         }
-        #button-grid-1, #button-grid-2{/*container-contain:Nappien css*/
+        #button-grid-1, #button-grid-2{/*container-contain:Nappien css* button-grid-1 == search options button-grid-2 == MEISTÄ button*/
             transition: 1s cubic-bezier(.21,1.29,.4,.99);
             color: aliceblue;
             background-color: #0123266d;
@@ -67,6 +67,7 @@
             width: 100vw;
             margin: 0px;
             border: 2px solid #00000055;
+            position: static;
         }
         #button-grid-1:hover, #button-grid-2:hover{/*container-contain:Nappien hover css*/
             transition: 1s cubic-bezier(.21,1.29,.4,.99);
@@ -77,6 +78,11 @@
             transition: 1s cubic-bezier(.21,1.29,.4,.99);
             background-color: #012326;
             padding-top: 20px;
+        }
+
+        #button-grid-2{
+            position: absolute;
+            top: 211px;
         }
         input, select{
             appearance: auto;
