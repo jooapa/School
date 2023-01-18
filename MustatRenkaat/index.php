@@ -61,6 +61,10 @@
         .text1{/*MAINOS TEXTI!!*/
             text-align: center;
         }
+        .text2{ /*SQL MITÄÄN EI LÖYTYNYT teksti*/ 
+            text-shadow: 0px 0px 20px #000000;
+            text-align: center;
+        }
         #button-grid-1, #button-grid-2{/*container-contain:Nappien css* button-grid-1 == search options button-grid-2 == MEISTÄ button*/
             transition: 1s cubic-bezier(.21,1.29,.4,.99);
             color: aliceblue;
@@ -178,7 +182,7 @@
             width: 400px;
             height: auto;
         }
-        @media only screen and (max-width: 1000px) {
+        @media only screen and (max-width: 1000px) { /*media säännöt*/
             img{
                 height: 500px;
             }
@@ -228,6 +232,37 @@
             font-size: 14px;
             padding: 0;
         }
+        .SQL-grid{ /*SQL grid mihin tulee tuotteen */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            justify-items: center;
+        }
+        @media only screen and (min-width: 800px) {
+            .SQL-grid{
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media only screen and (min-width: 1000px) {
+            .SQL-grid{
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        @media only screen and (min-width: 1400px) {
+            .SQL-grid{
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+        }
+        @media only screen and (min-width: 1600px) {
+            .SQL-grid{
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            }
+        }
+        @media only screen and (min-width: 2000px) {
+            .SQL-grid{
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            }
+        }
         .product{
             position: relative;
             height: 300px;
@@ -257,7 +292,7 @@
     </style>
 </head>
 <body>
-    <img id="logo-img" src="RengasKuvat/logo_dark.svg">
+    <img id="logo-img" src="RengasKuvat/logo_dark.svg"> 
     <div class="imageDiv-overlay">
     </div>
     <div class="imageDiv">
@@ -265,87 +300,96 @@
         <div class="container-pre-logo">
             <div class="container-contain">
                 <div class="Searchdiv">
-                    <form method="POST">
+                    <form method="POST"> <!--Renkaiden haku formi -->
                         <input id="button-grid-1" type="text" name="tiretext">
                         <select name="TireCompany">
-                            <option value="allcompany">Kaikki Yritykset</option>
-                            <option value="nokian">Nokian</option>
-                            <option value="kumho">Kumho</option>
-                            <option value="hankook">Hankook</option>
+                            <option value="">Kaikki Yritykset</option>
+                            <option value="Nokian">Nokian</option>
+                            <option value="Kumho">Kumho</option>
+                            <option value="Hankook">Hankook</option>
                         </select>
                         <select name="TireType">
-                            <option value="alltype">Kaikki Tyypit</option>
-                            <option value="sumtype">Kesä</option>
-                            <option value="wintype">Talvi</option>
-                            <option value="kittype">Kitka</option>
+                            <option value="">Kaikki Tyypit</option>
+                            <option value="Kesä">Kesä</option>
+                            <option value="Talvi">Talvi</option>
+                            <option value="Kitka">Kitka</option>
                           </select>
                         <select name="TireSize">
-                            <option value="allsize">Kaikki Koot</option>
-                            <option value="1">165/55-14</option>
-                            <option value="2">165/65-14</option>
-                            <option value="3">165/55-15</option>
-                            <option value="4">175/65-15</option>
-                            <option value="5">185/65-15</option>
-                            <option value="6">205/65-16</option>
-                            <option value="7">175/65-14</option>
-                            <option value="8">185/65-14</option>
-                            <option value="9">235/65-17</option>
-                            <option value="10">235/60-18</option>
-                            <option value="11">195/65-15</option>
-                            <option value="12">225/55-18</option>
-                            <option value="13">235/60-17</option>
-                            <option value="14">255/50-19</option>
-                            <option value="15">205/55-16</option>
-                            <option value="16">185/55-15</option>
-                            <option value="17">195/55-15</option>
+                            <option value="">Kaikki Koot</option>
+                            <option value="165/55-14">165/55-14</option>
+                            <option value="165/65-14">165/65-14</option>
+                            <option value="165/55-15">165/55-15</option>
+                            <option value="175/65-15">175/65-15</option>
+                            <option value="185/65-15">185/65-15</option>
+                            <option value="205/65-16">205/65-16</option>
+                            <option value="175/65-14">175/65-14</option>
+                            <option value="185/65-14">185/65-14</option>
+                            <option value="235/65-17">235/65-17</option>
+                            <option value="235/60-18">235/60-18</option>
+                            <option value="195/65-15">195/65-15</option>
+                            <option value="225/55-18">225/55-18</option>
+                            <option value="235/60-17">235/60-17</option>
+                            <option value="255/50-19">255/50-19</option>
+                            <option value="205/55-16">205/55-16</option>
+                            <option value="185/55-15">185/55-15</option>
+                            <option value="195/55-15">195/55-15</option>
                           </select>
                         <input id="button-grid-1" type="submit" value="Hae Renkaita" name="haetires">
                     </form>
                 </div>
-                <button onclick="location.href='#meista-id'" id="button-grid-2">MEISTÄ</button>
+                <button onclick="location.href='#meista-id'" id="button-grid-2">MEISTÄ</button> <!--Klikkauksen jälkeen tämä vie #meista-id diviin-->
             </div>
         </div>
         
             
-        <div class="image-grid">
+        <div class="SQL-grid">
             <?php
             if (isset($_POST['haetires'])) {
-                $TireCompany = $_POST["TireCompany"];
-                $TireType = $_POST["TireType"];
-                $TireSize = $_POST["TireSize"];
-                $TireCompany = "Merkki";
-                $TireType    = "Tyyppi";
-                $TireSize    = "Koko";
+                    $TireCompany = $_POST["TireCompany"]; //ottaa formista tiedot muuttujaan
+                    $TireType = $_POST["TireType"];
+                    $TireSize = $_POST["TireSize"];
 
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $data = "renkaat";
-                $conn = new mysqli($servername, $username, $password, $data);
-                $sql = "SELECT * FROM renkaat";
-                $result = $conn->query($sql);
-                //echo"<table>";
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                            //echo "<tr><th>".$row["Merkki"]."</th>"."<th>".$row["Malli"]."</th>"."<th>".$row["Tyyppi"]."</th>"."<th>".$row["Koko"]."</th>"."<th>".$row["Merkki"]."</th>"."<th>".$row["Hinta"]."</th>"."<th>".$row["Saldo"]."</th></tr>"."<br>";
-            
-                        echo "<div class='product'>
-                        <h1>" . $row["Merkki"] . "</h1>
-                        <h2>" . $row["Malli"] . "</h2>
-                        <h2>" . $row["Tyyppi"] . "</h2>
-                        <h2>" . $row["Koko"] . "</h2>
-                        <h2>" . $row["Saldo"] . "</h2>
+                    if($TireCompany == ""){$TireCompany = "";} //Tämä muuttaa muuttajat eri SQL Lauseiseen, filtteröintia varten
+                        else{$TireCompany = "WHERE Merkki ='$TireCompany'";}
 
-                        <div class='hintadiv' <h1 id='hinta'>" . $row["Hinta"] . "€</h1></div></div>";
+                    if($TireType == ""){$TireType = "";}
+                        else if($TireCompany == ""){$TireType = "WHERE Tyyppi ='$TireType'";}
+                        else{$TireType = "AND Tyyppi ='$TireType'";}
+                        
+                        
+                    if($TireSize == ""){$TireSize = "";}
+                        else if($TireCompany == "" and $TireType == ""){$TireSize = " WHERE Koko = '$TireSize'";}
+                        else if($TireCompany != "" and $TireType == ""){$TireSize = " AND Koko = '$TireSize'";}
+                        else if($TireCompany != "" and $TireType != ""){$TireSize = " AND Koko = '$TireSize'";}
+
+                    $servername = "localhost"; //etsii tietokannan
+                    $username = "root";
+                    $password = "";
+                    $data = "renkaat";
+                    $conn = new mysqli($servername, $username, $password, $data);
+                    $sql = "SELECT * FROM renkaat $TireCompany $TireType $TireSize";//SQL lause
+                    $result = $conn->query($sql);
+                    //echo"<table>";
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) { //Tämä laittaa rivit HTML:llään                            
+                            echo "<div class='product'>
+                            <h1>" . $row["Merkki"] . "</h1>
+                            <h2>" . $row["Malli"] . "</h2>
+                            <h2>" . $row["Tyyppi"] . "</h2>
+                            <h2>" . $row["Koko"] . "</h2>
+                            <h2>" . $row["Saldo"] . "</h2>
+                            
+                            <div class='hintadiv' <h1 id='hinta'>" . $row["Hinta"] . "€</h1></div></div>";
+                        }
+                    } else {
+                        echo "</div><div class='text2'>
+                        <h1>MITÄÄN EI LÖYTYNYT</h1>
+                        </div>";
                     }
-                } else {
-                    echo "Nothing Found :/";
+                    //echo"</table>";
+                    $conn->close();
                 }
-                //echo"</table>";
-                $conn->close();
-
-            }
-            ?>
+                ?>
         </div>
         <div class="text1">
             <h1>KORJAAMME SINUN AUTON</h1>
