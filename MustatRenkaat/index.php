@@ -46,7 +46,7 @@
         .container-pre-logo{  /*Tämä sisältää napit*/
             background-color: #012840;   
             width: 100vw;
-            height: 320px; 
+            height: 360px; 
             min-width: 100vw; 
             min-width: 100vw;  
         }
@@ -89,7 +89,7 @@
 
         #button-grid-2{
             position: absolute;
-            top: 211px;
+            top: 242px;
         }
         input, select{
             appearance: auto;
@@ -234,6 +234,8 @@
         }
         .SQL-grid{ /*SQL grid mihin tulee tuotteen */
             display: grid;
+            background-color: #012840;
+            background: linear-gradient(0deg, rgb(0 28 30) 0%, rgba(2,48,89,1) 71%);
             grid-template-columns: 1fr;
             gap: 15px;
             justify-items: center;
@@ -289,6 +291,11 @@
             color: #ffffff;
             font-size: 32px;
         }
+        .Searchdiv h1{
+            background-color: #0123266d;
+            margin: 0;
+            width: 100vw;
+        }
     </style>
 </head>
 <body>
@@ -334,6 +341,11 @@
                             <option value="185/55-15">185/55-15</option>
                             <option value="195/55-15">195/55-15</option>
                           </select>
+                        <select name="Sort">
+                            <option value="Hinta">Lajittele Hinnan mukaan:</option>
+                            <option value="Merkki">Lajittele Merkin mukaan:</option>
+                        <select>
+                        
                         <input id="button-grid-1" type="submit" value="Hae Renkaita" name="haetires">
                     </form>
                 </div>
@@ -345,10 +357,11 @@
         <div class="SQL-grid">
             <?php
             if (isset($_POST['haetires'])) {
+                    $TireText = $_POST["tiretext"]; //ottaa formista tiedot muuttujaan
                     $TireCompany = $_POST["TireCompany"]; //ottaa formista tiedot muuttujaan
                     $TireType = $_POST["TireType"];
                     $TireSize = $_POST["TireSize"];
-
+                    $Sort = $_POST["Sort"];
                     if($TireCompany == ""){$TireCompany = "";} //Tämä muuttaa muuttajat eri SQL Lauseiseen, filtteröintia varten
                         else{$TireCompany = "WHERE Merkki ='$TireCompany'";}
 
@@ -362,14 +375,27 @@
                         else if($TireCompany != "" and $TireType == ""){$TireSize = " AND Koko = '$TireSize'";}
                         else if($TireCompany != "" and $TireType != ""){$TireSize = " AND Koko = '$TireSize'";}
 
+                         
+                    if ($TireText == "") {
+                        $TireText == "";
+                    } 
+                        if($TireText != ""){
+                            if($TireCompany == "" && $TireSize == "" && $TireType == ""){
+                                $TireText = "WHERE Malli LIKE '%$TireText%'";
+                            }
+                            else if($TireCompany != "" || $TireSize != "" || $TireType != ""){
+                                $TireText = "AND Malli LIKE '%$TireText%'";
+                            }
+                        }
+                    
+                    
                     $servername = "localhost"; //etsii tietokannan
                     $username = "root";
                     $password = "";
                     $data = "renkaat";
                     $conn = new mysqli($servername, $username, $password, $data);
-                    $sql = "SELECT * FROM renkaat $TireCompany $TireType $TireSize";//SQL lause
+                    $sql = "SELECT * FROM renkaat $TireCompany $TireType $TireSize $TireText ORDER BY $Sort";//SQL lause
                     $result = $conn->query($sql);
-                    //echo"<table>";
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) { //Tämä laittaa rivit HTML:llään                            
                             echo "<div class='product'>
