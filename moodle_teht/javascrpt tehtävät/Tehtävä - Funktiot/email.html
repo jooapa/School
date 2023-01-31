@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tarkista Email</title>
+</head>
+<body>
+    
+    
+    <button onclick="start()">Syötä Email Painamalla</button>
+    
+    <script>
+        var email = undefined
+        const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+     
+        function CheckEmail(email) {
+            return re.test(email);
+        }   
+        
+        
+        function start(email){
+            email = prompt("Laita Sähköpostiosoitteesi")
+            CheckEmail( email);
+
+            if (CheckEmail(email) == true){
+                console.log("sähköpostiosoitteesi on kevollinen");
+            }
+            else{
+                console.log("sähköpostiosoitteesi ei ole kelvollinen");
+            }
+        }
+    </script>
+
+
+    
+</body>
+</html>

@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(75, 75, 75);
+  }
+  
+  .navbar {
+    overflow: hidden;
+    background-color: rgb(0, 0, 0);
+    border-radius: 22px;
+
+  }
+  
+  .navbar a {
+    float: left;
+    font-size: 16px;
+    color: rgb(209, 209, 209);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  .dropdown {
+    float: right;
+    overflow: hidden;
+  }
+  
+  .dropdown .dropbtn {
+    font-size: 16px;  
+    border: 0px;
+    outline: none;
+    color: rgb(203, 203, 203);
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
+  
+  .navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: rgb(61, 61, 61);
+  }
+  
+  .dropdown-content {
+    right: 2%;
+    display: none;
+    position:absolute;
+    background-color: #979797;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: rgb(126, 126, 126);
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+
+  kyselyon {
+    background-color: rgb(203, 203, 203);
+    padding: 10px;
+    margin-left: 100px;
+    border-radius: 10px;
+    width: 150px;
+  }

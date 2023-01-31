@@ -1,0 +1,44 @@
+body {
+    font-family: Verdana,sans-serif;
+    font-size: 0.9em;
+  }
+  
+  header, footer {
+    padding: 10px;
+    color: white;
+    background-color: black;
+  }
+  .flex-con {
+
+    display: flex;
+    background-color: rgb(37, 37, 184);
+    height: 300px;
+    flex-wrap: wrap;
+    
+
+}
+.flex-con > section {
+    margin: 5px;
+    padding: 10px;
+    background-color: rgb(167, 0, 0);
+    width: 300px;
+    height: 300px;
+  }
+
+article {
+    margin: 5px;
+    padding: 10px;
+    background-color: white;
+  }
+  
+  nav ul {
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin: 5px;
+  }
+
+
+

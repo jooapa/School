@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <title>hom</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Varela+Round&display=swap);
+        body{
+            margin: 0;
+            background-color: rgb(53, 53, 53);
+            display: grid;
+            grid-template-columns: 1fr  ;
+            justify-items: center;
+            color: rgb(255, 255, 255);
+            font-family: "Varela?Round", sans-serif;
+        }
+        .kap, .lgo{
+            text-align: center;
+            text-shadow: 0px 0px 10px rgb(3, 0, 27);
+        }
+        .lgo{
+            font-size: 40px;
+        }
+        .code{
+            padding: 10px;
+            position: relative;
+            background-color: black;
+            width: fit-content;
+            height: fit-content;
+            border-radius: 20px ;
+            top: 15px;
+            margin: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .kap-code-text{
+            text-align: left;
+            margin-left: 20px;
+        }
+        blue{
+            color: rgb(91, 91, 255);
+        }
+        lblue{
+            color: lightblue;
+        }
+        yellow{
+            color:rgb(255, 255, 255)
+        }
+        lyellow{
+            color: rgb(255, 255, 93);
+        }
+        pink{
+            color: palevioletred;
+        }
+        orange{
+            color: rgb(255, 255, 255);
+        }
+        green{
+            color: rgb(14, 88, 14);
+        }
+        dyellow{
+            color:rgb(255, 230, 0)
+        }
+        lgreen{
+            color:rgb(4, 121, 0);
+        }
+        #foot {
+            bottom: 0px;
+            font-weight: 600;
+            font-size: 6px;
+        }
+    </style>    
+</head>
+<body>
+    <div class="parent">
+        <div class="lgo">
+             <h1>Oliot</h1>
+         </div>    
+    <div class="perus-parent">
+       <div class="kap">
+            <h1>Keskeiset sisäänrakennetut oliot</h1>
+            <h4>Javascriptissä on jo valmiiksi omia olioita. Esim.</h4>
+        </div> 
+        <div class="code">
+            document<br>
+            console
+        </div><br>
+    </div>
+    <div class="ominaisuus-parent">
+       <div class="kap">
+            <h1>Olion ominaisuudet</h1>
+            <h4>Atribuutit ja kentät, joita kutsutaa ominaisuuksiksi</h4>
+        </div> 
+        <div class="code">
+            olioNimi.property         <green>&emsp;&nbsp;&emsp;// ihminen.ikä<br></green>
+            olioNimi["property"]      <green>&emsp;// ihminen["ikä"]<br></green>
+            olioNimi[expression]      <green>&emsp;// x = "ikä"; ihminen[x]</green>
+            
+        </div>
+    </div><br>
+
+    <div class="toteutus-parent">
+       <div class="kap">
+            <h1>Perusolion Toteutus</h1>
+        </div> 
+        <div class="code">
+            &emsp; <blue>const</blue> <lblue>person</lblue> = <yellow>{</yellow><br>
+                &emsp;<lblue>nimi</lblue>: <pink>[</pink><orange>"Bob", "Smith"</orange><pink>]</pink>,<br>
+                &emsp;<lblue>ikä</lblue>: <green>32</green>,<br>
+                &emsp;<lblue>bio</lblue>: <blue>function</blue> <pink>()</pink> {<br>
+                    &emsp;&emsp;<lblue>console</lblue>.<yellow>log</yellow><dblue>(</dblue><orange>`</orange><blue>${this.</blue>nimi<yellow>[</yellow><blue>0</blue><yellow>]</yellow>}<blue>${this.</blue><lblue>nimi</lblue> <yellow>[</yellow><blue>1</blue><yellow>]</yellow>}<orange>on</orange>  <blue>${this.</blue><orange>ikä</orange>} <orange>vuotta vanha.`</orange>);<br>
+                    &emsp;},<br>
+                    &emsp;<yellow>introduceSelf</yellow>: <lblue>function</lblue> <pink>()</pink> {<br>
+                        &emsp;&emsp;    console.<yellow>log</yellow>(<orange>` Olen</orange> <blue>$</blue>{<blue>this</blue>.<lblue>nimi</lblue><yellow>[</yellow><blue>0</blue><yellow>]</yellow>}<orange>!`</orange>);<br>
+                  &emsp;},<br>
+              };<br>
+        </div>
+    </div>
+    <div class="toteutus-parent"><br>
+        <div class="kap">
+             <h1>Konsruktorit</h1>
+             <h4>Javascriptissä luokka määritellään konstruktorifunktion avulla. Luodaan siis uusi funktio, jolla kaikki luokan uudet alkiot alustetaan.<br>
+                Konstruktorin nimi on sama kuin luokan nimi</h4>
+         </div> 
+         <div class="code">
+            <lblue>class</lblue> auto <dyellow>{</dyellow><br>
+                &emsp;<blue>constructor</blue><pink>(</pink><lblue>brand</lblue><pink>) {</pink><br>
+                    &emsp;&emsp;<blue>this</blue>.<lblue>autonimi</lblue> = <lblue>Merkki</lblue>;<br>
+                    &emsp;<pink>}</pink><br>
+              <dyellow>}</dyellow><br>    
+              <lblue>minunAuto</lblue> = <blue>new</blue> auto<dyellow>(</dyellow>"lamborghini"<dyellow>)</dyellow>;<br>
+         </div>
+         <div class="kap">
+             <h4>Luokan uusia alkioita luodaan komennolla new _____()</h4>
+         </div>
+         <div class="code">
+            <blue>var</blue> <yellow>person1</yellow> = <blue>new</blue> <lyellow>Person</lyellow><dyellow>()</dyellow>;<br>
+            <blue>var</blue> <yellow>person2</yellow> = <blue>new</blue> <lyellow>Person</lyellow><dyellow>()</dyellow>; 
+         </div>
+     </div><br>
+
+
+    <div class="kap-parent">
+        <div class="kap">
+            <h1>Kapselointi</h1>
+            <h4>Kapselointi tarkoittaa ohjelmoinnissa yhteen kuuluvien tietojen ja toimintojen kokoamista yhdeksi kokonaisuudeksi. <br>Olio-ohjelmoinnissa kapselointi tapahtuu usein kokoamalla muuttujat ja metodit luokaksi.</h4>
+        </div>
+        <div class="code">
+            <div class="kap-code-text">
+                <span style="color:lightblue">class</span> Juna{<br>
+                    &emsp;<span style="color:rgb(245, 245, 88)">aseta</span>(malli, vuosi){<br>
+                        &emsp;&emsp;<span style="color:lightblue">this</span>.malli = malli<br>
+                        &emsp;&emsp;<span style="color:lightblue">this</span>.vuosi = vuosi<br>
+                    &emsp;}<br>
+                        &emsp;<span style="color:rgb(245, 245, 88)">otaMalli</span>(){<br>
+                        &emsp;&emsp;console.<span style="color:rgb(245, 245, 88)">log</span>(<span style="color:lightblue">this</span>.malli)<br>
+                        &emsp;}<br>
+                        &emsp;<span style="color:rgb(245, 245, 88)">otaVuosi</span>(){<br>
+                        &emsp;&emsp;console.<span style="color:rgb(245, 245, 88)">log</span>(<span style="color:lightblue">this</span>.vuosi)<br>
+                        &emsp;}<br>
+                        &emsp;<span style="color:blue">const</span> j = <span style="color:blue">new</span> Juna <br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">aseta</span>("vr-juna", 2010) <span style="color:green">//asettaa nämä tiedot</span><br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">otaMalli</span>()<br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">otavuosi</span>()<br>
+                        &emsp;<span style="color:green">//Tulostaa konsoliin /"vr juna" "2010"\</span><br>
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="peri-parent"><br>
+        <div class="kap">
+            <h1>Periytyminen</h1>
+            <h4>Periytyminen tarkoittaa, että jonkin ns. kantaluokan (base class) ominaisuuksia voidaan<br>
+                periyttää (inherit) kantaluokasta johdetulle luokalle (derived class).</h4>
+        </div>
+        <div class="code">
+            <green>class</green> Animal <pink>{</pink><br>
+                <blue>constructor</blue>(<lblue>name</lblue>) <pink>{</pink><br>
+                  <blue>this</blue>.speed = 0;<br>
+                  <blue>this</blue>.<lblue>name</lblue> = <lblue>name</lblue>;<br>
+                }<br>
+                run(speed) {<br>
+                    <blue>this</blue>.speed = speed;<br>
+                  alert(`${<blue>this</blue>.<lblue>name</lblue>} runs with speed ${<blue>this</blue>.speed}.`);<br>
+                }<br>
+                stop() {<br>
+                    <blue>this</blue>.speed = 0;<br>
+                  alert(`${<blue>this</blue>.<lblue>name</lblue>} stands still.`);<br>
+                  <pink>}</pink><br>
+                <pink>}</pink><br>
+              <br>
+              let <lblue>animal</lblue> = <green>new</green> Animal("My animal ");<br>
+              <br>
+              <green>class</green> Rabbit extends Animal {<br>
+                hide() {<br>
+                  alert(`${<blue>this</blue>.<lblue>name</lblue>} hides!`);<br>
+                }<br>
+              }<br>
+              <br>
+              let rabbit = <green>New</green> Rabbit("White Rabbit");<br>
+              <br>
+              rabbit.run(5); // White Rabbit runs with speed 5.<br>
+              rabbit.hide(); // White Rabbit hides!<br>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+    class Car {
+    constructor(brand) {  // Constructor
+        this.carname = brand;
+    }
+    }
+    mycar = new Car("Ford"); 
+    </script> 
+<br><br><br>
+    <div id="foot">
+        <br><br><br><br><br><br><br><br>
+        <p>&#169; 2023  Akonpelto Jooa, Mero Miska</p>
+    </div>
+</body>
+</html>

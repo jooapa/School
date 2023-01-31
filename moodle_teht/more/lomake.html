@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('#button').click(function(){ 
+        if(!$('#iframe').length) {
+                $('#iframeHolder').html('<iframe id="iframe" src="https://www.liiga.fi" width="1200" height="600"></iframe>');
+                
+        }
+        if(!$('#iframe1').length) {
+                $('#iframeHolder1').html('<iframe id="iframe1" src="https://www.mtv.fi" width="1200" height="600"></iframe>');
+                
+        }
+        
+    });   
+});
+</script>
+
+
+</head>
+<body>
+
+    <div class="navbar">
+
+        <a href="https://images.coollogo.com/images/prism-large-green.png"></a>
+        <a href="#" id="button" id="iframeHolder">Liiga</a>
+        <a href="lomake.html">Kysely</a>
+        <div class="dropdown">
+          <button class="dropbtn">Lisää... 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="https://www.patreon.com">Tue</a>
+            <a href="https://www.gradia.fi">Lisätietoa</a>
+            <a href="https://jaofi.sharepoint.com/sites/mungradia">Yhteistiedot</a>
+          </div>
+        </div> 
+      </div>
+      <script>
+         function kyselyon(){
+          
+        }
+      </script>
+
+
+<div class="kyselyon">
+<form>
+      <label for="fname">Nimi:</label><br>
+      <input type="text" id="fname" name="fname" value=""><br>
+      
+      <label for="lname">Sukunimi:</label><br>
+      <input type="text" id="lname" name="lname" value=""><br><br>
+
+      <label for="lname">Postinumero:</label><br>
+      <input type="text" id="lname" name="lname" value=""><br><br>
+
+      <label for="lname">postitoimipaikka:</label><br>
+      <input type="text" id="lname" name="lname" value=""><br><br>
+
+      <label for="lname">Sähköpostiosoite:</label><br>
+      <input type="text" id="lname" name="lname" value=""><br><br>
+
+      <input type="radio" id="html" name="fav_language" value="mies">
+       <label for="html">Mies</label><br>
+       <input type="radio" id="css" name="fav_language" value="Nainen">
+       <label for="css">Nainen</label><br>
+       <input type="radio" id="javascript" name="fav_language" value="joku">
+       <label for="javascript">En halua kertoa</label><br><br>
+
+       <label for="start">Syntymäpäivä:</label><br>
+
+       <input type="date" id="start" name="päivä"
+              value="1999 01-01"
+              min="1900-01-01" max="2018-01-01"><br>
+       
+
+      <label for="tentacles">Kengän Numero</label>
+
+      <input type="number" id="Kenkä" name="Kenkä-numero"
+             min="30" max="50"><br>
+
+    <label for="palvelu1">Aamianen</label>
+    <input type="checkbox" id="palvelu1"  name="aamianen"><br>
+
+    <label for="palvelu1">Päivällinen</label>
+    <input type="checkbox" id="palvelu2"  name="päivällinen"><br>
+
+    <label for="palvelu1">Välipala</label>
+    <input type="checkbox" id="palvelu3"  name="välipala"><br>
+
+    <label for="palvelu1">Iltapala</label>
+    <input type="checkbox" id="palvelu4"  name="iltapala"><br>
+
+
+
+      <input type="submit" value="Lähetä">
+
+      
+</form>
+
+
+
+
+</div>
+<div id="iframeHolder"></div>
+<div id="iframeHolder1"></div>
+
+      
+
+
+
+</body>
+</html>

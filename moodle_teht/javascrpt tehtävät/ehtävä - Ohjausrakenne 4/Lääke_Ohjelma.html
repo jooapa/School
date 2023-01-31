@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <title>funktio</title>
+        <style>
+            body{
+                background-color: rgb(49, 49, 49);
+                font-family: monospace;
+            }
+            button{
+                size: 200px;
+                margin: 0%;
+                background-color: rgb(255, 52, 52);
+            }
+            .kirjoitus{
+                background-color: rgb(0, 0, 0);
+                font-family: monospace;
+            }
+            th, td {
+            border-style: double;
+            background-color: rgb(211, 234, 255);
+            }
+            .vari{
+                color: white;
+            }
+            #Lääkelista{
+                color: aliceblue;
+            }
+        </style>
+        <script src="js.js"></script>
+    </head>
+    <body>
+
+        <table>
+            <tr>
+                <th colspan="2" rowspan="1"><button onclick="suositusmaara()"> Syötä Suositusmäärä:</button></th>
+                <td><kirjoitus id="suositus"></kirjoitus></td>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><kirjoitus id="annosteksti"></kirjoitus></td>
+                <td><kirjoitus id="jäljellä"></kirjoitus></td>
+            </tr>
+            <tr>
+            
+                <td colspan="2">Lääkettä käytetty <kirjoitus id="laakek"></kirjoitus></td>
+                <td>Edellinen annos oli</td>
+                <td>Suurin annos</td>
+            
+            </tr>
+            <tr>
+            
+                <th colspan="2" rowspan="3"><button onclick="laakemaara()">Anna Lääke</button></th>
+                
+            </tr>
+            <tr>
+                <td><kirjoitus id="tuloslaake"></kirjoitus></td>
+                <td><kirjoitus id="suurin"></kirjoitus></td>
+            </tr>
+        </table>
+        <p id="Lääkelista"></p>
+        
+    </body>
+</html>

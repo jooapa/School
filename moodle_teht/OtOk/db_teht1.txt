@@ -1,0 +1,2 @@
+Tietokanta on iso Google Spreadsheet. Eli taulukko, rivejä ja sarakkeita.
+Josta voi lopulta ottaa tietoa ja lisätä tietoa. Ja sita dataa voidaan käyttää vaikka nettisivulla.

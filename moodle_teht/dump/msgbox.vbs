@@ -1,0 +1,6 @@
+x=msgbox("minä ,0, "Hei! Olen ostamassa juuri nyt LENOVO G32QC-10 31.5" Kaareva QHD PELINÄYTTÖ.") 
+x=msgbox("minä" ,0, "Mutta en tiedä mitä tarkoittaa virkistystaajuus esim tässä näytössä on 144hz virkistystaajuus?😃") 
+x=msgbox("Joni" ,0, "Kauttani toimitus 0€") 
+x=msgbox("Minä" ,0, "Selvä! Kiitos avustasi!👍") 
+x=msgbox("Joni" ,0, "Kiitos! Laitetaanko teille matkaan!") 
+x=msgbox("Minä" ,0, "Ei nyt tarvitse! Kiitos!") 

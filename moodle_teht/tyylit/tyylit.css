@@ -1,0 +1,14 @@
+Header{
+
+height: 20%;
+width: 100%;
+background-color: rgb(1, 159, 159);
+}
+
+
+div{
+    height: 50%;
+    width: 100%;
+    background-color: rgba(1, 159, 159, 0.126);
+font-size: 30px;
+}

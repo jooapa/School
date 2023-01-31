@@ -1,0 +1,23 @@
+.container {
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 200px;
+    padding: 00px;
+    margin: 0px;
+}
+
+.Hover {
+
+    background-color: rgba(0, 0, 0, 0);
+    width: 180px;
+    padding: 10px;
+    margin: 0px;
+}
+
+
+.Hover1 {
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 140px;
+    padding: 10px;
+    margin: 0;
+
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<hmtl>
+    <head>
+        <title>arrayt 3</title>
+    </head>
+    <body>
+
+
+        <script>
+            function tempavg(temperatures) {
+                let avg = 0;
+                for (var i = 0; i<temperatures.length;i++) {
+                    avg += temperatures[i]
+                }
+                return Math.round(avg/temperatures.length * 10) / 10;
+            }
+            var ma = [10, 11, 25];
+            var ti = [23, 22, 12];      
+            var ke = [13, 13, 10];       
+            var to = [23, 24, 30];    
+            var pe = [23, 18, 13];    
+            var la = [13, 10, 8];   
+            var su = [7, 3, 0];
+
+            document.write("Maanantai " + tempavg(ma) +"°C" + "<br>");
+            document.write("Tiistai " + tempavg(ti) +"°C" + "<br>");
+            document.write("Keskiviikko " + tempavg(ke) +"°C" + "<br>");
+            document.write("Tortai " + tempavg(to) +"°C" + "<br>");
+            document.write("Perjantai " + tempavg(pe) +"°C" + "<br>");
+            document.write("Lauantai " + tempavg(la) +"°C" + "<br>");
+            document.write("Sunnuntai " + tempavg(su) +"°C" + "<br>");
+
+        </script>
+    </body>
+</html>

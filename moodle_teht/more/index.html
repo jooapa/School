@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('#button').click(function(){ 
+        if(!$('#iframe').length) {
+                $('#iframeHolder').html('<iframe id="iframe" src="https://www.liiga.fi" width="1200" height="600"></iframe>');
+        }
+        if(!$('#iframe1').length) {
+                $('#iframeHolder1').html('<iframe id="iframe1" src="https://www.mtv.fi" width="1200" height="600"></iframe>');
+                
+        }
+    });   
+});
+</script>
+
+
+</head>
+<body>
+
+    <div class="navbar">
+
+        <a href="#" id="button" id="iframeholder">Liiga</a>
+        <a href="#" id="button" id="iframeholder1">Uutiset</a>
+        <a href="lomake.html">Kysely</a>
+        <div class="dropdown">
+          <button class="dropbtn">Lisää... 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="https://www.patreon.com">Tue</a>
+            <a href="https://www.gradia.fi">Lisätietoa</a>
+            <a href="https://jaofi.sharepoint.com/sites/mungradia">Yhteistiedot</a>
+          </div>
+        </div> 
+      </div>
+      <script>
+         function kyselyon(){
+          
+        }
+      </script>
+
+
+
+
+
+
+
+</div>
+<div id="iframeHolder"></div>
+<div id="iframeHolder1"></div>
+
+
+      
+
+
+
+</body>
+</html>

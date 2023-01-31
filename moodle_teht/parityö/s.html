@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hom</title>
+    <style>
+        body{
+            margin: 0;
+            background-color: rgb(53, 53, 53);
+            display: grid;
+            grid-template-columns: 1fr  ;
+            justify-items: center;
+            color: rgb(255, 255, 255);
+        }
+        .kap, .lgo{
+            text-align: center;
+            text-shadow: 0px 0px 10px rgb(3, 0, 27);
+        }
+        .lgo{
+            font-size: 40px;
+        }
+        .code{
+            padding: 10px;
+            position: relative;
+            background-color: black;
+            width: fit-content;
+            height: fit-content;
+            border-radius: 20px ;
+            top: 15px;
+            margin: auto;
+        }
+        .kap-code-text{
+            text-align: left;
+            margin-left: 20px;
+        }
+        blue{
+            color: rgb(91, 91, 255);
+        }
+        lblue{
+            color: lightblue;
+        }
+        yellow{
+            color:rgb(255, 255, 255)
+        }
+        lyellow{
+            color: rgb(255, 255, 93);
+        }
+        pink{
+            color: palevioletred;
+        }
+        orange{
+            color: rgb(255, 255, 255);
+        }
+        green{
+            color: rgb(14, 88, 14);
+        }
+        dyellow{
+            color:rgb(255, 230, 0)
+        }
+        lgreen{
+            color:rgb(4, 121, 0);
+        }
+    </style>    
+</head>
+<body>
+    <div class="parent">
+        <div class="lgo">
+             <h1>Oliot</h1>
+         </div>    
+    <div class="perus-parent">
+       <div class="kap">
+            <h1>Keskeiset sisäänrakennetut oliot</h1>
+            <h4>Javascriptissä on jo valmiiksi omia olioita. Esim.</h4>
+        </div> 
+        <div class="code">
+            document<br>
+            console
+        </div>
+    </div>
+    <div class="ominaisuus-parent">
+       <div class="kap">
+            <h1>Olion ominaisuudet</h1>
+            <h4>Atribuutit ja kentät, joita kutsutaa ominaisuuksiksi</h4>
+        </div> 
+        <div class="code">
+            olioNimi.property         <green>&emsp;&nbsp;&emsp;// ihminen.ikä<br></green>
+            olioNimi["property"]      <green>&emsp;// ihminen["ikä"]<br></green>
+            olioNimi[expression]      <green>&emsp;// x = "ikä"; ihminen[x]</green>
+            
+        </div>
+    </div>
+
+    <div class="toteutus-parent">
+       <div class="kap">
+            <h1>Perusolion Toteutus</h1>
+        </div> 
+        <div class="code">
+            &emsp; <blue>const</blue> <lblue>person</lblue> = <yellow>{</yellow><br>
+                &emsp;<lblue>nimi</lblue>: <pink>[</pink><orange>"Bob", "Smith"</orange><pink>]</pink>,<br>
+                &emsp;<lblue>ikä</lblue>: <green>32</green>,<br>
+                &emsp;<lblue>bio</lblue>: <blue>function</blue> <pink>()</pink> {<br>
+                    &emsp;&emsp;<lblue>console</lblue>.<yellow>log</yellow><dblue>(</dblue><orange>`</orange><blue>${this.</blue>nimi<yellow>[</yellow><blue>0</blue><yellow>]</yellow>}<blue>${this.</blue><lblue>nimi</lblue> <yellow>[</yellow><blue>1</blue><yellow>]</yellow>}<orange>on</orange>  <blue>${this.</blue><orange>ikä</orange>} <orange>vuotta vanha.`</orange>);<br>
+                    &emsp;},<br>
+                    &emsp;<yellow>introduceSelf</yellow>: <lblue>function</lblue> <pink>()</pink> {<br>
+                        &emsp;&emsp;    console.<yellow>log</yellow>(<orange>` Olen</orange> <blue>$</blue>{<blue>this</blue>.<lblue>nimi</lblue><yellow>[</yellow><blue>0</blue><yellow>]</yellow>}<orange>!`</orange>);<br>
+                  &emsp;},<br>
+              };<br>
+        </div>
+    </div>
+    <div class="toteutus-parent">
+        <div class="kap">
+             <h1>Konsruktorit</h1>
+             <h4>Javascriptissä luokka määritellään konstruktorifunktion avulla. Luodaan siis uusi funktio, jolla kaikki luokan uudet alkiot alustetaan.<br>
+                Konstruktorin nimi on sama kuin luokan nimi</h4>
+         </div> 
+         <div class="code">
+            <blue>var</blue> <yellow>Person</yellow> = <blue>function</blue><dyellow>() {}</dyellow>;
+         </div>
+         <div class="kap">
+             <h4>Luokan uusia alkioita luodaan komennolla new _____()</h4>
+         </div>
+         <div class="code">
+            <blue>var</blue> <yellow>person1</yellow> = <blue>new</blue> <lyellow>Person</lyellow><dyellow>()</dyellow>;<br>
+            <blue>var</blue> <yellow>person2</yellow> = <blue>new</blue> <lyellow>Person</lyellow><dyellow>()</dyellow>; 
+         </div>
+     </div>
+
+
+    <div class="kap-parent">
+        <div class="kap">
+            <h1>Kapselointi</h1>
+            <h4>Kapselointi tarkoittaa ohjelmoinnissa yhteen kuuluvien tietojen ja toimintojen kokoamista yhdeksi kokonaisuudeksi. <br>Olio-ohjelmoinnissa kapselointi tapahtuu usein kokoamalla muuttujat ja metodit luokaksi.</h4>
+        </div>
+        <div class="code">
+            <div class="kap-code-text">
+                <span style="color:lightblue">class</span> Juna{<br>
+                    &emsp;<span style="color:rgb(245, 245, 88)">aseta</span>(malli, vuosi){<br>
+                        &emsp;&emsp;<span style="color:lightblue">this</span>.malli = malli<br>
+                        &emsp;&emsp;<span style="color:lightblue">this</span>.vuosi = vuosi<br>
+                    &emsp;}<br>
+                        &emsp;<span style="color:rgb(245, 245, 88)">otaMalli</span>(){<br>
+                        &emsp;&emsp;console.<span style="color:rgb(245, 245, 88)">log</span>(<span style="color:lightblue">this</span>.malli)<br>
+                        &emsp;}<br>
+                        &emsp;<span style="color:rgb(245, 245, 88)">otaVuosi</span>(){<br>
+                        &emsp;&emsp;console.<span style="color:rgb(245, 245, 88)">log</span>(<span style="color:lightblue">this</span>.vuosi)<br>
+                        &emsp;}<br>
+                        &emsp;<span style="color:blue">const</span> j = <span style="color:blue">new</span> Juna <br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">aseta</span>("vr-juna", 2010) <span style="color:green">//asettaa nämä tiedot</span><br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">otaMalli</span>()<br>
+                        &emsp;j.<span style="color:rgb(245, 245, 88)">otavuosi</span>()<br>
+                        &emsp;<span style="color:green">//Tulostaa konsoliin /"vr juna" "2010"\</span><br>
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="peri-parent">
+        <div class="kap">
+            <h1>Periytyminen</h1>
+            <h4>Periytyminen tarkoittaa, että jonkin ns. kantaluokan (base class) ominaisuuksia voidaan<br>
+                periyttää (inherit) kantaluokasta johdetulle luokalle (derived class).</h4>
+        </div>
+        <div class="code">
+            <blue>var</blue> <lblue>a</lblue> = {<br>
+                <lblue>x</lblue>: 10,<br>
+                <dyellow>calculate</dyellow>: function (z) {<br>
+                  <pink>return</pink> <blue>this</blue>.<lblue>x</lblue> + <blue>this</blue>.<lblue>y</lblue> + <lblue>z</lblue><br>
+                }<br>
+              };<br>
+              <br>
+              <blue>var</blue> <lblue>b</lblue> = {<br>
+                <lblue>y</lblue>: 20,<br>
+                <lblue>__proto__: a<br></lblue>
+              };<br>
+              <br>
+              <blue>var</blue> <lblue>c</lblue> = {<br>
+                <lblue>y</lblue>: 30,<br>
+                <lblue>__proto__: a<br></lblue>
+              };<br>
+              <br>
+             <green> // call the inherited method<br></green>
+              <lblue>b</lblue>.<dyellow>calculate</dyellow>(30); <green>// 60<br></green>
+              <lblue>c</lblue>.<dyellow>calculate</dyellow>(40); <green>// 80<br></green>
+            </div>
+        </div>
+    </div>
+
+    <script>
+var a = {
+  x: 10,
+  calculate: function (z) {
+    return this.x + this.y + z
+  }
+};
+ 
+var b = {
+  y: 20,
+  __proto__: a
+};
+ 
+var c = {
+  y: 30,
+  __proto__: a
+};
+ 
+// call the inherited method
+b.calculate(30); // 60
+c.calculate(40); // 80  
+    </script>
+</body>
+</html>

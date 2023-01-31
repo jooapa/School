@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="TellName()">Kerro nimesi</button>
+    <script>
+        function TellName(){
+            Etu = prompt("Etunimesi")
+            Sukunimi = prompt("Sukunimesi")
+            TunnusMaker3000();
+        }
+        function TunnusMaker3000(){
+            Etu3 = Etu.substring(0,3);
+            suku3 = Sukunimi.substring(0,3);
+            Etu3 = Etu3.toLowerCase()
+            suku3 = suku3.toLowerCase()
+            console.log(Replace(Etu3))
+            console.log("gradia" + Replace(Etu3) + Replace(suku3))
+        }   
+
+        function Replace(e){
+
+            e = e.replaceAll("ä","a");
+            e = e.replaceAll("ö","o");
+            e = e.replaceAll("å","o");
+            
+            return e;
+        }
+    </script>
+</body>
+</html>

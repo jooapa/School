@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <script>
+      const cL = new Date();
+        let tunti = cL.getHours();
+
+        //document.write(tunti)
+        
+        if (tunti > 7 && tunti < 12) 
+        
+            document.write("hyvää huomenta");
+            
+            else if (tunti > 12 && tunti < 18) 
+            
+               document.write("hyvää päivää");
+               
+               else if (tunti > 19 && tunti < 22) 
+               
+                  document.write("hyvää iltaa");
+                  
+                  else if(tunti > 23 && tunti < 6) 
+                  
+                     document.write("hyvää yötä");
+
+        </script>
+
+
+
+    </body>
+    </html>

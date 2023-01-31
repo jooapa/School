@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            
+            button{
+                width:70px !important;
+                height:40px !important;
+            }
+            .tup{
+                font-size: larger;
+            }
+
+        </style>
+    </head>
+    <body>
+        <script>
+            var N1 = 0
+            var N2 = 0
+            var N3 = 0
+            tulos = "."
+
+            function nappi1K(){
+                N1 = 1
+            }
+            function nappi1E(){
+                N1 = 0
+            }
+            function nappi2K(){
+                N2 = 1
+            }
+            function nappi2E(){
+                N2 = 0
+            }
+            function nappi3K(){
+                N3 = 1
+            }
+            function nappi3E(){
+                N3 = 0
+            }
+        
+            function nappivas(){
+                
+                
+                console.clear
+                console.log(N1)
+                console.log(N2)
+                console.log(N3)
+
+                    if (N1 == 1 && N2 == 1 && N3 == 1)
+                    {
+                        tulos = "Aurinko paistaa ja vettä sataa taitaa tulla kesä.";
+                    }
+                    else if (N1 == 0 && N2 == 1&& N3 == 1){
+                        tulos ="Syksy saapui lehdet vei tuuli mennessään.";
+                    }
+                    else if ((N1 == 0 && N2 == 0 && N3 == 1)  || (N1 == 1 && N2 == 0 && N3 == 1)){
+                        tulos ="Jo joutui armas aika ja suvi suloinen.";
+                    }
+                    else if (N1 == 0 && N2 == 0 && N3 == 0){
+                        tulos ="Kelläkään ei ole hauskaa";
+                    }
+                    else if (N1 == 1 && N2 == 1 && N3 == 0){
+                        tulos ="Syksystä Talveen";
+                    }
+                    else if (N1 == 1 && N2 == 0 && N3 == 0){
+                        tulos ="Ainakin jotain positiivista taivaalla";
+                    }
+                    else if (N1 == 0 && N2 == 1 && N3 == 0){
+                        tulos ="Pimeässä sade tulee ja menee";
+                    }
+                    
+                    
+
+                    document.getElementById("nappi").innerHTML= tulos;
+            }
+            
+
+
+
+        </script>
+    <contain>
+        Paistaako aurinko<br>
+        <button
+            onclick="nappi1K()">Kyllä
+        </button>
+
+        <button
+            onclick="nappi1E()">Ei
+        </button>
+        <br><br>
+        Sataako<br>
+        <button
+            onclick="nappi2K()">Kyllä
+        </button>
+
+        <button
+            onclick="nappi2E()">Ei
+        </button>
+        <br>
+        <br>
+        Onko lämpötila >0<br>
+        <button
+            onclick="nappi3K()">Kyllä
+        </button>
+
+        <button
+            onclick="nappi3E()">Ei
+        </button>
+        <br><br><br>
+        <button
+            onclick="nappivas()">Tilaa
+        </button>
+
+        <tup id="nappi"></tup>
+        
+    </contain>
+
+
+
+    </body>
+    </html>

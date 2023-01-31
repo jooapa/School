@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-darkness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <title>Document</title>
+    <style>
+    
+        body{
+            background-color: rgb(75, 75, 75);
+            color: aliceblue;
+        }
+        #datepicker{
+            background-color: rgb(130, 130, 130);
+
+        }
+        #post {
+            position: relative;
+            color: aliceblue;
+            border: 0.001px solid rgb(104, 104, 104) ;
+            box-sizing: border-box;
+            border-radius: 5px;
+            background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(255, 255, 255) 500%);
+        }
+        #post1 {
+            top: 160px;
+            font-size: 10px;
+            position: relative;
+            color: aliceblue;
+            border: 0.001px solid rgb(104, 104, 104) ;
+            box-sizing: border-box;
+            background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(255, 255, 255) 500%);
+        }
+        #toggle{
+            position: absolute;
+            font-size: 8px;
+            width: 20rem;
+            color: aliceblue;
+            border: 0.001px solid rgb(104, 104, 104) ;
+            border-radius: 4px;
+            background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(255, 255, 255) 500%);
+            height: 300px;
+        }
+
+    </style>
+</head>
+<body>
+    <script>  
+    function ValidateEmail(mail) 
+    {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email.value))
+    {
+        return (true)
+    }
+        alert("Ei ole oikea sähköposti")
+        return (false)
+    }
+        function validateForm() {
+            x = 0;
+            let fname = document.forms["form"]["fname"].value;
+            let lname = document.forms["form"]["lname"].value;
+            let email = document.forms["form"]["email"].value;
+            let addr = document.forms["form"]["addr"].value;
+            let zip = document.forms["form"]["zip"].value;
+            let post = document.forms["form"]["post"].value;
+            let phone = document.forms["form"]["phone"].value;
+            let date = document.forms["form"]["date"].value;
+            let viesti = document.forms["form"]["viesti"].value;
+
+            if (fname == "") {
+                alert("Nimi Pitää olla");
+                x += 1;
+            }
+            if (lname == "") {
+                alert("Sukunimi Pitää olla");
+                x += 1;
+            }
+            if (email == "") {
+                alert("tyhjyys ei ole oikea sähköposti");
+
+                x += 1;
+            }
+            ValidateEmail(email);
+            if (viesti == "") {
+                alert("Kirjoita jotain Viesti laatikkoon");
+                x += 1;
+            }
+            if(x > 1){
+                x = 0   
+                return false;
+            }
+        }
+
+        $( function() {
+            $( "#datepicker" ).datepicker();
+        } );
+
+        $(document).ready(function() {
+        $( "s" ).click(function() {
+            $( "#toggle" ).effect( "size", {
+                to: { width: 300, height: 150 }
+            }, 1000 );
+        })});
+    </script>
+
+<form onsubmit= "return validateForm()" id="foo" name="form" method="post">
+    *Etunimi: <br><input id="post" type="text" name="fname"> <br>
+
+    *Sukunimi: <br><input id="post" type="text" name="lname"> <br>
+    
+    *Sähköposti: <br><input id="post" type="text" name="email"> <br>
+    
+    Lähiosoite: <br><input id="post" type="text" name="addr"> <br>
+    
+    Postinumero: <br><input id="post" type="text" name="zip"> <br>
+
+    Postitoimipaikka: <br><input id="post" type="text" name="post"> <br>
+
+    Puhelin: <br><input id="post" type="text" name="phone"> <br>
+
+    PVM:<br> <input type="text" id="datepicker" name="date"> <br>
+    
+    *Viesti:<br>
+    <s> <textarea name="viesti" id="toggle" rows="5"  style="width:100px;height:100px;"></textarea></s>
+
+
+
+
+
+    <input id="post1" type="Submit" name="lähetys" value="Lähetä">
+</form>
+<div class="foo"></div>
+
+
+</body>
+</html>

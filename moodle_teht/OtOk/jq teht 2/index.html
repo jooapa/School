@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Rejesus.ru</title>
+    <script> 
+        $(document).ready(function(){
+          $("#abts").click(function(){
+            $("#text").slideToggle("fast");
+          });
+        });
+        $(document).ready(function(){
+        $("#sus").mouseover(function(){
+            $( "#sus" ).fadeToggle(500);
+            })
+        })
+        $(document).ready(function(){
+        $("#sus").mouseleave(function(){
+            $( "#sus" ).slideDown(500);
+            })
+        })
+            </script>
+    <style>
+        html{
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: lighter;
+            font-size: large;     
+            width: 100%;
+            height: 200%;
+            overflow-x: hidden;
+            color: aliceblue;
+        }
+        body{
+            background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(41, 41, 41) 5%, rgb(82, 82, 82) 80%, rgb(23, 23, 23) 90%); 
+        }
+        header{
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            text-align: center;
+            right: 0;
+            width: 100%;
+            height: 4rem;
+            background-color: rgb(23, 23, 23);
+        }
+        #abts, #abts:hover:after{
+            transition: 1s cubic-bezier(.21,1.2,.06,.98);
+            right: 10%;
+            position: absolute;
+            border: 2px solid rgb(255, 255, 255);
+            background-color: rgba(255, 255, 255, 0);
+            color: rgb(255, 255, 255);
+            padding: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #abts:hover{
+            transition: 1s cubic-bezier(.21,1.2,.06,.98);
+            background-color: rgba(20, 20, 20, 0.086);
+        }
+        #text{
+            right: 7%;
+            top: 70%;
+            position: absolute;
+        }
+        .container{
+            display: grid;  
+            grid-template-columns: auto auto auto;
+            background-color: #00000000;
+            border: 3px solid rgba(0, 0, 0, 0.386);
+            position: relative;
+            right: -4%;margin-top:20%;
+            width: 90%;
+        }
+        .div1{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #00000000;
+            border: 3px solid black;
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        a{
+            color: rgb(235, 161, 13);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="sus">Rejesus corporation</h1>
+        <button id="abts">About us</button>
+        <h4 id="text">Nothing to know</h4>
+    </header>
+    <div class="container">
+        <div class="div1">Good Products</div>
+        <div class="div1">Amazing Customer Service</div>
+        <div class="div1">5/5<br>-techradar
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="div1">contact us:<br>support@rejesus.ru</div>
+        <div class="div1"><a href="lomake.html">FILL OUT OUR FORM<br></a>!!</div>
+        <div class="div1">Terms of Service</div>
+    </div>
+
+</body>
+</html>

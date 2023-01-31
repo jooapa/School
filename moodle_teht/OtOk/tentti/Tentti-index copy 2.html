@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body> <!--puuttui "<" -->
+<h2>JavaScript taulukko</h2>
+<p>For looppi:</p>
+<p id="teht3"></p>
+<script>
+   var autot, text, fLen; // ei i
+   autot = ["BMW", "Opel", "Volvo", "MB", "Honda", "Kia"];
+   fLen = autot.length;
+   text = "<ul>";
+   for (i = 0; i < fLen; i++) // o -> 0
+   { //ei ()
+      text += "<li>" + autot[i] + "</li>";
+   } //ei ()
+   text += "</ul>";
+   document.getElementById("teht3").innerHTML = text;
+   console.log(i);
+</script>

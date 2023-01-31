@@ -1,0 +1,86 @@
+
+
+body{
+
+    background-image: url("untitled.jpg");
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+tarj{
+
+    background-color: rgb(88, 88, 88);
+    font-size: 25px;
+    position: fixed;
+    padding: 15px;
+    border-radius: 40px;
+    top: 162px;
+    left: 60px;
+}
+
+
+Header2{
+    background-color: rgb(26, 26, 26);
+    font-size: 100px;
+    color: rgb(255, 255, 255);
+    width: 75%;
+
+    text-align: center;
+    position: fixed;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    left: 13.5%;
+}
+
+ruokalista{
+    position: absolute;
+    font-size: medium;
+    background-color: rgb(51, 51, 51);
+    width: 75vw;
+    left: 0%;
+    top: 250px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+footer{
+    
+    background-color: rgb(20, 20, 20);
+    font-size: 20px;
+    text-align: center;
+    position: fixed;
+    left: 0;
+     bottom: 0;
+    width: 100%;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+text{
+
+    text-align: center;
+    font-size: 15px;
+    color: rgb(209, 209, 209);
+
+
+}
+
+text1{
+    font-size: large;
+    color: rgb(255, 255, 255);
+}
+
+yhteis{
+    position: absolute;
+    font-size: medium;
+    background-color: rgb(37, 37, 37);
+    width: 100%;
+    left: 0%;
+    top: 650px;
+    border-radius: 10px;
+    
+}
+
+yhteistext{
+    font-family: Georgia, serif;
+}

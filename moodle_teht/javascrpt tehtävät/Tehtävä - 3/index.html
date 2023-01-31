@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+   
+    </head>
+    <body>
+        <script>
+
+            var maIn1 = prompt("Maanantain lämpötila aamulla");
+            var maIn2 = prompt("Maanantain lämpötila päivällä");
+            var maIn3 = prompt("Maanantain lämpötila illalla");   
+                  
+            var ma1 = parseInt(maIn1)
+            var ma2 = parseInt(maIn2)
+            var ma3 = parseInt(maIn3)
+            var maSr = ma1 + ma2 + ma3;
+            var maTrue = Math.round(maSr / 3); 
+            
+          //------------------------------------------------------------  
+            var tiIn1 = prompt("Tiistain lämpötila aamulla");
+            var tiIn2 = prompt("Tiistain lämpötila päivällä");
+            var tiIn3 = prompt("Tiistain lämpötila illalla");   
+                  
+            var ti1 = parseInt(tiIn1)
+            var ti2 = parseInt(tiIn2)
+            var ti3 = parseInt(tiIn3)
+            var tiSr = ti1 + ti2 + ti3;
+            
+            var tiTrue = Math.round(tiSr / 3); 
+            //------------------------------------------------------------  
+              var keIn1 = prompt("Keskiviikon lämpötila aamulla");
+              var keIn2 = prompt("Keskiviikon lämpötila päivällä");
+              var keIn3 = prompt("Keskiviikon lämpötila illalla");   
+                    
+              var ke1 = parseInt(keIn1)
+              var ke2 = parseInt(keIn2)
+              var ke3 = parseInt(keIn3)
+              var keSr = ke1 + ke2 + ke3;
+              
+              var keTrue = Math.round(keSr / 3); 
+            //------------------------------------------------------------  
+              var toIn1 = prompt("Torstain lämpötila aamulla");
+              var toIn2 = prompt("Torstain lämpötila päivällä");
+              var toIn3 = prompt("Torstain lämpötila illalla");   
+                    
+              var to1 = parseInt(toIn1)
+              var to2 = parseInt(toIn2)
+              var to3 = parseInt(toIn3)
+              var toSr = to1 + to2 + to3;
+              
+              var toTrue = Math.round(toSr / 3); 
+            //------------------------------------------------------------  
+              var peIn1 = prompt("Perjantain lämpötila aamulla");
+              var peIn2 = prompt("Perjantain lämpötila päivällä");
+              var peIn3 = prompt("Perjantain lämpötila illalla");   
+                    
+              var pe1 = parseInt(peIn1)
+              var pe2 = parseInt(peIn2)
+              var pe3 = parseInt(peIn3)
+              var peSr = to1 + to2 + to3;
+              
+              var peTrue = Math.round(peSr / 3); 
+            //------------------------------------------------------------  
+              var laIn1 = prompt("Launtain lämpötila aamulla");
+              var laIn2 = prompt("Launtain lämpötila päivällä");
+              var laIn3 = prompt("Launtain lämpötila illalla");   
+                
+              var la1 = parseInt(laIn1)
+              var la2 = parseInt(laIn2)
+              var la3 = parseInt(laIn3)
+              var laSr = la1 + la2 + la3;
+              
+              var laTrue = Math.round(laSr / 3); 
+            //------------------------------------------------------------  
+              var suIn1 = prompt("Sunnuntain lämpötila aamulla");
+              var suIn2 = prompt("Sunnuntain lämpötila päivällä");
+              var suIn3 = prompt("Sunnuntain lämpötila illalla");   
+                
+              var su1 = parseInt(suIn1)
+              var su2 = parseInt(suIn2)
+              var su3 = parseInt(suIn3)
+              var suSr = su1 + su2 + su3;
+              
+              var suTrue = Math.round(suSr / 3); 
+                            
+              
+            if (maTrue> 25)  
+               var maTrue = "<span style='color:red'>" + maTrue + "</span>";
+              else if (maTrue < 15)
+              var maTrue = "<span style='color:blue'>" + maTrue + "</span>";
+            else if (maTrue)
+              var maTrue = "<span style='color:black'>" + maTrue + "</span>";
+
+
+              if (tiTrue> 25)  
+               var tiTrue = "<span style='color:red'>" + tiTrue + "</span>";
+              else if (tiTrue < 15)
+              var tiTrue = "<span style='color:blue'>" + tiTrue + "</span>";
+            else if (tiTrue)
+              var tiTrue = "<span style='color:black'>" + tiTrue + "</span>";
+              
+              
+              if (keTrue> 25)  
+               var keTrue = "<span style='color:red'>" + keTrue + "</span>";
+              else if (keTrue < 15)
+              var keTrue = "<span style='color:blue'>" + keTrue + "</span>";
+            else if (keTrue)
+              var keTrue = "<span style='color:black'>" + keTrue + "</span>";
+              
+              
+              if (toTrue> 25)  
+               var toTrue = "<span style='color:red'>" + toTrue + "</span>";
+              else if (toTrue < 15)
+              var toTrue = "<span style='color:blue'>" + toTrue + "</span>";
+            else if (toTrue)
+              var toTrue = "<span style='color:black'>" + toTrue + "</span>";
+              
+              
+              if (peTrue> 25)  
+               var peTrue = "<span style='color:red'>" + peTrue + "</span>";
+              else if (peTrue < 15)
+              var peTrue = "<span style='color:blue'>" + peTrue + "</span>";
+            else if (peTrue)
+              var peTrue = "<span style='color:black'>" + peTrue + "</span>";
+              
+              
+              if (laTrue> 25)  
+               var laTrue = "<span style='color:red'>" + laTrue + "</span>";
+              else if (laTrue < 15)
+              var laTrue = "<span style='color:blue'>" + laTrue + "</span>";
+            else if (laTrue)
+              var laTrue = "<span style='color:black'>" + laTrue + "</span>";
+              
+              
+              if (suTrue> 25)  
+               var suTrue = "<span style='color:red'>" + suTrue + "</span>";
+              else if (suTrue < 15)
+              var suTrue = "<span style='color:blue'>" + suTrue + "</span>";
+            else if (suTrue)
+              var suTrue = "<span style='color:black'>" + suTrue + "</span>";
+
+
+
+
+
+
+
+
+            document.write("Maanantai " + maTrue + "°C" + "<br>");
+            document.write("tiistai " + tiTrue +"°C" + "<br>");
+            document.write("keskiviikko " + keTrue +"°C" + "<br>");
+            document.write("Torstai " + toTrue +"°C" + "<br>");
+            document.write("Perjantai " + peTrue +"°C" + "<br>");
+            document.write("Lauantai " + laTrue +"°C" + "<br>");
+            document.write("Sunnuntai " + suTrue +"°C" + "<br>");
+              
+              </script>
+
+             
+
+
+    </body>
+    </html>

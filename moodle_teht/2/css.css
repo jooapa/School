@@ -1,0 +1,88 @@
+.div3 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation-name: big;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier();
+}
+
+.div2 {
+    width: 200px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    animation-name: example;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease();
+}
+
+
+.divv1{
+    width: 100px;
+    height: 300px;
+    background-color: red;
+    position: relative;
+    animation-name: lol;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease();
+}
+.divv2{
+    
+    width: 100px;
+    height: 200px;
+    background-color: red;
+    position: relative;
+    animation-name: lol;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease();
+}
+
+@keyframes example {
+
+    0%   {background-color:red; left:0px; top:0px;}
+    33%  {background-color:yellow; left:500px; top:500px;}
+    50%  {background-color:blue; left:1000px; top:200px;}
+    75% {background-color:green; left:60px; top:200px;}
+    100%{background-color:red; left:0px; top:0px;}
+
+    0%   {border-bottom-right-radius: 40%;}
+    33%  {border-top-right-radius: 40%;}
+    50%  {border-bottom-left-radius: 60%;}
+    75% {border-radius: 40%;}
+    100%   {border-bottom-right-radius: 40%;}
+
+}
+@keyframes big {
+
+    0%   {background-color:red; left:0px; top:0px;}
+    33%  {background-color:yellow; left:600px; top:550px;}
+    50%  {background-color:blue; left:1000px; top:200px;}
+    75% {background-color:green; left:490px; top:100px;}
+    100%{background-color:red; left:0px; top:0px;}
+
+    0%   {border-bottom-right-radius: 40%;}
+    33%  {border-top-right-radius: 40%;}
+    50%  {border-bottom-left-radius: 60%;}
+    75% {border-radius: 40%;}
+    100%   {border-bottom-right-radius: 40%;}
+
+}
+
+@keyframes lol {
+    0% {left:900px; top:-220px;}
+    100% {left:900px; top:-220px;}
+    0%   {border-bottom-right-radius: 40%;}
+    33%  {border-top-right-radius: 40%;}
+    50%  {border-bottom-right-radius: 60%;}
+    75%     {border-radius: 40%;}
+    100%    {border-bottom-right-radius: 40%;}
+}
+
+
+

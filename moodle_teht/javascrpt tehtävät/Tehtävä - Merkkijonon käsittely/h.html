@@ -1,0 +1,31 @@
+<body style="text-align:center;">
+	<h2 style="color:green">GeeksForGeeks</h2>
+	<h4>Function Parameters and Arguments</h4>
+
+	<p>Finding the largest number : (4, 50, 6)</p>
+
+	<p id="geeks"></p>
+
+	<script>
+		function GFG( var1, var2, var3 ) {
+			if( var1 > var2 ) {
+				if( var1 > var3 ) {
+					return var1;
+				}
+				else {
+					return var3;
+				}
+			}
+			else {
+				if( var2 > var3 ) {
+					return var2;
+				}
+				else {
+					return var3;
+				}
+			}
+		}
+		document.getElementById("geeks").innerHTML
+				= GFG(4, 50, 6);
+	</script>
+</body>
