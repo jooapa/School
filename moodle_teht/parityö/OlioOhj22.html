@@ -86,7 +86,11 @@
         </div> 
         <div class="code">
             document<br>
-            console
+            console<br>
+            Number<br>
+            String<br>
+            Array<br>
+            function
         </div><br>
     </div>
     <div class="ominaisuus-parent">
@@ -179,32 +183,32 @@
         </div>
         <div class="code">
             <green>class</green> Animal <pink>{</pink><br>
-                <blue>constructor</blue>(<lblue>name</lblue>) <pink>{</pink><br>
-                  <blue>this</blue>.speed = 0;<br>
-                  <blue>this</blue>.<lblue>name</lblue> = <lblue>name</lblue>;<br>
-                }<br>
-                run(speed) {<br>
-                    <blue>this</blue>.speed = speed;<br>
-                  alert(`${<blue>this</blue>.<lblue>name</lblue>} runs with speed ${<blue>this</blue>.speed}.`);<br>
-                }<br>
-                stop() {<br>
-                    <blue>this</blue>.speed = 0;<br>
-                  alert(`${<blue>this</blue>.<lblue>name</lblue>} stands still.`);<br>
-                  <pink>}</pink><br>
-                <pink>}</pink><br>
+                &emsp;  <blue>constructor</blue>(<lblue>name</lblue>) <pink>{</pink><br>
+                    &emsp;&emsp; <blue>this</blue>.speed = 0;<br>
+                    &emsp; &emsp; <blue>this</blue>.<lblue>name</lblue> = <lblue>name</lblue>;<br>
+                  &emsp;}<br>
+                &emsp;&emsp;run(speed) {<br>
+                    &emsp;&emsp;&emsp; <blue>this</blue>.speed = speed;<br>
+                    &emsp;&emsp; alert(`${<blue>this</blue>.<lblue>name</lblue>} runs with speed ${<blue>this</blue>.speed}.`);<br>
+                  &emsp;}<br>
+                &emsp;stop() {<br>
+                    &emsp;&emsp; <blue>this</blue>.speed = 0;<br>
+                    &emsp;&emsp;&emsp;alert(`${<blue>this</blue>.<lblue>name</lblue>} stands still.`);<br>
+                  &emsp;&emsp;<pink>}</pink><br>
+                  &emsp;<pink>}</pink><br>
               <br>
-              let <lblue>animal</lblue> = <green>new</green> Animal("My animal ");<br>
+              &emsp;let <lblue>animal</lblue> = <green>new</green> Animal("My animal ");<br>
+              &emsp;<br>
+              &emsp;<green>class</green> Rabbit extends Animal {<br>
+                &emsp;&emsp;hide() {<br>
+                    &emsp;&emsp;&emsp;alert(`${<blue>this</blue>.<lblue>name</lblue>} hides!`);<br>
+                  &emsp;&emsp;}<br>
+                &emsp;}<br>
               <br>
-              <green>class</green> Rabbit extends Animal {<br>
-                hide() {<br>
-                  alert(`${<blue>this</blue>.<lblue>name</lblue>} hides!`);<br>
-                }<br>
-              }<br>
+              &emsp;let rabbit = <green>New</green> Rabbit("White Rabbit");<br>
               <br>
-              let rabbit = <green>New</green> Rabbit("White Rabbit");<br>
-              <br>
-              rabbit.run(5); // White Rabbit runs with speed 5.<br>
-              rabbit.hide(); // White Rabbit hides!<br>
+              &emsp;rabbit.run(5); // White Rabbit runs with speed 5.<br>
+              &emsp;rabbit.hide(); // White Rabbit hides!<br>
                 
             </div>
         </div>

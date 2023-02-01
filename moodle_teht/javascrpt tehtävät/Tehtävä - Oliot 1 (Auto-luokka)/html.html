@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Auto{
+            
+            constructor(merkki, malli, vuosimalli, nopeus){
+                this.malli = malli;
+                this.merkki = merkki;
+                this.vuosimalli = vuosimalli
+                this.nopeus = nopeus
+            }
+            aja(x){
+                this.nopeus += x
+            }
+            jarruta(x){
+                this.nopeus -= x
+                
+            }
+            naytaTiedot(){
+                document.getElementById("l").innerHTML = "Autosi merkki on: " + this.merkki + "<br> Autosi malli on: "+ this.malli +"<br> Autosi vuosimalli on: "+ this.vuosimalli +"<br>ajat: " + this.nopeus + "km/h <br>";
+            }
+        }
+        let MunAuto = new Auto("Ford", "Focus", "2002", 0)
+
+    </script>
+    <button onclick="MunAuto.aja(1)">aja 1km/h nopeammin</button>
+    <button onclick="MunAuto.jarruta(1)">jarruta kun ajat 1km/s hitaammin</button>
+    <button onclick="MunAuto.naytaTiedot()">näytätiedot</button>
+    <p id="l"></p>
+</body>
+</html>
