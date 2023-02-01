@@ -7,14 +7,19 @@
     <title>Document</title>
 </head>
 <body>
+    <p id="kertoma"></p>
     <script>
-        j = Parseint(prompt("luku"))
-        j++
+        j = prompt("Anna Luku")
         fac = 1;
-        for (i = 1; i < j; i++){
-            fac = fac * i;
-            console.log(fac)
+        for (i = 1; i <= j; i++){
+            fac *= i;
         }   
+        if(j === ""){
+            document.getElementById("kertoma").innerHTML = "0 kertoma on " + fac;
+        }
+        else{
+            document.getElementById("kertoma").innerHTML = j +" kertoma on " + fac;
+        }
     </script>
 </body>
 </html>
