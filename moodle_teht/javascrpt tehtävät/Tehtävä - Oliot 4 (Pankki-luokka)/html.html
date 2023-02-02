@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    Kirjaluku = "Kirja ei ole luettu"
+        class kirja{    
+            constructor(nimi, kirjailija, julkaisuvuosi, sivumäärä, luettu){
+            this.nimi = nimi;
+            this.kirjailija = kirjailija;
+            this.julkaisuvuosi = julkaisuvuosi;
+            this.sivumäärä = sivumäärä ;
+            this.luettu = false;
+            
+            }  
+            lue(){
+                this.luettu = true
+                Kirjaluku = "Kirja on luettu"
+            }
+            näytätiedot(){
+                document.getElementById("Tieto").innerHTML = "Kirjan nimi: " + this.nimi+ "<br>Kirjan kirjailija:" +this.kirjailija+ "<br>Kirjan julkaisuvuosi: " +this.kirjailija+ "<br>Kirjan sivumäärä: " + this.sivumäärä + "<br>" + Kirjaluku
+            }
+        }
+        let aakkoset = new kirja("Aakkoset", "Mikael", "1802", "1202")
+    </script>
+    <button onclick="aakkoset.näytätiedot()">Kirja tiedot</button>
+    <button onclick="aakkoset.lue(); aakkoset.näytätiedot()">Lue Kirja</button>
+    <p id="Tieto"></p>
+</body>
+</html>
