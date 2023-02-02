@@ -16,14 +16,13 @@
                 this.historia = historia;
             }  
             talleta(x){
-                let date = new Date();
+                let date = new Date.now();
                 this.saldo += x
                 this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
             }
             nosta(x){
                 let date = new Date();
                 this.saldo -= x
-                this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
             }
             näytäTiedot(){
                 document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
