@@ -15,16 +15,43 @@
                 this.saldo = saldo;
                 this.historia = historia;
             }  
-            talleta(){
-
+            talleta(x){
+                let date = new Date();
+                this.saldo += x
+                this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+            }
+            nosta(x){
+                let date = new Date();
+                this.saldo -= x
+                this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+            }
+            näytäTiedot(){
+                document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
+            }
+            näytäHistoria(){
+                //[Nosta/Talletus, Tapahtuman määrä, Saldo Tapahtuman jälkeen, Päivämäärä]
+                document.getElementById("historia").innerHTML = `Tilin historia: 
+                <table>
+                <tr>
+                    <th>Tapahtuma</th>
+                    <th>Tapahtuman määrä</th>
+                    <th>Saldo</th>
+                    <th>Päivämäärä</th>
+                    
+                </tr>${this.historia.join("")}
+                <table>`
             }
 
         }
 
         let MiskanTili = new Pankki("F10580001470824575")
     </script>
-    <button onclick="aakkoset.näytätiedot()">Kirja tiedot</button>
-    <button onclick="aakkoset.lue(); aakkoset.näytätiedot()">Lue Kirja</button>
+    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
+    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button>
+    <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button>
+    <button onclick="MiskanTili.näytäTiedot()">Näytä Tiedot</button>
+
     <p id="Tieto"></p>
+    <p id="historia"></p>
 </body>
 </html>
