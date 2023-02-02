@@ -8,7 +8,8 @@
 </head>
 <body>
     <script>
-    Kirjaluku = "Kirja ei ole luettu"
+        var tiliNum = false;
+
         class Pankki{    
             constructor(tilinumero, saldo = 0, historia = []){
                 this.tilinumero = tilinumero;
@@ -16,20 +17,38 @@
                 this.historia = historia;
             }  
             talleta(x){
+                if (tiliNum === "F10580001470824575"){
                 let date = new Date();
                 this.saldo += x
                 this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
-            }
-            nosta(x){
-                if(x - 1 < this.saldo){
-                    let date = new Date();
-                    this.saldo -= x
-                    this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+
                 }
-                else{alert("Et voi nostaa");}
+                else{
+                    alert("Et voi Talleta");
+                }
+            }
+
+            nosta(x, tiliNum){
+                if (tiliNum === "F10580001470824575"){
+                    TiliNum = true
+                    if(x - 1 < this.saldo){
+                        let date = new Date();
+                        this.saldo -= x
+                        this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+                    }
+                    else{alert("Et voi nostaa");}
+                }
+                else{
+                    alert("Väärä Tilinumero")
+                }
             }
             näytäTiedot(){
-                document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
+                if(tiliNum === true){
+                    document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
+                }
+                else{
+                    document.getElementById("Tieto").innerHTML = "NOUNOU"
+                }
             }
             näytäHistoria(){
                 //[Nosta/Talletus, Tapahtuman määrä, Saldo Tapahtuman jälkeen, Päivämäärä]
@@ -51,7 +70,7 @@
         console.log("muokkaus")
     </script>
     <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
-    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button>
+    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')), prompt('tilinumero'))">Nosta Rahaa</button>
     <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button>
     <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button>
 
