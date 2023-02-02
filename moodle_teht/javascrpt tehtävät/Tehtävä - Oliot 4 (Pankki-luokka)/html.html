@@ -9,24 +9,19 @@
 <body>
     <script>
     Kirjaluku = "Kirja ei ole luettu"
-        class kirja{    
-            constructor(nimi, kirjailija, julkaisuvuosi, sivumäärä, luettu){
-            this.nimi = nimi;
-            this.kirjailija = kirjailija;
-            this.julkaisuvuosi = julkaisuvuosi;
-            this.sivumäärä = sivumäärä ;
-            this.luettu = false;
-            
+        class Pankki{    
+            constructor(tilinumero, saldo = 0, historia = []){
+                this.tilinumero = tilinumero;
+                this.saldo = saldo;
+                this.historia = historia;
             }  
-            lue(){
-                this.luettu = true
-                Kirjaluku = "Kirja on luettu"
+            talleta(){
+
             }
-            näytätiedot(){
-                document.getElementById("Tieto").innerHTML = "Kirjan nimi: " + this.nimi+ "<br>Kirjan kirjailija:" +this.kirjailija+ "<br>Kirjan julkaisuvuosi: " +this.kirjailija+ "<br>Kirjan sivumäärä: " + this.sivumäärä + "<br>" + Kirjaluku
-            }
+
         }
-        let aakkoset = new kirja("Aakkoset", "Mikael", "1802", "1202")
+
+        let MiskanTili = new Pankki("F10580001470824575")
     </script>
     <button onclick="aakkoset.näytätiedot()">Kirja tiedot</button>
     <button onclick="aakkoset.lue(); aakkoset.näytätiedot()">Lue Kirja</button>
