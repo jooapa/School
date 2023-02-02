@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #button4{
+            display: none;
+        }
+    </style>
+</head>
+<body onload="gamer.näytäTiedot()">
+    <script>
+        PlayerName = "";
+        PlayerName = prompt("Kerro Pelaajasi nimi");
+        Kirjaluku = "Kirja ei ole luettu"
+        document.getElementById("button4").style.visibility = "visible"
+        class pelaaja{    
+            constructor(nimi, pisteet, elämät, taso, kokemuspisteet){
+            this.nimi = nimi;
+            this.pisteet = pisteet;
+            this.elämät = elämät;
+            this.taso = taso ;
+            this.kokemuspisteet = kokemuspisteet;
+            }  
+            pelaa(x){
+                this.pisteet += x
+                this.kokemuspisteet += x/10
+            }
+            häviä(x){
+                this.elämät -= x;
+            }
+            nouseTasolle(){
+                if(this.kokemuspisteet >= this.taso*100){
+                    this.kokemuspisteet -= this.taso*100
+                    this.taso += 1
+                }
+            }
+            näytäTiedot(){
+                document.getElementById("Tieto").innerHTML = "Pelaajan nimi: " + this.nimi+"<br>" +this.nimi+"n pisteet: " + this.pisteet + "<br>" +this.nimi+"n elämät: " + this.elämät + "<br>" +this.nimi+"n taso: " + this.taso + "<br>" +this.nimi+"n kokemuspisteet: " + this.kokemuspisteet + "/"+ this.taso*100;
+            }
+            
+        }
+        let gamer = new pelaaja(PlayerName, 0, 3, 1, 0)
+    </script>
+    <button id="button4" onclick="gamer.pelaa(50); gamer.näytäTiedot();">Pelaa</button>
+    <button id="button4" onclick="gamer.häviä(1); gamer.näytäTiedot();">Häviä</button>
+    <button id="button4" onclick="gamer.nouseTasolle(); gamer.näytäTiedot();">Nouse uudelle Tasolle</button>
+    <button id="button4" onclick="gamer.näytäTiedot();">Näytä Tiedot</button>
+    <p id="Tieto"></p>
+</body>
+</html>
