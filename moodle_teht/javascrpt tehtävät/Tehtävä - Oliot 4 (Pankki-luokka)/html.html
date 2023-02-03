@@ -34,6 +34,13 @@
             -moz-box-shadow:    0px 0px 17px 1px rgba(0,0,0,0.75);
             transform: scale(95%);
         }
+        button:active{
+            box-shadow:         0px 0px 0px 0px rgba(0,0,0,0.75);
+            -webkit-box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow:    0px 0px 0px 0px rgba(0,0,0,0.75);
+            transform: scale(94%);
+            transition: 0.1s cubic-bezier(.1,1.09,.3,1.05);
+        }
         red{
             color: rgb(214, 52, 52);
         }
@@ -87,10 +94,12 @@
                     gateOpen = true
                     let date = new Date();
                     this.saldo += x
-                    this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                    if(x != 0){
+                        this.historia.push("<tr><th>Tallennus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                    }                      
                     if(updateAutomaticly === true){
-                            this.näytäTiedot(); 
-                            this.näytäHistoria();
+                        this.näytäTiedot(); 
+                        this.näytäHistoria();
                     }                }
                 else{
                     alert("Tilinumero On Väärin");
@@ -114,7 +123,9 @@
                     if(x - 1 < this.saldo){
                         let date = new Date();
                         this.saldo -= x
-                        this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                        if(x != 0){
+                            this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                        }
                         if(updateAutomaticly === true){
                             this.näytäTiedot(); 
                             this.näytäHistoria();
@@ -147,7 +158,7 @@
                     <th>Saldo</th>
                     <th>Päivämäärä</th>
                     
-                </tr>${this.historia.join("")}
+                </tr>${this.historia.join("")} //poistaa pilkut
                 <table>`
             }
 
