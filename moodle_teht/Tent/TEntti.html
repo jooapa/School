@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tentti</title>
+</head>
+<body>
+
+    <button onclick="AddName()">Lisää Nimi</button><!--napit jotka kutsuu function-->
+    <button onclick="History1()">Historia</button>
+    <p id="Historia"></p>
+    <p id="yhtSum"></p>
+    <p id="Vokaalit"></p>  
+    <p id="yli"></p>
+    <script>
+        nimiLista = [];//Glabaalit muuttujat
+        nimi = "";
+        last4 = [];
+        Vokaalit = [];
+        function AddName(){ //function joka lisää nimen listaan
+            nimi = prompt("lol");
+           
+            if (nimi === "") {
+                alert("Tyhjyys ei ole nimi");
+            }
+            else{
+                nimiPituus = nimi.length; // ottaa nimen pituuden ja laittaa sen listaa
+                Vokaalit.push(nimi.match(/[aeiouyäö]/gi).length);
+                nimiLista.push(nimiPituus);
+                last4 = nimiLista.slice(-4); // näyttää vain viimeiset 4 numeroa
+                VokaalitLast4 = Vokaalit.slice(-4); // näyttää vain viimeiset 4 numeroa vokaaleista
+                console.log(nimi);
+            }
+           
+        }
+       
+        function History1(){
+            if(nimi != ""){
+                document.getElementById("Historia").innerHTML = "Historia: " + last4;
+                sum = last4.reduce((a, b) => a + b, 0); //laskee yhteen listassa olevat luvut
+                console.log(sum);
+                document.getElementById("yhtSum").innerHTML = "Yhteenlaskettu summa: " + sum;
+                document.getElementById("Vokaalit").innerHTML = "Vokaaleja on: " + VokaalitLast4.reduce((a, b) => a + b, 0);;
+
+                if(sum > 20){ //selvittää onko viimeiset 4 luvun summa yli 20
+                    document.getElementById("yli").innerHTML = "Luku kaksikymmentä ylitetty!";
+                }
+                else{
+                    document.getElementById("yli").innerHTML = "";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

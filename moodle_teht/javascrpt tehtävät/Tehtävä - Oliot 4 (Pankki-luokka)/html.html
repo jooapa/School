@@ -8,7 +8,8 @@
 </head>
 <body>
     <script>
-        var tiliNum = false;
+        var tili = false;
+        var gateOpen = false;
 
         class Pankki{    
             constructor(tilinumero, saldo = 0, historia = []){
@@ -16,21 +17,24 @@
                 this.saldo = saldo;
                 this.historia = historia;
             }  
-            talleta(x){
-                if (tiliNum === "F10580001470824575"){
-                let date = new Date();
-                this.saldo += x
-                this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+            talleta(x, tiliNum){
+
+                if (tiliNum === "F10580001470824575" || gateOpen == true){
+                    gateOpen = true
+                    let date = new Date();
+                    this.saldo += x
+                    this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
 
                 }
                 else{
-                    alert("Et voi Talleta");
+                    alert("Tilinumero On Väärin");
                 }
             }
 
             nosta(x, tiliNum){
-                if (tiliNum === "F10580001470824575"){
-                    TiliNum = true
+                if (tiliNum === "F10580001470824575" || gateOpen == true){
+                    gateOpen = true
+                    tili = true
                     if(x - 1 < this.saldo){
                         let date = new Date();
                         this.saldo -= x
@@ -43,7 +47,7 @@
                 }
             }
             näytäTiedot(){
-                if(tiliNum === true){
+                if(tili === true){
                     document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
                 }
                 else{
@@ -69,7 +73,7 @@
         let MiskanTili = new Pankki("F10580001470824575")
         console.log("muokkaus")
     </script>
-    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
+    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')), prompt('tilinumero'))">Talleta Rahaa</button>
     <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')), prompt('tilinumero'))">Nosta Rahaa</button>
     <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button>
     <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button>
