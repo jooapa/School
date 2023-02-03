@@ -10,6 +10,7 @@
     <script>
         var tili = false;
         var gateOpen = false;
+        tiliNum = "";
 
         class Pankki{    
             constructor(tilinumero, saldo = 0, historia = []){
@@ -17,8 +18,10 @@
                 this.saldo = saldo;
                 this.historia = historia;
             }  
-            talleta(x, tiliNum){
-
+            talleta(x){
+                if(gateOpen == false){
+                    tiliNum = prompt("Tilinumero")
+                }
                 if (tiliNum === "F10580001470824575" || gateOpen == true){
                     gateOpen = true
                     let date = new Date();
@@ -31,7 +34,10 @@
                 }
             }
 
-            nosta(x, tiliNum){
+            nosta(x){
+                if(gateOpen == false){
+                    tiliNum = prompt("Tilinumero")
+                }
                 if (tiliNum === "F10580001470824575" || gateOpen == true){
                     gateOpen = true
                     tili = true
@@ -40,18 +46,18 @@
                         this.saldo -= x
                         this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
                     }
-                    else{alert("Et voi nostaa");}
+                    else{alert("Et voi nostaa enemmän kuin sinulla on rahaa");}
                 }
                 else{
                     alert("Väärä Tilinumero")
                 }
             }
             näytäTiedot(){
-                if(tili === true){
+                if(gateOpen == true){
                     document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
                 }
                 else{
-                    document.getElementById("Tieto").innerHTML = "NOUNOU"
+                    document.getElementById("Tieto").innerHTML = "Kirjaudu Sisään Ensin"
                 }
             }
             näytäHistoria(){
@@ -73,8 +79,8 @@
         let MiskanTili = new Pankki("F10580001470824575")
         console.log("muokkaus")
     </script>
-    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')), prompt('tilinumero'))">Talleta Rahaa</button>
-    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')), prompt('tilinumero'))">Nosta Rahaa</button>
+    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
+    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button>
     <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button>
     <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button>
 
