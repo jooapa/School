@@ -4,15 +4,55 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Jooapankki.fi</title>
+    <style>
+        body{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 900;
+            margin: 20px;
+        }
+        button {
+            background-color: #ffffff; /* Green */
+            border: none;
+            color: rgb(0, 0, 0);
+            padding: 15px 32px;
+            text-align: center;
+            border-radius: 0px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 200px;
+            transition: 1s cubic-bezier(.1,1.09,.3,1.05);
+            box-shadow: -1px 1px 24px 6px rgba(0,0,0,0.16);
+            -webkit-box-shadow: -1px 1px 24px 6px rgba(0,0,0,0.16);
+            -moz-box-shadow: -1px 1px 24px 6px rgba(0,0,0,0.16);
+            transform: scale(100%);
+        }
+        button:hover{
+            box-shadow:         0px 0px 17px 1px rgba(0,0,0,0.75);
+            -webkit-box-shadow: 0px 0px 17px 1px rgba(0,0,0,0.75);
+            -moz-box-shadow:    0px 0px 17px 1px rgba(0,0,0,0.75);
+            transform: scale(95%);
+        }
+        red{
+            color: rgb(214, 52, 52);
+        }
+        table, th, td {
+            padding: 10px;
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 <body onload="REGEX()">
+    <h1><red>JOOAPA</red>NKKI</h1>
     <script>
         var tili = false;
         var gateOpen = false;
         tiliNum = "";
         IBAN = "";
         var regEx = new RegExp(/[A-Z]{2}\d{2} ?\d{4} ?\d{4} ?\d{4} ?\d{2} ?[\d]{0,2}/gm);
+        updateAutomaticly = true;
 
         function REGEX(){
             IBAN = prompt("Kerro Tilinumero: Laita Muistiin Tulet tarviimaan sitä kirjautumisessa")
@@ -20,7 +60,7 @@
                 alert("Oikein!")
             }
             else{
-                alert("Väärin")
+                alert("TiliNumero Pitää olla oikea: FI00 0000 0000 0000 00")
                 location.reload();
             }
 
@@ -33,6 +73,13 @@
                 this.historia = historia;
             }  
             talleta(x){
+                if(isNaN(x)){
+                    x = 0
+                }
+                if(x < 0){
+                    alert("Luku ei voi olla miinus!")
+                    return;
+                }
                 if(gateOpen == false){
                     tiliNum = prompt("Kirjaudu sisään ensin: Tilinumero")
                 }
@@ -40,15 +87,24 @@
                     gateOpen = true
                     let date = new Date();
                     this.saldo += x
-                    this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
-
-                }
+                    this.historia.push("<tr><th>Talletus:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                    if(updateAutomaticly === true){
+                            this.näytäTiedot(); 
+                            this.näytäHistoria();
+                    }                }
                 else{
                     alert("Tilinumero On Väärin");
                 }
             }
 
             nosta(x){
+                if(isNaN(x)){
+                    x = 0
+                }
+                if(x < 0){
+                    alert("Luku ei voi olla miinus!")
+                    return;
+                }
                 if(gateOpen == false){
                     tiliNum = prompt("Kirjaudu sisään ensin: Tilinumero")
                 }
@@ -58,7 +114,11 @@
                     if(x - 1 < this.saldo){
                         let date = new Date();
                         this.saldo -= x
-                        this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date+"</th></tr>")
+                        this.historia.push("<tr><th>Nosto:</th>", "<th>"+x+"</th>", "<th>"+this.saldo+"</th>", "<th>"+date.toGMTString()+"</th></tr>")
+                        if(updateAutomaticly === true){
+                            this.näytäTiedot(); 
+                            this.näytäHistoria();
+                        } 
                     }
                     else{alert("Et voi nostaa enemmän kuin sinulla on rahaa");}
                 }
@@ -68,11 +128,14 @@
             }
             näytäTiedot(){
                 if(gateOpen == true){
-                    document.getElementById("Tieto").innerHTML = `Tilinumero: ${this.tilinumero}<br>Tilin Saldo: ${this.saldo}€ <br>`            
+                    document.getElementById("Tieto").innerHTML = `Tilinumero: ${IBAN}<br>Tilin Saldo: ${this.saldo}€ <br>`            
                 }
                 else{
                     document.getElementById("Tieto").innerHTML = "Kirjaudu Sisään Ensin"
                 }
+            }
+            korko(){
+
             }
             näytäHistoria(){
                 //[Nosta/Talletus, Tapahtuman määrä, Saldo Tapahtuman jälkeen, Päivämäärä]
@@ -89,16 +152,28 @@
             }
 
         }
-
+        
         let MiskanTili = new Pankki(IBAN)
         console.log("muokkaus")
-    </script>
-    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
-    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button>
-    <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button>
-    <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button>
+
+        function autoUpdate(){
+            if(updateAutomaticly == false){
+                updateAutomaticly = true
+            }       
+            else if(updateAutomaticly == true){
+                updateAutomaticly = false
+            } 
+
+        }
+        </script>
+    <button id="" onclick="autoUpdate()">automaat. Historia</button><br><br>
+    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button><br><br>
+    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button><br><br>
+    <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button><br><br>
+    <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button><br><br>
 
     <p id="Tieto"></p>
     <p id="historia"></p>
+
 </body>
 </html>
