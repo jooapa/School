@@ -11,6 +11,53 @@
             font-weight: 900;
             margin: 20px;
         }
+        .vihreä{
+            background-color: #ffffff; /* Green */
+            border: none;
+            color: rgb(0, 0, 0);
+            padding: 15px 32px;
+            text-align: center;
+            border-radius: 0px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 200px;
+            transition: 1s cubic-bezier(.1,1.09,.3,1.05);
+            box-shadow: -1px 1px 24px 6px rgba(0, 255, 34, 0.25);
+            -webkit-box-shadow: -1px 1px 24px 6px rgba(0,255,0,0.25);
+            -moz-box-shadow: -1px 1px 24px 6px rgba(0,255,0,0.25);
+            transform: scale(100%);
+        }
+        .vihreä:hover{
+            box-shadow:         0px 0px 17px 1px rgba(255, 0, 0, 0.75);
+            -webkit-box-shadow: 0px 0px 17px 1px rgba(255, 0, 0, 0.75);
+            -moz-box-shadow:    0px 0px 17px 1px rgba(255, 0, 0, 0.16);
+            transform: scale(95%);
+        }
+        .punainen{
+            background-color: #ffffff; /* Green */
+            border: none;
+            color: rgb(0, 0, 0);
+            padding: 15px 32px;
+            text-align: center;
+            border-radius: 0px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            width: 200px;
+            transition: 1s cubic-bezier(.1,1.09,.3,1.05);
+            box-shadow: -1px 1px 24px 6px rgba(255, 0, 0, 0.16);
+            -webkit-box-shadow: -1px 1px 24px 6px rgba(255,0,0,0.16);
+            -moz-box-shadow: -1px 1px 24px 6px rgba(255,0,0,0.16);
+            transform: scale(100%);
+        }
+        .punainen:hover{
+            box-shadow:         0px 0px 17px 1px rgba(0, 255, 0, 0.25);
+            -webkit-box-shadow: 0px 0px 17px 1px rgba(0, 255, 0, 0.25);
+            -moz-box-shadow:    0px 0px 17px 1px rgba(0, 255, 0, 0.25);
+            transform: scale(95%);
+        }
+
         button {
             background-color: #ffffff; /* Green */
             border: none;
@@ -41,6 +88,9 @@
             transform: scale(94%);
             transition: 0.1s cubic-bezier(.1,1.09,.3,1.05);
         }
+        /* #aButton{
+
+        } */
         red{
             color: rgb(214, 52, 52);
         }
@@ -48,18 +98,27 @@
             padding: 10px;
             border: 2px solid black;
             border-collapse: collapse;
+            box-shadow:0px 0px 10px -0px rgba(0, 0, 0, 0.425)
         }
     </style>
 </head>
 <body onload="REGEX()">
     <h1><red>JOOAPA</red>NKKI</h1>
+    <button id="aButton" onclick="autoUpdate()">automaat. Historia</button><br><br>
+    <button onclick="MiskanTili.talleta(parseFloat(prompt('Talleta Rahaa €')))">Talleta Rahaa</button><br><br>
+    <button onclick="MiskanTili.nosta(parseFloat(prompt('Nosta Rahaa €')))">Nosta Rahaa</button><br><br>
+    <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button><br><br>
+    <button onclick="MiskanTili.näytäTiedot()">Näytä Tiedot</button><br><br>
+
+    <p id="Tieto"></p>
+    <p id="historia"></p>
     <script>
         var tili = false;
         var gateOpen = false;
         tiliNum = "";
         IBAN = "";
         var regEx = new RegExp(/[A-Z]{2}\d{2} ?\d{4} ?\d{4} ?\d{4} ?\d{2} ?[\d]{0,2}/gm);
-        updateAutomaticly = true;
+        updateAutomaticly = false;
 
         function REGEX(){
             IBAN = prompt("Kerro Tilinumero: Laita Muistiin Tulet tarviimaan sitä kirjautumisessa")
@@ -158,7 +217,7 @@
                     <th>Saldo</th>
                     <th>Päivämäärä</th>
                     
-                </tr>${this.historia.join("")} //poistaa pilkut
+                </tr>${this.historia.join("")}
                 <table>`
             }
 
@@ -170,21 +229,21 @@
         function autoUpdate(){
             if(updateAutomaticly == false){
                 updateAutomaticly = true
+                // document.getElementById("aButton").style.color = "blue";
+                document.getElementById("aButton").classList.add("vihreä");
+                document.getElementById("aButton").classList.remove("punainen");
+
             }       
             else if(updateAutomaticly == true){
                 updateAutomaticly = false
-            } 
+                document.getElementById("aButton").classList.add("punainen");
+                document.getElementById("aButton").classList.remove("vihreä");
 
+            } 
+            
         }
         </script>
-    <button id="" onclick="autoUpdate()">automaat. Historia</button><br><br>
-    <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button><br><br>
-    <button onclick="MiskanTili.nosta(parseInt(prompt('Nosta Rahaa €')))">Nosta Rahaa</button><br><br>
-    <button onclick="MiskanTili.näytäHistoria()">Näytä Historia</button><br><br>
-    <button onclick="MiskanTili.näytäTiedot(); MiskanTili.näytäHistoria()">Näytä Tiedot</button><br><br>
 
-    <p id="Tieto"></p>
-    <p id="historia"></p>
 
 </body>
 </html>
