@@ -6,11 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
+<body onload="REGEX()">
     <script>
         var tili = false;
         var gateOpen = false;
         tiliNum = "";
+        IBAN = "";
+        var regEx = new RegExp(/[A-Z]{2}\d{2} ?\d{4} ?\d{4} ?\d{4} ?\d{2} ?[\d]{0,2}/gm);
+
+        function REGEX(){
+            IBAN = prompt("Kerro Tilinumero: Laita Muistiin Tulet tarviimaan sitä kirjautumisessa")
+            if (IBAN.match(regEx)) {
+                alert("Oikein!")
+            }
+            else{
+                alert("Väärin")
+                location.reload();
+            }
+
+        } 
 
         class Pankki{    
             constructor(tilinumero, saldo = 0, historia = []){
@@ -20,9 +34,9 @@
             }  
             talleta(x){
                 if(gateOpen == false){
-                    tiliNum = prompt("Tilinumero")
+                    tiliNum = prompt("Kirjaudu sisään ensin: Tilinumero")
                 }
-                if (tiliNum === "F10580001470824575" || gateOpen == true){
+                if (tiliNum === IBAN || gateOpen == true){
                     gateOpen = true
                     let date = new Date();
                     this.saldo += x
@@ -36,9 +50,9 @@
 
             nosta(x){
                 if(gateOpen == false){
-                    tiliNum = prompt("Tilinumero")
+                    tiliNum = prompt("Kirjaudu sisään ensin: Tilinumero")
                 }
-                if (tiliNum === "F10580001470824575" || gateOpen == true){
+                if (tiliNum === IBAN || gateOpen == true){
                     gateOpen = true
                     tili = true
                     if(x - 1 < this.saldo){
@@ -76,7 +90,7 @@
 
         }
 
-        let MiskanTili = new Pankki("F10580001470824575")
+        let MiskanTili = new Pankki(IBAN)
         console.log("muokkaus")
     </script>
     <button onclick="MiskanTili.talleta(parseInt(prompt('Talleta Rahaa €')))">Talleta Rahaa</button>
