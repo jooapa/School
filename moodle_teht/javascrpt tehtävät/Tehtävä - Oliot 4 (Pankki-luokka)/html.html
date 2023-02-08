@@ -136,7 +136,7 @@
         } 
 
         class Pankki{    
-            constructor(tilinumero, saldo = 0, historia = [], korkoPros = 0){
+            constructor(tilinumero, saldo = 0, historia = [], korkoPros = 1){
                 this.tilinumero = tilinumero;
                 this.saldo = saldo;
                 this.historia = historia;
@@ -216,7 +216,7 @@
                 }              
             }
             luottorajanTarkistus(){
-                luottoRaja = netto * this.korkoPros;
+                luottoRaja = netto / this.korkoPros;
             }
             näytäHistoria(){
                 //[Nosta/Talletus, Tapahtuman määrä, Saldo Tapahtuman jälkeen, Päivämäärä]
