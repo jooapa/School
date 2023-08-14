@@ -138,13 +138,13 @@ header {
     color: #fff;
     font-size: 1em;
     cursor: pointer;
-    transition: 0.3s ease-in-out;
+    transition: 0.1s ease-in-out;
 
 }
 
 .buttons button:hover {
     background-color: #555;
-    box-shadow: 0 0 8px 0 rgb(134, 134, 134);
+    box-shadow: 0 0 0 0 rgb(134, 134, 134);
 }
 
 #hideShow {
