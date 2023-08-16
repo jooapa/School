@@ -1,75 +1,76 @@
-const Header = (props) => {
-  console.log(props);
-  return (
-      <h1>{props.course}</h1>
-  );
-};
+import { useState } from "react";
 
-// const Part = (props) => {
-//   return (
-//     <div>
-//       <p>Part</p>
-//     </div>
-//   );
-// };
+const Statistics = (props) => {
+  //addFeedback lisää arvoja muuttujiin, jotka ovat propsina tässä komponentissa
+  const {good, neutral, bad} = props;
 
-const Content = (props) => {
-  return (
-    <div>
-      <p>
-        Name of Course: {props.parts[0].name} <br />
-        Exercises: {props.parts[0].exercises}
-      </p>
-      <p>
-        Name of Course: {props.parts[1].name} <br />
-        Exercises: {props.parts[1].exercises}
-      </p>
-      <p>
-        Name of Course: {props.parts[2].name} <br />
-        Exercises: {props.parts[2].exercises}
-      </p>
-    </div>
-  );
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return(
+      <div> No feedback given</div>
+    ) 
+  }
+  else {
+    return(
+      <div>
+      <StatisticLine text="good" value = {good} />
+      <StatisticLine text="neutral" value = {neutral} />
+      <StatisticLine text="bad" value = {bad} />
+      <StatisticLine text="all" value = {bad + neutral + good} />
+      <StatisticLine text="average" value = {(good - bad) / (bad + neutral + good)} />
+      <StatisticLine text="positive" value = {good / (bad + neutral + good) * 100 + " %"} />
+      
+      </div>
+    )
+  } 
+  
 }
 
-const Total = (props) => {
+const StatisticLine = (props) => {
   return (
     <div>
-      <p>
-        Number of exercises:{" "}
-        {props.parts[0].exercises +
-          props.parts[1].exercises +
-          props.parts[2].exercises}
-      </p>
+      <p>{props.text} {props.value}</p>
     </div>
   );
 };
 
-const App = () => {
-    const course = "Half Stack application development";
-    const parts = [
-      {
-        name: "Fundamentals of React",
-        exercises: 10,
-      },
-      {
-        name: "Using props to pass data",
-        exercises: 7,
-      },
-      {
-        name: "State of a component",
-        exercises: 14,
-      },
-    ];
+const Header = (props) => {
+  return (
+      <h2>{props.header}</h2>
+  );
+};
 
+
+const App = () => {
+  // tallenna napit omaan tilaansa
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  //lisää muutujiin arvoja useState hookin avulla
+  function addFeedback(state) {
+    if (state === "good") {
+      setGood(good + 1);
+    }
+    if (state === "neutral") {
+      setNeutral(neutral + 1);
+    }
+    if (state === "bad") {
+      setBad(bad + 1);
+    }
+  }
+
+  
   return (
     <div>
-      <Header course={course} />
-      <Content parts={parts} />
-      <Total parts={parts} />
+      <Header header={"give feedback"} />
+      <br />
+      <button onClick={() => addFeedback("good")}>good</button>
+      <button onClick={() => addFeedback("neutral")}>neutral</button>
+      <button onClick={() => addFeedback("bad")}>bad</button>
+      <Header header={"statistics"} />
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   );
 };
 
 export default App;
-
