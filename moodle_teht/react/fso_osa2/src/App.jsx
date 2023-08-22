@@ -68,7 +68,7 @@ const App = () => {
     }
 
     //regex for maching any letter and space
-    if (newName.match(/^[A-Za-z\s]+$/) === null) {
+    if (newName.match(/[\p{Letter}\p{Mark}]+/gu) === null) {
       alert("Aseta oikea nimi");
       return;
     }
