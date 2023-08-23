@@ -1,10 +1,8 @@
 import { useState, useEffect, React } from "react";
-import axios from "axios";
 import personService from "./services/personService";
 
 
-
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, setPersons }) => {
   const filteredPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -13,8 +11,8 @@ const Persons = ({ persons, filter }) => {
       {filteredPersons.map((person) => (
         <table>
           <tr key={person.name}>
-            <td>{person.name} |</td>
-            <td>{person.number}</td>
+            <td>{person.name} | </td>
+            <td>{person.number} | </td>
             {/* delete person */}
             <td>
               <button
@@ -23,6 +21,10 @@ const Persons = ({ persons, filter }) => {
                     console.log("delete", person.id);
                     personService.deletePerson(person.id).then((response) => {
                       console.log(response);
+                      // update persons
+                      personService.getAll().then((initialPersons) => {
+                        setPersons(initialPersons);
+                      });
                     });
                   }
                 }}
@@ -77,31 +79,6 @@ const App = () => {
   const [newNumber, setNewNumber] = useState();
   const [filter, setFilter] = useState("");
 
-  // useEffect(() => {
-  //   fetchData();
-
-  //   const intervalId = setInterval(() => {
-  //     fetchData();
-  //   }, 2000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-  // const fetchData = () => {
-  //   axios
-  //     .get("http://localhost:3001/persons")
-
-  //     .then((response) => {
-  //       setPersons(response.data);
-
-  //       console.log(response);
-  //     })
-
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // };
-
     useEffect(() => {
       personService.getAll().then((initialPersons) => {
         setPersons(initialPersons);
@@ -120,11 +97,6 @@ const App = () => {
       return;
     }
 
-    //regex for maching any letter and space
-    if (newName.match(/[\p{Letter}\p{Mark}]+/gu) === null) {
-      alert("Aseta oikea nimi");
-      return;
-    }
     // phone number validation
     else if (newNumber === undefined || newNumber === null || newNumber === "") {
       alert("Anna puhelinnumero");
@@ -165,7 +137,7 @@ const App = () => {
         }}
       />
       <h2>Numerot</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons setPersons={setPersons} persons={persons} filter={filter}/>
     </div>
   );
 };
