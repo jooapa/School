@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Persons = ({ persons, filter }) => {
   const filteredPersons = persons.filter((person) =>
@@ -43,17 +44,42 @@ const PersonForm = ({ props }) => {
 const Filter = ({ filter, setFilter }) => {
   return (
     <div>
-    Rajaa näytettäviä:{" "}
-        <input type="text" onChange={(e) => setFilter(e.target.value)} />
+      Rajaa näytettäviä:{" "}
+      <input type="text" onChange={(e) => setFilter(e.target.value)} />
     </div>
   );
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas", number: "040-1231244" }]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState();
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    fetchData();
+
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const fetchData = () => {
+    axios
+      .get("http://localhost:3001/persons")
+
+      .then((response) => {
+        setPersons(response.data);
+
+        console.log(response);
+      })
+
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -73,19 +99,30 @@ const App = () => {
       return;
     }
     // phone number validation
-    if (newNumber === undefined || newNumber === null || newNumber === "") {
+    else if (newNumber === undefined || newNumber === null || newNumber === "") {
       alert("Anna puhelinnumero");
       return;
     }
 
     //regex for maching any number and - and space
-    if (newNumber.match(/^[0-9\s-]+$/) === null) {
+    else if (newNumber.match(/^[0-9\s-]+$/) === null) {
       alert("Aseta oikea puhelinnumero");
       return;
     }
+    else {
+      axios
+        .post("http://localhost:3001/persons", { name: newName, number: newNumber })
+        .then((response) => {
+          const addedPerson = response.data;
+          setPersons([...persons, addedPerson]);
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          console.error("Error adding person:", error);
+        });
+    }
     
-    setPersons([...persons, { name: newName, number: newNumber }]);
-
   };
 
   return (
