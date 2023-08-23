@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, React } from "react";
 import axios from "axios";
+import personService from "./services/personService";
+
+
 
 const Persons = ({ persons, filter }) => {
   const filteredPersons = persons.filter((person) =>
@@ -8,9 +11,27 @@ const Persons = ({ persons, filter }) => {
   return (
     <div>
       {filteredPersons.map((person) => (
-        <p key={person.name}>
-          {person.name} {person.number}
-        </p>
+        <table>
+          <tr key={person.name}>
+            <td>{person.name} |</td>
+            <td>{person.number}</td>
+            {/* delete person */}
+            <td>
+              <button
+                onClick={() => {
+                  if (window.confirm(`Poistetaanko ${person.name}?`)) {
+                    console.log("delete", person.id);
+                    personService.deletePerson(person.id).then((response) => {
+                      console.log(response);
+                    });
+                  }
+                }}
+              >
+                Poista
+              </button>
+            </td>
+          </tr>
+        </table>
       ))}
     </div>
   );
@@ -56,30 +77,36 @@ const App = () => {
   const [newNumber, setNewNumber] = useState();
   const [filter, setFilter] = useState("");
 
-  useEffect(() => {
-    fetchData();
+  // useEffect(() => {
+  //   fetchData();
 
-    const intervalId = setInterval(() => {
-      fetchData();
-    }, 2000);
+  //   const intervalId = setInterval(() => {
+  //     fetchData();
+  //   }, 2000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
-  const fetchData = () => {
-    axios
-      .get("http://localhost:3001/persons")
+  // const fetchData = () => {
+  //   axios
+  //     .get("http://localhost:3001/persons")
 
-      .then((response) => {
-        setPersons(response.data);
+  //     .then((response) => {
+  //       setPersons(response.data);
 
-        console.log(response);
-      })
+  //       console.log(response);
+  //     })
 
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // };
+
+    useEffect(() => {
+      personService.getAll().then((initialPersons) => {
+        setPersons(initialPersons);
       });
-  };
+    }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -110,17 +137,13 @@ const App = () => {
       return;
     }
     else {
-      axios
-        .post("http://localhost:3001/persons", { name: newName, number: newNumber })
-        .then((response) => {
-          const addedPerson = response.data;
-          setPersons([...persons, addedPerson]);
-          setNewName("");
-          setNewNumber("");
-        })
-        .catch((error) => {
-          console.error("Error adding person:", error);
-        });
+     // add new person to persons database db.json file using personService
+      personService.create({ name: newName, number: newNumber }).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+      });
+      
+      setNewName("");
+      setNewNumber("");
     }
     
   };
