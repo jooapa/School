@@ -93,15 +93,26 @@ const App = () => {
         alert("Anna nimi");
         return;
       }
-      alert(`${newName} on jo luettelossa`);
+      
+      // phone number validation
+      if (newNumber === undefined || newNumber === null || newNumber === "") {
+        alert("Anna puhelinnumero");
+        return;
+      }
+
+      if (window.confirm(`${newName} on jo luettelossa, Haluatko korvata vanhan numeron uudella?`)) {
+        // find person id
+        const person = persons.find((person) => person.name === newName);
+        // update person
+        personService.update(person.id, { name: newName, number: newNumber }).then((returnedPerson) => {
+          setPersons(persons.map((person) => (person.id !== returnedPerson.id ? person : returnedPerson)));
+        });
+        setNewName("");
+        setNewNumber("");
       return;
+      }
     }
 
-    // phone number validation
-    else if (newNumber === undefined || newNumber === null || newNumber === "") {
-      alert("Anna puhelinnumero");
-      return;
-    }
 
     //regex for maching any number and - and space
     else if (newNumber.match(/^[0-9\s-]+$/) === null) {
@@ -126,6 +137,8 @@ const App = () => {
       <div>
         <Filter filter={filter} setFilter={setFilter} />
       </div>
+      <br />
+      <p></p>
       <h3>Lisää uusi</h3>
       <PersonForm
         props={{
