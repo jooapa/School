@@ -1,6 +1,37 @@
 import { useState, useEffect, React } from "react";
 import personService from "./services/personService";
+import "./App.css";
 
+const personStatus = (time, type, newName) => {
+  const addedName = document.querySelector(".addedName");
+  addedName.style.display = "block";
+  if (type === "added") {
+    addedName.innerHTML = `${newName} lisätty.`;
+    addedName.style.border = "3px solid green";
+  } else if (type === "updated") {
+    addedName.innerHTML = `${newName} päivitetty.`;
+    addedName.style.border = "3px solid green";
+  } else if (type === "deleted") {
+    addedName.innerHTML = `${newName} poistettu.`;
+    addedName.style.border = "3px solid red";
+  }
+
+  setTimeout(() => {
+    addedName.style.display = "none";
+  }, time);
+}
+
+const addedPersonStyle = {
+  display: "none",
+  color: "black",
+  border: "3px solid green",
+  padding: "10px",
+  margin: "10px",
+  borderRadius: "5px",
+  width: "fit-content",
+  textAlign: "center",
+  backgroundColor: "#f2f2f2",
+};
 
 const Persons = ({ persons, filter, setPersons }) => {
   const filteredPersons = persons.filter((person) =>
@@ -9,10 +40,9 @@ const Persons = ({ persons, filter, setPersons }) => {
   return (
     <div>
       {filteredPersons.map((person) => (
-        <table>
           <tr key={person.name}>
-            <td>{person.name} | </td>
-            <td>{person.number} | </td>
+            <td>{person.name}</td>
+            <td>{person.number}</td>
             {/* delete person */}
             <td>
               <button
@@ -26,6 +56,7 @@ const Persons = ({ persons, filter, setPersons }) => {
                         setPersons(initialPersons);
                       });
                     });
+                    personStatus(1500, "deleted", person.name);
                   }
                 }}
               >
@@ -33,7 +64,6 @@ const Persons = ({ persons, filter, setPersons }) => {
               </button>
             </td>
           </tr>
-        </table>
       ))}
     </div>
   );
@@ -79,11 +109,11 @@ const App = () => {
   const [newNumber, setNewNumber] = useState();
   const [filter, setFilter] = useState("");
 
-    useEffect(() => {
-      personService.getAll().then((initialPersons) => {
-        setPersons(initialPersons);
-      });
-    }, []);
+  useEffect(() => {
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
+    });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -109,6 +139,7 @@ const App = () => {
         });
         setNewName("");
         setNewNumber("");
+        personStatus(1500, "updated", newName);
       return;
       }
     }
@@ -127,9 +158,12 @@ const App = () => {
       
       setNewName("");
       setNewNumber("");
+      personStatus(1500, "added", newName);
     }
     
   };
+
+
 
   return (
     <div>
@@ -138,7 +172,7 @@ const App = () => {
         <Filter filter={filter} setFilter={setFilter} />
       </div>
       <br />
-      <p></p>
+      <p className="addedName" style={addedPersonStyle}></p>
       <h3>Lisää uusi</h3>
       <PersonForm
         props={{
@@ -150,7 +184,9 @@ const App = () => {
         }}
       />
       <h2>Numerot</h2>
-      <Persons setPersons={setPersons} persons={persons} filter={filter}/>
+      <table>
+      <Persons setPersons={setPersons} persons={persons} filter={filter} />
+      </table>
     </div>
   );
 };
