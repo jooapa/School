@@ -39,31 +39,36 @@ const Persons = ({ persons, filter, setPersons }) => {
   );
   return (
     <div>
+      <tr>
+        <th>Nimi</th>
+        <th>Puhelinumero</th>
+        <th>Poista</th>
+      </tr>
       {filteredPersons.map((person) => (
-          <tr key={person.name}>
-            <td>{person.name}</td>
-            <td>{person.number}</td>
-            {/* delete person */}
-            <td>
-              <button
-                onClick={() => {
-                  if (window.confirm(`Poistetaanko ${person.name}?`)) {
-                    console.log("delete", person.id);
-                    personService.deletePerson(person.id).then((response) => {
-                      console.log(response);
-                      // update persons
-                      personService.getAll().then((initialPersons) => {
-                        setPersons(initialPersons);
-                      });
+        <tr key={person.name}>
+          <td>{person.name}</td>
+          <td>{person.number}</td>
+          {/* delete person */}
+          <td>
+            <button
+              onClick={() => {
+                if (window.confirm(`Poistetaanko ${person.name}?`)) {
+                  console.log("delete", person.id);
+                  personService.deletePerson(person.id).then((response) => {
+                    console.log(response);
+                    // update persons
+                    personService.getAll().then((initialPersons) => {
+                      setPersons(initialPersons);
                     });
-                    personStatus(1500, "deleted", person.name);
-                  }
-                }}
-              >
-                Poista
-              </button>
-            </td>
-          </tr>
+                  });
+                  personStatus(1500, "deleted", person.name);
+                }
+              }}
+            >
+              Poista
+            </button>
+          </td>
+        </tr>
       ))}
     </div>
   );
@@ -109,10 +114,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState();
   const [filter, setFilter] = useState("");
 
+  //update persons every 3 seconds
   useEffect(() => {
-    personService.getAll().then((initialPersons) => {
-      setPersons(initialPersons);
-    });
+    const interval = setInterval(() => {
+      personService.getAll().then((initialPersons) => {
+        setPersons(initialPersons);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSubmit = (event) => {
@@ -123,47 +132,54 @@ const App = () => {
         alert("Anna nimi");
         return;
       }
-      
+
       // phone number validation
       if (newNumber === undefined || newNumber === null || newNumber === "") {
         alert("Anna puhelinnumero");
         return;
       }
 
-      if (window.confirm(`${newName} on jo luettelossa, Haluatko korvata vanhan numeron uudella?`)) {
+      if (
+        window.confirm(
+          `${newName} on jo luettelossa, Haluatko korvata vanhan numeron uudella?`
+        )
+      ) {
         // find person id
         const person = persons.find((person) => person.name === newName);
         // update person
-        personService.update(person.id, { name: newName, number: newNumber }).then((returnedPerson) => {
-          setPersons(persons.map((person) => (person.id !== returnedPerson.id ? person : returnedPerson)));
-        });
+        personService
+          .update(person.id, { name: newName, number: newNumber })
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== returnedPerson.id ? person : returnedPerson
+              )
+            );
+          });
         setNewName("");
         setNewNumber("");
         personStatus(1500, "updated", newName);
-      return;
+        return;
       }
     }
-
 
     //regex for maching any number and - and space
     else if (newNumber.match(/^[0-9\s-]+$/) === null) {
       alert("Aseta oikea puhelinnumero");
       return;
-    }
-    else {
-     // add new person to persons database db.json file using personService
-      personService.create({ name: newName, number: newNumber }).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-      });
-      
+    } else {
+      // add new person to persons database db.json file using personService
+      personService
+        .create({ name: newName, number: newNumber })
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+        });
+
       setNewName("");
       setNewNumber("");
       personStatus(1500, "added", newName);
     }
-    
   };
-
-
 
   return (
     <div>
@@ -185,7 +201,7 @@ const App = () => {
       />
       <h2>Numerot</h2>
       <table>
-      <Persons setPersons={setPersons} persons={persons} filter={filter} />
+        <Persons setPersons={setPersons} persons={persons} filter={filter} />
       </table>
     </div>
   );
