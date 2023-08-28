@@ -120,7 +120,7 @@ const App = () => {
       personService.getAll().then((initialPersons) => {
         setPersons(initialPersons);
       });
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
