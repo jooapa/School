@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 
-Laskuri = () => {
+const Laskuri = () => {
   const [num, setNum] = useState(0)
 
   return (
@@ -13,10 +13,47 @@ Laskuri = () => {
     </div>
   )
 }
+
+const TehtäväLista = () => {
+  const [tasks, setTasks] = useState([])
+  const [task, setTask] = useState('')
+  
+  const addTask = () => {
+    if (task === '') return
+    setTasks([...tasks, task])
+    setTask('')
+  }
+
+  const removeTask = (index) => {
+    const newTasks = [...tasks]
+    newTasks.splice(index, 1)
+    setTasks(newTasks)
+  }
+
+  return (
+    <div className="App">
+      <h1>Tehtävälista</h1>
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+      />
+      <button onClick={addTask}>Lisää</button>
+      
+        {tasks.map((task, index) => (
+          <p key={index}>
+            <b>{task}</b> <button onClick={() => removeTask(index)}>Poista: {task}</button>
+          </p>
+        ))}
+    </div>
+  );
+}
+
 function App() {
   return (
     <div className="App">
       <Laskuri />
+      <TehtäväLista />
     </div>
   );
 }
