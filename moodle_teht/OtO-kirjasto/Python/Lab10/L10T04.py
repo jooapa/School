@@ -1,5 +1,6 @@
 maara = 0
 pisinNimi = ""
+
 f = open("nimet.txt", "r")
 try:
     for line in f:

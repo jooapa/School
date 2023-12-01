@@ -23,7 +23,7 @@ while True:
         miskaTili = account()
         while True:
             try:
-                print("Saldo: ", miskaTili.saldo)
+                print("Saldo:", miskaTili.saldo , "€")
                 print("1. Nosta rahaa")
                 print("2. Lisää rahaa")
                 print("3. Lopeta")
