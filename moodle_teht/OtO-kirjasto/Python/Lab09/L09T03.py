@@ -24,4 +24,4 @@ except IOError as e:
 except Exception as e:
     print("Odottamaton virhe tapahtui: ", e)
 
-print("Syötetty 5 lukua: ", määrä)
+print("Syötetty", määrä, "lukua")

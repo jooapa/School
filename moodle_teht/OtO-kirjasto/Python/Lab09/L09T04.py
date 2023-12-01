@@ -18,4 +18,9 @@ for i in nimiLista:
         nimet[i] = 1
 
 for i in nimet:
-    print(str(i) + ":", nimet[i], "kpl")
+    nimet[i] = str(nimet[i])
+
+for x in nimet:
+  print(x + " " + nimet[x], "kpl")
+  
+print("Nimiä löytyi " + str(len(nimet)) + " kpl")
