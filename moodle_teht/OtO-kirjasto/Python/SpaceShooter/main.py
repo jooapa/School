@@ -24,6 +24,8 @@ player_y = var.screen_height / 2
 bg_image = pygame.image.load("img/bg.png")
 bg_image = pygame.transform.scale(
     bg_image, (var.screen_width*2, var.screen_height*2))
+bg_rect = bg_image.get_rect()
+bg_rect.center = (0 , 0)
 
 # Crosshair
 crosshair_image = pygame.image.load("img/crosshair.png")
@@ -74,6 +76,7 @@ while running:
     # CAMERA OFFSET
     var.camera_offset = pygame.math.Vector2(
         var.screen_width // 2 - player_rect.centerx, var.screen_height // 2 - player_rect.centery)
+    
     # DRAW SPRITES
     screen.blit(bg_image, (0, 0), (player_rect.centerx - var.screen_width // 2,
                 player_rect.centery - var.screen_height // 2, var.screen_width, var.screen_height))
@@ -87,7 +90,7 @@ while running:
     # Update the display
     pygame.display.flip()
     dt = clock.tick(60) / 1000
-    pygame.display.set_caption("PIG Invaders - FPS: " + str(player_x) + " | " + str(player_y))
+    pygame.display.set_caption("PIG Invaders - FPS: " + str(int(clock.get_fps())))
 
 # Quit the game
 pygame.quit()
