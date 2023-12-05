@@ -52,13 +52,13 @@ while running:
 
     # Draw the player
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_w] and player.y > 0:
+    if keys[pygame.K_w] and player.y > 0: # UP
         player.y -= player.speed * dt
-    if keys[pygame.K_s] and player.y < var.screen_height - player.image.get_height():
+    if keys[pygame.K_s] and player.y < var.screen_height: # DOWN
         player.y += player.speed * dt
-    if keys[pygame.K_a] and player.x > 0:
+    if keys[pygame.K_a] and player.x > 0: # LEFT
         player.x -= player.speed * dt
-    if keys[pygame.K_d] and player.x < var.screen_width - player.image.get_width():
+    if keys[pygame.K_d] and player.x < var.screen_width: # RIGHT
         player.x += player.speed * dt
 
     # Get mouse position
@@ -74,7 +74,11 @@ while running:
     
     # SHOOT
     if pygame.mouse.get_pressed()[0]:
-        bullets.append(player.shoot(angle))
+        if var.firerate <= 0 and var.ammo > 0:
+            var.firerate = var.firerate_max
+            var.ammo -= 1
+            bullets.append(player.shoot(angle))
+            
         
     # CAMERA OFFSET
     var.camera_offset = pygame.math.Vector2(
@@ -89,7 +93,8 @@ while running:
     for bullet in bullets:
         bullet.draw(screen)
         bullet.update(dt)
-        if bullet.x > var.screen_width + 300 or bullet.x < -300 or bullet.y > var.screen_height + 300 or bullet.y < -300:
+        # if bullet goes off screen + 0r - camera_offset, remove it
+        if bullet.x < -var.camera_offset.x - 100 or bullet.x > var.screen_width - var.camera_offset.x + 100 or bullet.y < -var.camera_offset.y - 100 or bullet.y > var.screen_height - var.camera_offset.y + 100:
             bullets.remove(bullet)
 
     player.draw(screen, player.rect, rotated_player)
@@ -97,6 +102,17 @@ while running:
     # Draw the mouse
     screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
     pygame.mouse.set_visible(False)
+    
+    # FIRERATE
+    var.firerate -= dt
+    # RELOAD
+    if var.ammo <= 0:
+        var.reload_time -= dt
+        if var.reload_time <= 0:
+            var.ammo = var.ammo_max
+            var.reload_time = var.reload_time_max
+
+    print('\r>> Ammo: ', var.ammo, " >> Firerate: ", var.firerate, " >> Reload Time: ", var.reload_time, end='')
     # Update the display
     pygame.display.flip()
     dt = clock.tick(60) / 1000
