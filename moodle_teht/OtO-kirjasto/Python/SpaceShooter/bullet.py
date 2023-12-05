@@ -1,25 +1,29 @@
-import pygame, math
+import pygame, math, var, random
+# from functions import rando_bullet
 
 class Bullet:
-    def __init__(self, x, y, speed, angle):
+    def __init__(self, x, y, speed, angle, image,):
         self.x = x
         self.y = y
         self.speed = speed
         self.angle = angle
-        self.image = pygame.image.load("img/bullet.png")
-        self.image = pygame.transform.scale(self.image, (50, 50))
-        self.rect = self.image.get_rect()
+        self.image = pygame.image.load(image)
+        self.image = pygame.transform.scale(
+        self.image, (random.randint(30, 60), random.randint(30, 60)))
+        self.image = pygame.transform.rotate(self.image, -self.angle + 90)
+        self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.x = self.x
         self.rect.y = self.y
 
     def update(self, dt):
         self.x += self.speed * dt * math.cos(math.radians(self.angle))
         self.y += self.speed * dt * math.sin(math.radians(self.angle))
-        self.rect.x = self.x
-        self.rect.y = self.y
+        self.rect.x = self.x + 333
+        self.rect.y = self.y + 333
 
-    def draw(self, screen, camera_offset):
-        screen.blit(self.image, (self.x + camera_offset.x, self.y + camera_offset.y))
+    def draw(self, screen):
+        screen.blit(self.image, (self.x + var.camera_offset.x,
+                    self.y + var.camera_offset.y))
 
     def get_rect(self):
         return self.rect
