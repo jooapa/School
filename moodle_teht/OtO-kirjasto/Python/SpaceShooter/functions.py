@@ -1,4 +1,4 @@
-import random, var
+import random, var, pygame, math
 spawn_enemy = random.randint(0, 10)
 
 def spawn_enemy():
@@ -27,3 +27,6 @@ def rando_bullet():
         return "img/räkä4.png"
     elif räkä == 5:
         return "img/räkä5.png"
+    
+def correct_scale(set_x, set_y): # returns the correct scale for the image
+    return set_x * var.screen_width / 1920, set_y * var.screen_height / 1080

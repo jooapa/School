@@ -1,4 +1,5 @@
-import pygame, bullet, math, functions, var
+import pygame, math, functions, var
+from bullet import Bullet
 
 class Player:
     def __init__(self, x, y, speed, image, health):
@@ -7,7 +8,8 @@ class Player:
         self.speed = speed
         self.health = health
         self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image, (200, 200))
+        self.image = pygame.transform.scale(
+            self.image, (functions.correct_scale(250, 250)))
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -24,7 +26,19 @@ class Player:
 
     def get_rect(self):
         return self.rect
+    
+    def get_center(self):
+        return self.rect.center
+    
+    def get_center_x(self):
+        return self.rect.centerx
 
+    def get_center_y(self):
+        return self.rect.centery
+    
+    def get_radius(self):
+        return self.rect.radius
+    
     def get_x(self):
         return self.x
 
@@ -52,8 +66,10 @@ class Player:
     def get_image(self):
         return self.image
     
-    def shoot(self, angle):
-        return bullet.Bullet(self.x - 20 - var.camera_offset.x, self.y - 30 - var.camera_offset.y, 1000, angle, functions.rando_bullet(), var.gun_damage)
+    def shoot(self, angle): # dont know why but the bullet spawns at the wrong place
+        bullet_x = self.get_center_x() - var.camera_offset.x - 30
+        bullet_y = self.get_center_y() - var.camera_offset.y - 30
+        return Bullet(bullet_x, bullet_y, 1000, angle, functions.rando_bullet(), var.gun_damage)
     
     def get_health(self):
         return self.health
@@ -62,7 +78,9 @@ class Player:
         self.health = health
 
     def hitted(self, damage):
+        print("Player got hit for " + str(damage) + " damage! Player health: " + str(self.health))
         self.health -= damage
+        print("Player health: " + str(self.health))
         if self.health <= 0:
             return True
         return False

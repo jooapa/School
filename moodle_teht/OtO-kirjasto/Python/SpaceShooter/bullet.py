@@ -1,6 +1,8 @@
 import pygame, math, var, random
 # from functions import rando_bullet
+from functions import correct_scale
 
+random_size = random.randint(70, 80)
 class Bullet:
     def __init__(self, x, y, speed, angle, image, damage):
         self.x = x
@@ -10,7 +12,7 @@ class Bullet:
         self.damage = damage
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(
-        self.image, (random.randint(30, 60), random.randint(30, 60)))
+        self.image, (correct_scale(random_size, random_size)))
         self.image = pygame.transform.rotate(self.image, -self.angle + 90)
         self.rect = self.image.get_rect(center=(self.x, self.y))
         self.rect.x = self.x
@@ -26,6 +28,9 @@ class Bullet:
         screen.blit(self.image, (self.x + var.camera_offset.x,
                     self.y + var.camera_offset.y))
 
+    def get_center(self):
+        return self.rect.center
+    
     def get_rect(self):
         return self.rect
     

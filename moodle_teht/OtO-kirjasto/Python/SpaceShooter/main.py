@@ -1,6 +1,7 @@
 import pygame
-import math, functions, enemy, var, player, roundsys
-    
+import math, functions, var, roundsys
+from enemy import Enemy
+from player import Player
 # Initialize pygame
 pygame.init()
 # SETUP PYGAME VARIABLES
@@ -17,8 +18,8 @@ enemies = []
 bullets = []
 
 # PLAYER
-player = player.Player(var.screen_width / 2,
-                       var.screen_height / 2, 300, "img/räkä alus.png", 100)
+player = Player(var.screen_width / 2,
+                       var.screen_height / 2, 300, "img/räkä alus.png", var.player_health)
 
 # BG
 bg_image = pygame.image.load("img/bg.png")
@@ -33,7 +34,7 @@ crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
 
 # ENEMY
 def spawn_enemy():
-    enemies.append(enemy.Enemy(*functions.spawn_enemy(), 200, "img/enemy.png", 100, 1))
+    enemies.append(Enemy(*functions.spawn_enemy(), var.enemy_speed, "img/enemy.png", 100, 1, 10))
 def spawn_enemies(num):
     for _ in range(num):
         spawn_enemy()
@@ -81,7 +82,6 @@ while running:
                 var.ammo -= 1
                 bullets.append(player.shoot(angle))
                 
-            
         # CAMERA OFFSET
         var.camera_offset = pygame.math.Vector2(
             var.screen_width // var.play_area - player.x, var.screen_height // var.play_area - player.y)
@@ -118,7 +118,7 @@ while running:
             if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90:
                 enemies.remove(_enemy_)
                 var.coins += 1
-                if player.hitted(50):
+                if player.hitted(_enemy_.get_damage()):
                     var.game_running = False
                     print("GAME OVER")
 
@@ -128,6 +128,21 @@ while running:
         screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         pygame.mouse.set_visible(False)
         
+        # # DEBUG
+        # # draw rect around player
+        # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
+        # # draw players center
+        # pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
+        # # draw rect around enemy
+        # for _enemy_ in enemies:
+        #     pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+
+        # # draw rect around bullet
+        # for bullet in bullets:
+        #     pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
+        #     pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
+
+
         # FIRERATE
         var.firerate -= dt
         # RELOAD
@@ -158,18 +173,25 @@ while running:
         pygame.mouse.set_visible(True)
         # DRAW MENU
         screen.fill((34, 0, 0))
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render('Press RMB to restart', True, (255, 255, 255), (34, 0, 0))
+        textRect = text.get_rect()
+        textRect.center = (var.screen_width // 2, var.screen_height // 2)
+        screen.blit(text, textRect)
+        
         if pygame.mouse.get_pressed()[2]:
-            var.round = 1
+            var.round = 0
             var.difficulty = 10
             var.ticks = 0
             var.cooldown = 0
             var.cooldown_time = var.cooldown_time 
 
-            var.ammo_max = 100 # can buy upgrades to increase this
+            var.ammo_max = var.ammo_max  # can buy upgrades to increase this
             var.ammo = var.ammo_max
-            var.firerate_max = 0.2 # can buy upgrades to decrease this
-            var.reload_time_max = 2 # can buy upgrades to decrease this
-            var.player_health = 100 # can buy upgrades to increase this
+            var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
+            var.reload_time_max = var.reload_time_max # can buy upgrades to decrease this
+            var.player_health = var.player_health  # can buy upgrades to increase this
+            var.gun_damage = var.gun_damage  # can buy upgrades to increase this
             player.set_health(var.player_health)
             player.set_x(var.screen_width / 2)
             player.set_y(var.screen_height / 2)

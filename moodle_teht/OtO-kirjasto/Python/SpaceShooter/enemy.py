@@ -1,14 +1,18 @@
-import pygame, var, math
+import pygame, var, math, random
+from functions import correct_scale
 
+random_side = random.randint(80, 120)
 class Enemy:
-    def __init__(self, x, y, speed, image, health, coins):
+    def __init__(self, x, y, speed, image, health, coins, damage):
+        global random_side
         self.x = x
         self.y = y
         self.speed = speed
         self.health = health
         self.coins = coins
+        self.damage = damage
         self.image = pygame.image.load(image)
-        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.image = pygame.transform.scale(self.image, (correct_scale(random_side, random_side)))
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -19,7 +23,7 @@ class Enemy:
         player_y = var.player_pos.y
         angle = math.atan2(player_y - self.y, player_x - self.x)
         self.x += math.cos(angle) * self.speed * dt
-        self.y += math.sin(angle) * self.speed * dt
+        self.y += math.sin(angle) * self.speed * dt     
             
         # Update rect
         self.rect.x = self.x + var.camera_offset.x
@@ -71,3 +75,9 @@ class Enemy:
             return True
         else:
             return False
+
+    def get_damage(self):
+        return self.damage
+    
+    def set_damage(self, damage):
+        self.damage = damage
