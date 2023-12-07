@@ -1,4 +1,4 @@
-import pygame
+import pygame, var, math
 
 class Enemy:
     def __init__(self, x, y, speed):
@@ -11,13 +11,21 @@ class Enemy:
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def update(self, dt):
-        self.x -= self.speed * dt
-        self.rect.x = self.x
-        self.rect.y = self.y
+    def update(self, dt): # move towards player
 
-    def draw(self, screen, camera_offset):
-        screen.blit(self.image, (self.x + camera_offset.x, self.y + camera_offset.y))
+        # Move towards player
+        player_x = var.player_pos.x
+        player_y = var.player_pos.y
+        angle = math.atan2(player_y - self.y, player_x - self.x)
+        self.x += math.cos(angle) * self.speed * dt
+        self.y += math.sin(angle) * self.speed * dt
+            
+        # Update rect
+        self.rect.x = self.x + var.camera_offset.x
+        self.rect.y = self.y + var.camera_offset.y
+
+    def draw(self, screen):
+        screen.blit(self.image, (self.x + var.camera_offset.x, self.y + var.camera_offset.y))
 
     def get_rect(self):
         return self.rect

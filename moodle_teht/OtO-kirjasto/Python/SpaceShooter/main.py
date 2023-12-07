@@ -1,18 +1,17 @@
 import pygame, math, functions
-import enemy, var, player
+import enemy, var, player, roundsys, time
     
 # Initialize pygame
 pygame.init()
 
-
 # Set up the display
 fullscreen = pygame.FULLSCREEN
 screen = pygame.display.set_mode((var.screen_width, var.screen_height))
-
+FPS = 60
 pygame.display.set_caption("PIG Invaders")
 
 # Load SPRITES
-enemys = []
+enemies = []
 bullets = []
 
 # PLAYER
@@ -31,13 +30,15 @@ crosshair_image = pygame.image.load("img/crosshair.png")
 crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
 
 # ENEMY
-for i in range(10):
-    enemys.append(enemy.Enemy(*functions.spawn_enemy(), 0))
+def spawn_enemy():
+    enemies.append(enemy.Enemy(*functions.spawn_enemy(), 200))
+def spawn_enemies(num):
+    for _ in range(num):
+        spawn_enemy()
 
 # SETUP PYGAME VARIABLES
 clock = pygame.time.Clock()
-dt = clock.tick(60) / 1000
-
+dt = clock.tick(FPS) / 1000
 
 # Game loopww
 running = True
@@ -60,6 +61,8 @@ while running:
         player.x -= player.speed * dt
     if keys[pygame.K_d] and player.x < var.screen_width: # RIGHT
         player.x += player.speed * dt
+    if keys[pygame.K_r] and var.ammo != var.ammo_max:
+        var.ammo = 0
 
     # Get mouse position
     var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
@@ -86,16 +89,36 @@ while running:
     
     # DRAW SPRITES
     screen.blit(bg_image, (bg_rect.x + var.camera_offset.x, bg_rect.y + var.camera_offset.y))
-    for enemy in enemys:
-        enemy.draw(screen, var.camera_offset)
-        enemy.update(dt)
 
     for bullet in bullets:
         bullet.draw(screen)
         bullet.update(dt)
-        # if bullet goes off screen + 0r - camera_offset, remove it
-        if bullet.x < -var.camera_offset.x - 100 or bullet.x > var.screen_width - var.camera_offset.x + 100 or bullet.y < -var.camera_offset.y - 100 or bullet.y > var.screen_height - var.camera_offset.y + 100:
-            bullets.remove(bullet)
+
+        for _enemy_ in enemies:
+            # if bullet plus camera_offset collides with enemy, remove bullet and enemy
+            bullet_rect = bullet.get_rect()
+            enemy_rect = _enemy_.get_rect()
+            if bullet_rect.colliderect(enemy_rect):
+                if bullet in bullets:
+                    bullets.remove(bullet)
+                enemies.remove(_enemy_)
+                var.coins += 1
+                break
+
+    for _enemy_ in enemies:
+        _enemy_.draw(screen)
+        _enemy_.update(dt)
+
+    # detect collision between player and enemy
+    for _enemy_ in enemies:
+        # if enemy plus camera_offset is near player_pos, remove enemy
+        enemy_y = _enemy_.get_y()
+        enemy_x = _enemy_.get_x()
+        player_y = var.player_pos.y
+        player_x = var.player_pos.x
+        if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90:
+            enemies.remove(_enemy_)
+            var.coins += 1
 
     player.draw(screen, player.rect, rotated_player)
 
@@ -112,11 +135,24 @@ while running:
             var.ammo = var.ammo_max
             var.reload_time = var.reload_time_max
 
+    if var.start_round:
+        # round starts when ticks is from the current ticks 5 seconds
+        if var.ticks >= var.cooldown + var.cooldown_time:
+            prev_ticks = var.ticks
+            var.start_round = False
+            roundsys.calculate_difficulty()
+            roundsys.calculate_enemy_spawn_amount()
+            spawn_enemies(roundsys.calculate_enemy_spawn_amount())
+            print("Round: ", var.round, " >> Difficulty: ", var.difficulty, " >> Enemy Spawn Amount: ", roundsys.calculate_enemy_spawn_amount())
+
     print('\r>> Ammo: ', var.ammo, " >> Firerate: ", var.firerate, " >> Reload Time: ", var.reload_time, end='')
     # Update the display
+    dt = clock.tick(FPS) / 1000
+    var.ticks += 1 / FPS
+    pygame.display.set_caption("PIG Invaders - Ticks: " + str(round(var.ticks))+ "prev_ticks: " + str(round(var.cooldown)))
     pygame.display.flip()
-    dt = clock.tick(60) / 1000
-    pygame.display.set_caption("PIG Invaders - FPS: " + str(int(clock.get_fps())))
+    roundsys.check_round(enemies)
+
 
 # Quit the game
 pygame.quit()

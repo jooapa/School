@@ -17,6 +17,8 @@ class Player:
         self.rect.y = self.y
 
     def draw(self, screen, rect, image):
+        var.player_pos.x = self.x - var.camera_offset.x - 50
+        var.player_pos.y = self.y - var.camera_offset.y - 60
         screen.blit(image, rect)
 
     def get_rect(self):

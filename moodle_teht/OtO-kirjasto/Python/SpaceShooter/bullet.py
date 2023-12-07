@@ -18,8 +18,8 @@ class Bullet:
     def update(self, dt):
         self.x += self.speed * dt * math.cos(math.radians(self.angle))
         self.y += self.speed * dt * math.sin(math.radians(self.angle))
-        self.rect.x = self.x + 333
-        self.rect.y = self.y + 333
+        self.rect.x = self.x + var.camera_offset.x
+        self.rect.y = self.y + var.camera_offset.y
 
     def draw(self, screen):
         screen.blit(self.image, (self.x + var.camera_offset.x,
@@ -27,7 +27,7 @@ class Bullet:
 
     def get_rect(self):
         return self.rect
-
+    
     def get_x(self):
         return self.x
 
