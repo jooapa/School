@@ -2,11 +2,12 @@ import pygame, math, var, random
 # from functions import rando_bullet
 
 class Bullet:
-    def __init__(self, x, y, speed, angle, image,):
+    def __init__(self, x, y, speed, angle, image, damage):
         self.x = x
         self.y = y
         self.speed = speed
         self.angle = angle
+        self.damage = damage
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(
         self.image, (random.randint(30, 60), random.randint(30, 60)))
@@ -60,3 +61,9 @@ class Bullet:
 
     def get_image(self):
         return self.image
+    
+    def get_damage(self):
+        return self.damage
+    
+    def set_damage(self, damage):
+        self.damage = damage

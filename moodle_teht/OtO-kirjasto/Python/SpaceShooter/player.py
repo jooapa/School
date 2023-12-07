@@ -1,10 +1,11 @@
 import pygame, bullet, math, functions, var
 
 class Player:
-    def __init__(self, x, y, speed, image):
+    def __init__(self, x, y, speed, image, health):
         self.x = x
         self.y = y
         self.speed = speed
+        self.health = health
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image, (200, 200))
         self.rect = self.image.get_rect()
@@ -50,5 +51,18 @@ class Player:
 
     def get_image(self):
         return self.image
+    
     def shoot(self, angle):
-        return bullet.Bullet(self.x - 20 - var.camera_offset.x, self.y - 30 - var.camera_offset.y, 1000, angle, functions.rando_bullet(),)
+        return bullet.Bullet(self.x - 20 - var.camera_offset.x, self.y - 30 - var.camera_offset.y, 1000, angle, functions.rando_bullet(), var.gun_damage)
+    
+    def get_health(self):
+        return self.health
+
+    def set_health(self, health):
+        self.health = health
+
+    def hitted(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            return True
+        return False

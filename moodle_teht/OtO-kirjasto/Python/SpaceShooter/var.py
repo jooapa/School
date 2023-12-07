@@ -4,7 +4,7 @@ screen_width = 1280
 screen_height = 720
 camera_offset = pygame.math.Vector2(0, 0)
 
-cooldown_time = 5
+cooldown_time = 1
 round = 0
 start_round = False
 difficulty = 10
@@ -13,15 +13,18 @@ difficulty_curve = 0.95
 player_speed = 300
 player_health = 1
 player_max_health = 5
+gun_damage = 30
 
 enemy_speed = 100
-enemy_health = 1
 enemy_max_health = 5
 
 mouse_x = 0
 mouse_y = 0
 player_pos = pygame.math.Vector2()
-enemy_spawn_offset = 100
+enemy_spawn_offset = 500
+FPS = 60
+play_area = 2
+game_running = False # False when player dies, showing the menu
 
 ammo_max = 50
 firerate_max = 0.1

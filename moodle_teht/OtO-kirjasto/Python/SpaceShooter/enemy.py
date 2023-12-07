@@ -1,18 +1,19 @@
 import pygame, var, math
 
 class Enemy:
-    def __init__(self, x, y, speed):
+    def __init__(self, x, y, speed, image, health, coins):
         self.x = x
         self.y = y
         self.speed = speed
-        self.image = pygame.image.load("img/enemy.png")
+        self.health = health
+        self.coins = coins
+        self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
 
     def update(self, dt): # move towards player
-
         # Move towards player
         player_x = var.player_pos.x
         player_y = var.player_pos.y
@@ -30,6 +31,9 @@ class Enemy:
     def get_rect(self):
         return self.rect
 
+    def get_health(self):
+        return self.health
+    
     def get_x(self):
         return self.x
 
@@ -51,8 +55,19 @@ class Enemy:
     def set_rect(self, rect):
         self.rect = rect
 
+    def set_health(self, health):
+        self.health = health
+
     def set_image(self, image):
         self.image = image
 
     def get_image(self):
         return self.image
+    
+    def hitted(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            self.coins += var.coins
+            return True
+        else:
+            return False
