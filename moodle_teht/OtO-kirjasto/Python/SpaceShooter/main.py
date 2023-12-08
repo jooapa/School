@@ -22,11 +22,11 @@ player = Player(var.screen_width / 2,
                        var.screen_height / 2, 300, "img/räkä alus.png", var.player_health)
 
 # BG
-bg_image = pygame.image.load("img/bg.png")
+bg_image = pygame.image.load("img/bg_space.png").convert()
 bg_image = pygame.transform.scale(
-    bg_image, (var.screen_width*2, var.screen_height*2))
+    bg_image, (var.screen_width*2.3, var.screen_height*2.3))
 bg_rect = bg_image.get_rect()
-bg_rect.center = (0 , 0)
+bg_rect.center = (var.screen_width, var.screen_height)
 
 # Crosshair
 crosshair_image = pygame.image.load("img/crosshair.png")
@@ -112,9 +112,8 @@ while running:
             enemy_x = _enemy_.get_x()
             player_y = var.player_pos.y
             player_x = var.player_pos.x
-            if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90:
+            if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90 and var.invincibility_time <= 0:
                 enemies.remove(_enemy_)
-                var.coins += 1
                 if player.hitted(_enemy_.get_damage()):
                     var.game_running = False
                     print("GAME OVER")
@@ -129,23 +128,30 @@ while running:
         player.draw(screen, player.rect, rotated_player)
 
         # Draw the mouse
-        screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
-        pygame.mouse.set_visible(False)
+        if var.buy_round == True:
+            pygame.mouse.set_visible(True)
+        else:
+            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+            pygame.mouse.set_visible(False)
         
-        # DEBUG
-        # draw rect around player
-        pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
-        # draw players center
-        pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
-        # draw rect around enemy
-        for _enemy_ in enemies:
-            pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+        # # DEBUG
+        # # draw rect around player
+        # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
+        # # draw players center
+        # pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
+        # # draw rect around enemy
+        # for _enemy_ in enemies:
+        #     pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
 
-        # draw rect around bullet
-        for bullet in bullets:
-            pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
-            pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
+        # # draw rect around bullet
+        # for bullet in bullets:
+        #     pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
+        #     pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
 
+        # INVICIBILITY
+        if var.invincibility_time > 0:
+            var.invincibility_time -= dt
+        
 
         # FIRERATE
         var.firerate -= dt
@@ -170,7 +176,7 @@ while running:
         # Update the display
         dt = clock.tick(var.FPS) / 1000
         var.ticks += 1 / var.FPS
-        pygame.display.set_caption("PIG Defenders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())))
+        pygame.display.set_caption("PIG Defenders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())) + " Invincibility: " + str(round(var.invincibility_time, 2)) + " Round: " + str(var.round) + " Difficulty: " + str(var.difficulty) + " Enemy Spawn Amount: " + str(roundsys.calculate_enemy_spawn_amount()) + " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + " Firerate: " + str(var.firerate) + " Reload Time: " + str(var.reload_time) + " Coins: " + str(var.coins))
         roundsys.check_round(enemies)
     else:
         pygame.mouse.set_visible(True)

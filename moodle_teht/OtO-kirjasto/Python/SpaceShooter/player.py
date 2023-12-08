@@ -78,6 +78,7 @@ class Player:
         self.health = health
 
     def hitted(self, damage):
+        var.invincibility_time = var.invincibility_time_max
         print("Player got hit for " + str(damage) + " damage! Player health: " + str(self.health))
         self.health -= damage
         print("Player health: " + str(self.health))
