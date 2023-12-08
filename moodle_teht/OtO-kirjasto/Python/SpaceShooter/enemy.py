@@ -1,7 +1,7 @@
 import pygame, var, math, random
 from functions import correct_scale
 
-random_side = random.randint(80, 120)
+random_side = random.randint(80, 120)*1.5
 class Enemy:
     def __init__(self, x, y, speed, image, health, coins, damage):
         global random_side
@@ -14,23 +14,52 @@ class Enemy:
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(self.image, (correct_scale(random_side, random_side)))
         self.rect = self.image.get_rect()
+        self.rotated_image = self.image
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def update(self, dt): # move towards player
+
+    def update(self, dt, enemies):
         # Move towards player
         player_x = var.player_pos.x
         player_y = var.player_pos.y
         angle = math.atan2(player_y - self.y, player_x - self.x)
         self.x += math.cos(angle) * self.speed * dt
-        self.y += math.sin(angle) * self.speed * dt     
-            
-        # Update rect
+        self.y += math.sin(angle) * self.speed * dt
+
+        # Calculate net force to repel other enemies
+        net_force = pygame.math.Vector2()
+        repulsion_distance = (self.image.get_width() / 2) * (2 ** 0.5)
+
+        for enemy in enemies:
+            if enemy != self:  # Skip checking against itself
+                offset = pygame.math.Vector2(self.x - enemy.x, self.y - enemy.y)
+                distance = offset.length()
+
+                if distance <= repulsion_distance:
+                    force_strength = (repulsion_distance -
+                                    distance) / repulsion_distance
+                    net_force += offset.normalize() * force_strength
+
+        # Update position based on net force
+        self.x += net_force.x * self.speed * dt
+        self.y += net_force.y * self.speed * dt
+
+        # Rotate the image based on the movement direction
+        self.rotated_image = pygame.transform.rotate(
+            self.image, -math.degrees(angle))
+        self.rect = self.rotated_image.get_rect(
+            center=(self.x + var.camera_offset.x, self.y + var.camera_offset.y))
+
+        # Update rect coordinates
         self.rect.x = self.x + var.camera_offset.x
         self.rect.y = self.y + var.camera_offset.y
 
+
+
     def draw(self, screen):
-        screen.blit(self.image, (self.x + var.camera_offset.x, self.y + var.camera_offset.y))
+        screen.blit(self.rotated_image, (self.x +
+                    var.camera_offset.x, self.y + var.camera_offset.y))
 
     def get_rect(self):
         return self.rect

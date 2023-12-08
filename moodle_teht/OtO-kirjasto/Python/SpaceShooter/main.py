@@ -11,7 +11,7 @@ dt = clock.tick(var.FPS) / 1000
 # Set up the display
 fullscreen = pygame.FULLSCREEN
 screen = pygame.display.set_mode((var.screen_width, var.screen_height))
-pygame.display.set_caption("PIG Invaders")
+pygame.display.set_caption("PIG Defenders")
 
 # Load SPRITES
 enemies = []
@@ -104,9 +104,6 @@ while running:
                         enemies.remove(_enemy_)
                     break
 
-        for _enemy_ in enemies:
-            _enemy_.draw(screen)
-            _enemy_.update(dt)
 
         # detect collision between player and enemy
         for _enemy_ in enemies:
@@ -122,25 +119,32 @@ while running:
                     var.game_running = False
                     print("GAME OVER")
 
+        for _enemy_ in enemies:
+            # update and draw, but make sure that enemys cannot overlap with each other
+            _enemy_.update(dt, enemies)
+            _enemy_.draw(screen)
+                    
+                
+
         player.draw(screen, player.rect, rotated_player)
 
         # Draw the mouse
         screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         pygame.mouse.set_visible(False)
         
-        # # DEBUG
-        # # draw rect around player
-        # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
-        # # draw players center
-        # pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
-        # # draw rect around enemy
-        # for _enemy_ in enemies:
-        #     pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+        # DEBUG
+        # draw rect around player
+        pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
+        # draw players center
+        pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
+        # draw rect around enemy
+        for _enemy_ in enemies:
+            pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
 
-        # # draw rect around bullet
-        # for bullet in bullets:
-        #     pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
-        #     pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
+        # draw rect around bullet
+        for bullet in bullets:
+            pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
+            pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
 
 
         # FIRERATE
@@ -166,9 +170,8 @@ while running:
         # Update the display
         dt = clock.tick(var.FPS) / 1000
         var.ticks += 1 / var.FPS
-        pygame.display.set_caption("PIG Invaders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())))
+        pygame.display.set_caption("PIG Defenders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())))
         roundsys.check_round(enemies)
-
     else:
         pygame.mouse.set_visible(True)
         # DRAW MENU

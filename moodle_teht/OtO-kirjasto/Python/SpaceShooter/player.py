@@ -9,7 +9,7 @@ class Player:
         self.health = health
         self.image = pygame.image.load(image)
         self.image = pygame.transform.scale(
-            self.image, (functions.correct_scale(250, 250)))
+            self.image, (functions.correct_scale(300, 300)))
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
