@@ -29,4 +29,4 @@ def rando_bullet():
         return "img/räkä5.png"
     
 def correct_scale(set_x, set_y): # returns the correct scale for the image
-    return set_x * var.screen_width / 1920, set_y * var.screen_height / 1080
+    return set_x * var.screen_width / 1920*0.8, set_y * var.screen_height / 1080*0.8

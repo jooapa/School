@@ -2,15 +2,15 @@ import pygame, math, var, random
 # from functions import rando_bullet
 from functions import correct_scale
 
-random_size = random.randint(70, 80)
 class Bullet:
     def __init__(self, x, y, speed, angle, image, damage):
+        random_size = random.randint(50, 80)
         self.x = x
         self.y = y
         self.speed = speed
         self.angle = angle
         self.damage = damage
-        self.image = pygame.image.load(image)
+        self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(
         self.image, (correct_scale(random_size, random_size)))
         self.image = pygame.transform.rotate(self.image, -self.angle + 90)

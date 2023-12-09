@@ -1,17 +1,16 @@
 import pygame, var, math, random
 from functions import correct_scale
 
-random_side = random.randint(80, 120)*1.5
 class Enemy:
     def __init__(self, x, y, speed, image, health, coins, damage):
-        global random_side
+        random_side = random.randint(80, 120)*1.5
         self.x = x
         self.y = y
         self.speed = speed
         self.health = health
         self.coins = coins
         self.damage = damage
-        self.image = pygame.image.load(image)
+        self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (correct_scale(random_side, random_side)))
         self.rect = self.image.get_rect()
         self.rotated_image = self.image

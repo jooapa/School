@@ -4,17 +4,17 @@ screen_width = 1280
 screen_height = 720
 camera_offset = pygame.math.Vector2(0, 0)
 
-cooldown_time = 0
+cooldown_time = 0.2
 round = 0
 start_round = False
 difficulty = 1
-difficulty_curve = 1.05
+difficulty_curve = 0.6
 
-player_speed = 200
+player_speed = 130
 player_health = 100
 player_max_health = 5
 
-enemy_speed = 90
+enemy_speed = 80
 enemy_max_health = 5
 
 mouse_x = 0

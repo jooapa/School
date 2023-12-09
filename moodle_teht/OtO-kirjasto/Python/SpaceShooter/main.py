@@ -10,7 +10,7 @@ dt = clock.tick(var.FPS) / 1000
 
 # Set up the display
 fullscreen = pygame.FULLSCREEN
-screen = pygame.display.set_mode((var.screen_width, var.screen_height))
+screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
 pygame.display.set_caption("PIG Defenders")
 
 # Load SPRITES
@@ -176,20 +176,19 @@ while running:
         # Update the display
         dt = clock.tick(var.FPS) / 1000
         var.ticks += 1 / var.FPS
-        pygame.display.set_caption("PIG Defenders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())) + " Invincibility: " + str(round(var.invincibility_time, 2)) + " Round: " + str(var.round) + " Difficulty: " + str(var.difficulty) + " Enemy Spawn Amount: " + str(roundsys.calculate_enemy_spawn_amount()) + " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + " Firerate: " + str(var.firerate) + " Reload Time: " + str(var.reload_time) + " Coins: " + str(var.coins))
+        pygame.display.set_caption("PIG Defenders - Ticks: " + str(round(var.ticks))+ " FPS: " + str(round(clock.get_fps())) + " Invincibility: " + str(round(var.invincibility_time, 2)) + " Round: " + str(var.round) + " Difficulty: " + str(var.difficulty) + " Enemy Spawn Amount: " + str(roundsys.calculate_enemy_spawn_amount()) + " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + " Firerate: " + str(round(var.firerate)) + " Reload Time: " + str(round(var.reload_time)) + " Coins: " + str(var.coins))
         roundsys.check_round(enemies)
     else:
         pygame.mouse.set_visible(True)
         # DRAW MENU
         screen.fill((34, 0, 0))
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render('Press RMB to restart', True, (255, 255, 255), (34, 0, 0))
+        text = font.render('Press RMB to Start', True, (255, 255, 255), (34, 0, 0))
         textRect = text.get_rect()
         textRect.center = (var.screen_width // 2, var.screen_height // 2)
         screen.blit(text, textRect)
         
         if pygame.mouse.get_pressed()[2]:
-            var.round = 0
             var.difficulty = 10
             var.ticks = 0
             var.cooldown = 0

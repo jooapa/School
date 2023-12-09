@@ -7,7 +7,7 @@ class Player:
         self.y = y
         self.speed = speed
         self.health = health
-        self.image = pygame.image.load(image)
+        self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(
             self.image, (functions.correct_scale(300, 300)))
         self.rect = self.image.get_rect()
