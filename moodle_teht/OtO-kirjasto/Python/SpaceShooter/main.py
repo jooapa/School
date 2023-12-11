@@ -40,6 +40,17 @@ def spawn_enemies(num):
         spawn_enemy()
 
 
+def draw_health_bar(screen, current_health, max_health):
+    bar_width = int((current_health / max_health) * 200)
+    pygame.draw.rect(screen, (255, 0, 0), (50, 50, 200, 20))
+    pygame.draw.rect(screen, (0, 255, 0), (50, 50, bar_width, 20))
+
+def draw_enemy_health_bar(screen, current_health, max_health, enemy):
+    bar_width = int((current_health / max_health) * 200)
+    pygame.draw.rect(screen, (255, 0, 0), (enemy.x - 50 +
+                     var.camera_offset.x, enemy.y + var.camera_offset.y - 50, 200, 20))
+    pygame.draw.rect(screen, (0, 255, 0), (enemy.x - 50 + var.camera_offset.x, enemy.y - 50 + var.camera_offset.y, bar_width, 20))
+
 # Game loopww
 running = True
 while running:
@@ -76,7 +87,7 @@ while running:
         player.rect = rotated_player.get_rect(center=(player.x, player.y))
         
         # SHOOT
-        if pygame.mouse.get_pressed()[0]:
+        if pygame.mouse.get_pressed()[0] and not var.buy_round:
             if var.firerate <= 0 and var.ammo > 0:
                 var.firerate = var.firerate_max
                 var.ammo -= 1
@@ -117,22 +128,28 @@ while running:
                 if player.hitted(_enemy_.get_damage()):
                     var.game_running = False
                     print("GAME OVER")
-
+        
+        # FOREGROUND
+        draw_health_bar(screen, player.get_health(), player.get_max_health())
         for _enemy_ in enemies:
             # update and draw, but make sure that enemys cannot overlap with each other
             _enemy_.update(dt, enemies)
+            draw_enemy_health_bar(screen, _enemy_.get_health(), _enemy_.get_max_health(), _enemy_)
             _enemy_.draw(screen)
-                    
                 
-
-        player.draw(screen, player.rect, rotated_player)
-
-        # Draw the mouse
-        if var.buy_round == True:
-            pygame.mouse.set_visible(True)
+        if var.invincibility_time > 0:
+            # flash the player
+            if var.invincibility_time % 0.1 < 0.05:
+                player.draw(screen, player.rect, rotated_player)
         else:
-            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+            player.draw(screen, player.rect, rotated_player)
+
+        # BUY ROUND
+        if var.buy_round:          
+            functions.buy_menu(screen)            
+        else:
             pygame.mouse.set_visible(False)
+            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         
         # # DEBUG
         # # draw rect around player
@@ -152,7 +169,7 @@ while running:
         if var.invincibility_time > 0:
             var.invincibility_time -= dt
         
-
+            
         # FIRERATE
         var.firerate -= dt
         # RELOAD
@@ -163,7 +180,7 @@ while running:
                 var.reload_time = var.reload_time_max
 
         # ROUND SYSTEM
-        if var.start_round:
+        if var.start_round and not var.buy_round:
             if var.ticks >= var.cooldown + var.cooldown_time:
                 prev_ticks = var.ticks
                 var.start_round = False

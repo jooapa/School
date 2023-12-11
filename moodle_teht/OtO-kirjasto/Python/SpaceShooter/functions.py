@@ -1,4 +1,6 @@
 import random, var, pygame, math
+import var
+import pygame
 spawn_enemy = random.randint(0, 10)
 
 def spawn_enemy():
@@ -30,3 +32,126 @@ def rando_bullet():
     
 def correct_scale(set_x, set_y): # returns the correct scale for the image
     return set_x * var.screen_width / 1920*0.8, set_y * var.screen_height / 1080*0.8
+
+def buy_menu(screen):
+    print(var.start_round)
+    pygame.mouse.set_visible(True)
+    
+    # buttons to upgrade player, ammo, firerate, reload time, gun damage
+    buttons = ["Ammo", "Firerate", "Reload time", "Gun damage", "Health", "START"]
+
+    # button positions
+    button_pos = []
+    for i in range(len(buttons)):
+        # add buttons to te center of the screen
+        button_pos.append(pygame.math.Vector2(0, 0))
+        button_pos[i].x = var.screen_width - 280
+        button_pos[i].y = var.screen_height / 2 - 200 + 150 * i
+        button_pos[i].x, button_pos[i].y = correct_scale(button_pos[i].x, button_pos[i].y)
+        
+        
+    # button sizes
+    button_size = pygame.math.Vector2(0, 0)
+    button_size.x = 400
+    button_size.y = 120
+    button_size.x, button_size.y = correct_scale(button_size.x, button_size.y)
+    font_size = 30
+    desc_font_size = 20
+    # button rects
+    button_rects = []
+    for i in range(len(buttons)):
+        button_rects.append(pygame.Rect(0, 0, 0, 0))
+        button_rects[i].center = button_pos[i]
+        button_rects[i].size = button_size
+        
+
+    # button texts
+    button_texts = []
+    for i in range(len(buttons)):
+        text = pygame.font.SysFont("Arial", font_size).render(
+            buttons[i], True, (0, 0, 0))
+        text_rect = text.get_rect(center=button_rects[i].center)
+        button_texts.append((text, text_rect))
+        
+    # button info, for telling how many upgrades you have and you can buy
+    # var.ammo_max_limit, var.firerate_max_limit, var.reload_time_max_limit, var.gun_damage_max_limit, var.player_max_health
+    button_info = []
+    offset_y = -20
+    for i in range(len(buttons)):
+        if buttons[i] == "Ammo":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "Upgrades: " + str(var.ammo_max) + "/" + str(var.ammo_max_limit), True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+        elif buttons[i] == "Firerate":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "Upgrades: " + str(var.firerate_max) + "/" + str(var.firerate_max_limit), True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+        elif buttons[i] == "Reload time":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "Upgrades: " + str(var.reload_time_max) + "/" + str(var.reload_time_max_limit), True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+        elif buttons[i] == "Gun damage":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "Upgrades: " + str(var.gun_damage) + "/" + str(var.gun_damage_max_limit), True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+        elif buttons[i] == "Health":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "Upgrades: " + str(var.player_health) + "/" + str(var.player_health_max_limit), True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+        elif buttons[i] == "START":
+            text = pygame.font.SysFont("Arial", desc_font_size).render(
+                "", True, (0, 0, 0))
+            text_rect = text.get_rect(center=button_rects[i].center - pygame.math.Vector2(0, offset_y))
+            button_info.append((text, text_rect))
+    
+        
+    #if clicked
+    mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+            for i in range(len(buttons)):
+                if button_rects[i].collidepoint(mouse_pos):
+                    print("clicked")
+                    if buttons[i] == "Ammo":
+                        if var.coins >= 1:
+                            var.coins -= 1
+                            var.ammo_max += 1
+                            var.ammo = var.ammo_max
+                            print("Ammo upgraded")
+                    elif buttons[i] == "Firerate":
+                        if var.coins >= 1:
+                            var.coins -= 1
+                            var.firerate_max -= 0.01
+                            print("Firerate upgraded")
+                    elif buttons[i] == "Reload time":
+                        if var.coins >= 1:
+                            var.coins -= 1
+                            var.reload_time_max -= 0.1
+                            print("Reload time upgraded")
+                    elif buttons[i] == "Gun damage":
+                        if var.coins >= 1:
+                            var.coins -= 1
+                            var.gun_damage += 1
+                            print("Gun damage upgraded")
+                    elif buttons[i] == "Health":
+                        if var.coins >= 1:
+                            var.coins -= 1
+                            var.player_health += 1
+                            print("Health upgraded")
+                    elif buttons[i] == "START":
+                        var.start_round = True
+                        var.buy_round = False
+                        print("Round started")
+                        return
+                        
+    # render buttons
+    for i in range(len(buttons)):
+        pygame.draw.rect(screen, (255, 255, 255), button_rects[i])
+        screen.blit(button_texts[i][0], button_texts[i][1])
+        screen.blit(button_info[i][0], button_info[i][1])

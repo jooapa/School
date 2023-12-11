@@ -7,6 +7,7 @@ class Player:
         self.y = y
         self.speed = speed
         self.health = health
+        self.max_health = health
         self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(
             self.image, (functions.correct_scale(300, 300)))
@@ -76,6 +77,12 @@ class Player:
 
     def set_health(self, health):
         self.health = health
+        
+    def get_max_health(self):
+        return self.max_health
+    
+    def set_max_health(self, max_health):
+        self.max_health = max_health
 
     def hitted(self, damage):
         var.invincibility_time = var.invincibility_time_max

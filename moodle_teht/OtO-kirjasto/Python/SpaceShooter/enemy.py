@@ -8,6 +8,7 @@ class Enemy:
         self.y = y
         self.speed = speed
         self.health = health
+        self.max_health = health
         self.coins = coins
         self.damage = damage
         self.image = pygame.image.load(image).convert_alpha()
@@ -66,6 +67,12 @@ class Enemy:
     def get_health(self):
         return self.health
     
+    def get_max_health(self):
+        return self.max_health
+    
+    def set_max_health(self, max_health):
+        self.max_health = max_health
+        
     def get_x(self):
         return self.x
 
