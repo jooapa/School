@@ -26,16 +26,19 @@ play_area = 10
 game_running = False # False when player dies, showing the menu
 buy_rounds = [3, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 buy_round = False
-buy_tokens = 3
 
 ammo_max = 20
 ammo_max_limit = 100
+
 firerate_max = 0.2
 firerate_max_limit = 0.05
+
 reload_time_max = 3
 reload_time_max_limit = 1
+
 gun_damage = 30
 gun_damage_max_limit = 100
+
 invincibility_time_max = 1
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
@@ -48,3 +51,4 @@ ammo = ammo_max
 ticks = 0
 cooldown = 0
 invincibility_time = 0
+start_new_round_in_the_main_menu = False

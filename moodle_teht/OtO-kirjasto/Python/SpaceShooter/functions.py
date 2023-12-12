@@ -33,8 +33,31 @@ def rando_bullet():
 def correct_scale(set_x, set_y): # returns the correct scale for the image
     return set_x * var.screen_width / 1920*0.8, set_y * var.screen_height / 1080*0.8
 
-def buy_menu(screen):
-    print(var.start_round)
+
+def start_new_level(player, enemies, bullets):
+    var.difficulty = 10
+    var.ticks = 0
+    var.cooldown = 0
+    var.cooldown_time = var.cooldown_time
+    var.round = 0
+
+    var.ammo_max = var.ammo_max  # can buy upgrades to increase this
+    var.ammo = var.ammo_max
+    var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
+    var.reload_time_max = var.reload_time_max  # can buy upgrades to decrease this
+    var.player_health = var.player_health  # can buy upgrades to increase this
+    var.gun_damage = var.gun_damage  # can buy upgrades to increase this
+    player.set_health(var.player_health)
+    player.set_x(var.screen_width / 2)
+    player.set_y(var.screen_height / 2)
+    player.set_speed(var.player_speed)
+
+    enemies.clear()
+    bullets.clear()
+    var.game_running = True
+    var.start_round = False
+
+def buy_menu(screen, player, enemies, bullets):
     pygame.mouse.set_visible(True)
     
     # buttons to upgrade player, ammo, firerate, reload time, gun damage
@@ -145,11 +168,10 @@ def buy_menu(screen):
                             var.player_health += 1
                             print("Health upgraded")
                     elif buttons[i] == "START":
-                        var.start_round = True
-                        var.buy_round = False
+                        start_new_level(player, enemies, bullets)
                         print("Round started")
                         return
-                        
+                            
     # render buttons
     for i in range(len(buttons)):
         pygame.draw.rect(screen, (255, 255, 255), button_rects[i])

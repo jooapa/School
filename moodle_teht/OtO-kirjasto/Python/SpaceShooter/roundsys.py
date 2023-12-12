@@ -18,5 +18,7 @@ def calculate_difficulty():
 
 def calculate_enemy_spawn_amount():
     enemy_spawn_amount = round(4 * math.sqrt(var.difficulty) * math.log(var.difficulty))
+    if var.round == 2:
+        return 2
     return max(enemy_spawn_amount, 1)
 

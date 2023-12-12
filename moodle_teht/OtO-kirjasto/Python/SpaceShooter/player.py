@@ -91,4 +91,8 @@ class Player:
         print("Player health: " + str(self.health))
         if self.health <= 0:
             return True
+    
+    def is_dead(self):
+        if self.health <= 0:
+            return True
         return False

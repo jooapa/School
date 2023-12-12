@@ -39,17 +39,44 @@ def spawn_enemies(num):
     for _ in range(num):
         spawn_enemy()
 
-
 def draw_health_bar(screen, current_health, max_health):
     bar_width = int((current_health / max_health) * 200)
     pygame.draw.rect(screen, (255, 0, 0), (50, 50, 200, 20))
     pygame.draw.rect(screen, (0, 255, 0), (50, 50, bar_width, 20))
 
 def draw_enemy_health_bar(screen, current_health, max_health, enemy):
-    bar_width = int((current_health / max_health) * 200)
-    pygame.draw.rect(screen, (255, 0, 0), (enemy.x - 50 +
-                     var.camera_offset.x, enemy.y + var.camera_offset.y - 50, 200, 20))
-    pygame.draw.rect(screen, (0, 255, 0), (enemy.x - 50 + var.camera_offset.x, enemy.y - 50 + var.camera_offset.y, bar_width, 20))
+    offset_x = -30
+    offset_y = 80
+    width = 25
+    height = 5
+    bar_width = int((current_health / max_health) * width)
+    pygame.draw.rect(screen, (255, 0, 0), (enemy.x - offset_x +
+                     var.camera_offset.x, enemy.y + var.camera_offset.y + offset_y, width, height))
+    pygame.draw.rect(screen, (0, 255, 0), (enemy.x - offset_x + var.camera_offset.x,
+                     enemy.y + offset_y + var.camera_offset.y, bar_width, height))
+
+def start_new_level():
+    var.difficulty = 10
+    var.ticks = 0
+    var.cooldown = 0
+    var.cooldown_time = var.cooldown_time 
+    var.round = 0
+    
+    var.ammo_max = var.ammo_max  # can buy upgrades to increase this
+    var.ammo = var.ammo_max
+    var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
+    var.reload_time_max = var.reload_time_max # can buy upgrades to decrease this
+    var.player_health = var.player_health  # can buy upgrades to increase this
+    var.gun_damage = var.gun_damage  # can buy upgrades to increase this
+    player.set_health(var.player_health)
+    player.set_x(var.screen_width / 2)
+    player.set_y(var.screen_height / 2)
+    player.set_speed(var.player_speed)
+
+    enemies.clear()
+    bullets.clear()
+    var.game_running = True
+    var.start_round = False
 
 # Game loopww
 running = True
@@ -74,7 +101,9 @@ while running:
             player.x += player.speed * dt
         if keys[pygame.K_r] and var.ammo != var.ammo_max:
             var.ammo = 0
-
+        if keys[pygame.K_o]:
+            healthed = player.get_health() - 10
+            player.set_health(healthed)
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
 
@@ -134,8 +163,8 @@ while running:
         for _enemy_ in enemies:
             # update and draw, but make sure that enemys cannot overlap with each other
             _enemy_.update(dt, enemies)
-            draw_enemy_health_bar(screen, _enemy_.get_health(), _enemy_.get_max_health(), _enemy_)
             _enemy_.draw(screen)
+            draw_enemy_health_bar(screen, _enemy_.get_health(), _enemy_.get_max_health(), _enemy_)
                 
         if var.invincibility_time > 0:
             # flash the player
@@ -145,7 +174,7 @@ while running:
             player.draw(screen, player.rect, rotated_player)
 
         # BUY ROUND
-        if var.buy_round:          
+        if var.buy_round and False:         
             functions.buy_menu(screen)            
         else:
             pygame.mouse.set_visible(False)
@@ -189,7 +218,6 @@ while running:
                 spawn_enemies(roundsys.calculate_enemy_spawn_amount())
                 print("\nRound: ", var.round, " >> Difficulty: ", var.difficulty, " >> Enemy Spawn Amount: ", roundsys.calculate_enemy_spawn_amount())
 
-        print('\r>> Ammo: ', var.ammo, " >> Firerate: ", var.firerate, " >> Reload Time: ", var.reload_time, end='')
         # Update the display
         dt = clock.tick(var.FPS) / 1000
         var.ticks += 1 / var.FPS
@@ -199,33 +227,8 @@ while running:
         pygame.mouse.set_visible(True)
         # DRAW MENU
         screen.fill((34, 0, 0))
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render('Press RMB to Start', True, (255, 255, 255), (34, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (var.screen_width // 2, var.screen_height // 2)
-        screen.blit(text, textRect)
+        functions.buy_menu(screen, player, enemies, bullets)
         
-        if pygame.mouse.get_pressed()[2]:
-            var.difficulty = 10
-            var.ticks = 0
-            var.cooldown = 0
-            var.cooldown_time = var.cooldown_time 
-
-            var.ammo_max = var.ammo_max  # can buy upgrades to increase this
-            var.ammo = var.ammo_max
-            var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
-            var.reload_time_max = var.reload_time_max # can buy upgrades to decrease this
-            var.player_health = var.player_health  # can buy upgrades to increase this
-            var.gun_damage = var.gun_damage  # can buy upgrades to increase this
-            player.set_health(var.player_health)
-            player.set_x(var.screen_width / 2)
-            player.set_y(var.screen_height / 2)
-            player.set_speed(var.player_speed)
-
-            enemies.clear()
-            bullets.clear()
-            var.game_running = True
-            var.start_round = False
         
     pygame.display.flip()
 
