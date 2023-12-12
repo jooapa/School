@@ -17,18 +17,30 @@ def spawn_enemy():
         return -var.enemy_spawn_offset - var.camera_offset.x, random.randint(0, var.screen_height) - var.camera_offset.y
     
 
-def rando_bullet():
+def rando_bullet(gun):
     räkä = random.randint(1, 5)
-    if räkä == 1:
-        return "img/räkä1.png"
-    elif räkä == 2:
-        return "img/räkä2.png"
-    elif räkä == 3:
-        return "img/räkä3.png"
-    elif räkä == 4:
-        return "img/räkä4.png"
-    elif räkä == 5:
-        return "img/räkä5.png"
+    if gun == "raka_ase":
+        if räkä == 1:
+            return "img/räkä1.png"
+        elif räkä == 2:
+            return "img/räkä2.png"
+        elif räkä == 3:
+            return "img/räkä3.png"
+        elif räkä == 4:
+            return "img/räkä4.png"
+        elif räkä == 5:
+            return "img/räkä5.png"
+    elif gun == "kakku_sinko":
+        if räkä == 1:
+            return "img/kakku1.png"
+        elif räkä == 2:
+            return "img/kakku2.png"
+        elif räkä == 3:
+            return "img/kakku3.png"
+        elif räkä == 4:
+            return "img/kakku4.png"
+        elif räkä == 5:
+            return "img/kakku5.png"
     
 def correct_scale(set_x, set_y): # returns the correct scale for the image
     return set_x * var.screen_width / 1920*0.8, set_y * var.screen_height / 1080*0.8

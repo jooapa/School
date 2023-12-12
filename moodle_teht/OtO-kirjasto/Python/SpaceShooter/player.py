@@ -2,12 +2,14 @@ import pygame, math, functions, var
 from bullet import Bullet
 
 class Player:
-    def __init__(self, x, y, speed, image, health):
+    def __init__(self, x, y, speed, image, health, gun, upgrade):
         self.x = x
         self.y = y
         self.speed = speed
         self.health = health
         self.max_health = health
+        self.gun = gun
+        self.upgrade = upgrade
         self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(
             self.image, (functions.correct_scale(300, 300)))
@@ -70,7 +72,14 @@ class Player:
     def shoot(self, angle): # dont know why but the bullet spawns at the wrong place
         bullet_x = self.get_center_x() - var.camera_offset.x - 30
         bullet_y = self.get_center_y() - var.camera_offset.y - 30
-        return Bullet(bullet_x, bullet_y, 1000, angle, functions.rando_bullet(), var.gun_damage)
+        if self.gun == "raka_ase":
+            gun_type = "raka_ase"
+            rand_x, rand_y = 50, 80
+        elif self.gun == "kakku_sinko":
+            gun_type = "kakku_sinko"
+            rand_x, rand_y = 80, 120
+            
+        return Bullet(bullet_x, bullet_y, 1000, angle, functions.rando_bullet(gun_type), var.gun_damage, rand_x, rand_y, gun_type)
     
     def get_health(self):
         return self.health
@@ -96,3 +105,30 @@ class Player:
         if self.health <= 0:
             return True
         return False
+    
+    def set_upgrade(self, gun, upgrade):
+        if gun == "raka_ase":
+            if upgrade == "MK1" or upgrade == "MK2" or upgrade == "MK3" or upgrade == "MK4" or upgrade == "MK5":
+                self.damage = var.raka_ase[upgrade]["Damage"]
+                var.firerate_max = var.raka_ase[upgrade]["Fire Rate"]
+                var.reload_time_max = var.raka_ase[upgrade]["Reload Time"]
+                var.reload_time = var.reload_time_max
+                var.ammo_max = var.raka_ase[upgrade]["Magazine Size"]
+                var.ammo = var.ammo_max
+                var.gun_damage = var.raka_ase[upgrade]["Damage"]
+                self.upgrade = upgrade
+                self.gun = gun
+        elif gun == "kakku_sinko":
+            if upgrade == "MK1" or upgrade == "MK2" or upgrade == "MK3" or upgrade == "MK4" or upgrade == "MK5":
+                self.damage = var.kakku_sinko[upgrade]["Damage"]
+                var.firerate_max = var.kakku_sinko[upgrade]["Fire Rate"]
+                var.reload_time_max = var.kakku_sinko[upgrade]["Reload Time"]
+                var.reload_time = var.reload_time_max
+                var.ammo_max = var.kakku_sinko[upgrade]["Magazine Size"]
+                var.gun_damage = var.kakku_sinko[upgrade]["Damage"]
+                var.ammo = var.ammo_max
+                self.upgrade = upgrade
+                self.gun = gun
+            
+    def get_upgrade(self):
+        return self.upgrade

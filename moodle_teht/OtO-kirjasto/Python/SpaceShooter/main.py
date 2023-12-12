@@ -19,7 +19,8 @@ bullets = []
 
 # PLAYER
 player = Player(var.screen_width / 2,
-                       var.screen_height / 2, 300, "img/räkä alus.png", var.player_health)
+                       var.screen_height / 2, 300, "img/räkä alus.png", var.player_health, "raka_ase", "MK1")
+player.set_upgrade("raka_ase", "MK1")
 
 # BG
 bg_image = pygame.image.load("img/bg_space.png").convert()
@@ -82,15 +83,23 @@ while running:
         if keys[pygame.K_o]:
             healthed = player.get_health() - 1
             player.set_health(healthed)
+        # SWITCH WEAPON
         if keys[pygame.K_1]:
-            # set bullets to mk5
-            for bullet in bullets:
-                bullet.set_upgrade("raka_ase", "MK1")
-            
+            player.set_upgrade("raka_ase", "MK1")
         if keys[pygame.K_2]:
-            # set bullets to mk5
-            for bullet in bullets:
-                bullet.set_upgrade("raka_ase", "MK2")
+            player.set_upgrade("kakku_sinko", "MK1")
+            
+        if keys[pygame.K_4]:
+            player.set_upgrade("raka_ase", "MK1")
+        if keys[pygame.K_5]:
+            player.set_upgrade("raka_ase", "MK2")
+        if keys[pygame.K_6]:
+            player.set_upgrade("raka_ase", "MK3")
+        if keys[pygame.K_7]:
+            player.set_upgrade("raka_ase", "MK4")
+        if keys[pygame.K_8]:
+            player.set_upgrade("raka_ase", "MK5")
+            
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
 
@@ -213,14 +222,16 @@ while running:
         dt = clock.tick(var.FPS) / 1000
         var.ticks += 1 / var.FPS
         pygame.display.set_caption("PIG Defenders - Ticks: " + 
-                                   str(round(var.ticks))+ " FPS: " + 
-                                   str(round(clock.get_fps())) + " Invincibility: " + 
-                                   str(round(var.invincibility_time, 2)) + " Round: " + 
-                                   str(var.round) + " Difficulty: " + str(var.difficulty) + 
-                                   " Enemy Spawn Amount: " + str(roundsys.calculate_enemy_spawn_amount()) + 
-                                   " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + 
-                                   " Firerate: " + str(var.firerate_max) + " Reload Time: " +
-                                   str(round(var.reload_time)) + " Coins: " + str(var.coins))
+                                    str(round(var.ticks))+ " FPS: " + 
+                                    str(round(clock.get_fps())) + " Round: " + 
+                                    str(var.round) + " Difficulty: " + str(var.difficulty) + 
+                                    " Enemy Amount: " + str(roundsys.calculate_enemy_spawn_amount()) + 
+                                    " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + 
+                                    " Firerate: " + str(var.firerate_max) + " Reload: " +
+                                    str(round(var.reload_time)) + " Coins: " + str(var.coins) +
+                                    " Current gun: " + player.gun + " Current upgrade: " + player.upgrade + " Gun damage: " + str(var.gun_damage) +
+                                    " Player speed: " + str(player.speed)
+                                    )
         roundsys.check_round(enemies)
     else:
         pygame.mouse.set_visible(True)
