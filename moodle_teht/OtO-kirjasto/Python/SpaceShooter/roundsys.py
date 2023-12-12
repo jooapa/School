@@ -4,11 +4,11 @@ def check_round(enemies):
     if len(enemies) == 0 and not var.start_round and not var.buy_round:
         var.round += 1
         var.cooldown = var.ticks
-        if var.round in var.buy_rounds:
-            var.buy_round = True
-            var.start_round = False
-        else:
-            var.start_round = True
+        # if var.round in var.buy_rounds:
+        #     var.buy_round = True
+        #     var.start_round = False
+        # else:
+        var.start_round = True
 
 def calculate_difficulty():
     var.difficulty = var.round * var.difficulty_curve

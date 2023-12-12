@@ -32,8 +32,7 @@ def rando_bullet():
     
 def correct_scale(set_x, set_y): # returns the correct scale for the image
     return set_x * var.screen_width / 1920*0.8, set_y * var.screen_height / 1080*0.8
-
-
+        
 def start_new_level(player, enemies, bullets):
     var.difficulty = 10
     var.ticks = 0
@@ -43,8 +42,9 @@ def start_new_level(player, enemies, bullets):
 
     var.ammo_max = var.ammo_max  # can buy upgrades to increase this
     var.ammo = var.ammo_max
-    var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
     var.reload_time_max = var.reload_time_max  # can buy upgrades to decrease this
+    var.reload_time = var.reload_time_max
+    var.firerate_max = var.firerate_max  # can buy upgrades to decrease this
     var.player_health = var.player_health  # can buy upgrades to increase this
     var.gun_damage = var.gun_damage  # can buy upgrades to increase this
     player.set_health(var.player_health)
