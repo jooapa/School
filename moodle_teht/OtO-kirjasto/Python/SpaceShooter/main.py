@@ -3,6 +3,7 @@ import math, functions, var, roundsys
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager
+from shop import shop_menu_btns
 # Initialize pygame
 pygame.init()
 # SETUP PYGAME VARIABLES
@@ -277,7 +278,7 @@ while running:
         screen.fill((34, 0, 0))
         if var.shop_open:
             change_bg_music("shop")
-            functions.shop_menu_btns(screen)
+            shop_menu_btns(screen)
         else:
             change_bg_music("menu")
             functions.start_menu_btns(screen, player, enemies, bullets)

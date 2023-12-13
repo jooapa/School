@@ -14,8 +14,8 @@ round_start_interval = 0
 current_bg_song = None
 bg_volume = 0.3
 
-player_speed = 70
-player_health = 100
+player_speed = 60
+player_health = 60
 player_max_health = 5
 
 enemy_speed = 80
