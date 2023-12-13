@@ -4,13 +4,14 @@ screen_width = 1280
 screen_height = 720
 camera_offset = pygame.math.Vector2(0, 0)
 
-cooldown_time = 0.2
-round = 2
+cooldown_time = 2
+round = 0
 start_round = False
 difficulty = 1
 difficulty_curve = 0.6
+round_start_interval = 0
 
-player_speed = 50
+player_speed = 70
 player_health = 100
 player_max_health = 5
 
@@ -24,6 +25,8 @@ enemy_spawn_offset = 500
 FPS = 144
 play_area = 10
 game_running = False # False when player dies, showing the menu
+shop_open = False
+
 buy_rounds = [3, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 buy_round = False
 
@@ -53,10 +56,11 @@ start_new_round_in_the_main_menu = False
 raka_ase = {
     "MK1": {"Damage": 20, "Fire Rate": 0.5, "Reload Time": 5, "Magazine Size": 10, "Speed": 800, "Cost": None},
     "MK2": {"Damage": 30, "Fire Rate": 0.4, "Reload Time": 4.5, "Magazine Size": 20, "Speed": 900, "Cost": 50},
-    "MK3": {"Damage": 40, "Fire Rate": 0.3, "Reload Time": 4, "Magazine Size": 30, "Speed": 1000, "Cost": 100},
-    "MK4": {"Damage": 50, "Fire Rate": 0.2, "Reload Time": 3.5, "Magazine Size": 40, "Speed": 1000, "Cost": 150},
-    "MK5": {"Damage": 60, "Fire Rate": 0.1, "Reload Time": 3, "Magazine Size": 50, "Speed": 1100, "Cost": 200},
+    "MK3": {"Damage": 40, "Fire Rate": 0.35, "Reload Time": 4, "Magazine Size": 30, "Speed": 1000, "Cost": 100},
+    "MK4": {"Damage": 50, "Fire Rate": 0.3, "Reload Time": 3.5, "Magazine Size": 40, "Speed": 1000, "Cost": 150},
+    "MK5": {"Damage": 60, "Fire Rate": 0.2, "Reload Time": 3, "Magazine Size": 50, "Speed": 1100, "Cost": 200},
 }
+current_raka_ase = "MK1"
 
 kakku_sinko = {
     "MK1": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
@@ -65,3 +69,4 @@ kakku_sinko = {
     "MK4": {"Damage": 80, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 150},
     "MK5": {"Damage": 90, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 200},
 }
+current_kakku_sinko = "MK1"

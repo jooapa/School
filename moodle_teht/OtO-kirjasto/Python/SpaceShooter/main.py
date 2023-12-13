@@ -36,6 +36,8 @@ crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
 # ENEMY
 def spawn_enemy():
     enemies.append(Enemy(*functions.spawn_enemy(), var.enemy_speed, "img/enemy.png", 100, 1, 10))
+    
+enemies_to_spawn = 1
 def spawn_enemies(num):
     for _ in range(num):
         spawn_enemy()
@@ -175,7 +177,7 @@ while running:
 
         # BUY ROUND
         if var.buy_round:       
-            functions.buy_menu(screen)            
+            functions.start_menu_btns(screen)            
         else:
             pygame.mouse.set_visible(False)
             screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
@@ -207,20 +209,34 @@ while running:
             if var.reload_time <= 0:
                 var.ammo = var.ammo_max
                 var.reload_time = var.reload_time_max
-
+        
         # ROUND SYSTEM
+        if round(var.ticks,2) == round(var.round_start_interval, 2) and not var.buy_round:
+            print("Next round")
+            roundsys.next_round()
+            
         if var.start_round and not var.buy_round:
             if var.ticks >= var.cooldown + var.cooldown_time:
                 prev_ticks = var.ticks
                 var.start_round = False
                 roundsys.calculate_difficulty()
-                roundsys.calculate_enemy_spawn_amount()
-                spawn_enemies(roundsys.calculate_enemy_spawn_amount())
+                enemies_to_spawn += roundsys.calculate_enemy_spawn_amount()
+                # spawn_enemies(roundsys.calculate_enemy_spawn_amount())
                 print("\nRound: ", var.round, " >> Difficulty: ", var.difficulty, " >> Enemy Spawn Amount: ", roundsys.calculate_enemy_spawn_amount())
-
-        # Update the display
-        dt = clock.tick(var.FPS) / 1000
-        var.ticks += 1 / var.FPS
+                print(enemies_to_spawn, " enemies left to spawn")
+                
+        
+        if enemies_to_spawn > 0:
+            if var.ticks >= var.cooldown + var.cooldown_time:
+                spawn_enemies(1)
+                enemies_to_spawn -= 1
+                var.cooldown = var.ticks
+                if enemies_to_spawn < 0:
+                    enemies_to_spawn += 1
+                print("Spawned enemy, ", enemies_to_spawn, " enemies left to spawn")
+                
+        roundsys.check_round(enemies)
+        
         pygame.display.set_caption("PIG Defenders - Ticks: " + 
                                     str(round(var.ticks))+ " FPS: " + 
                                     str(round(clock.get_fps())) + " Round: " + 
@@ -229,15 +245,19 @@ while running:
                                     " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + 
                                     " Firerate: " + str(var.firerate_max) + " Reload: " +
                                     str(round(var.reload_time)) + " Coins: " + str(var.coins) +
-                                    " Current gun: " + player.gun + " Current upgrade: " + player.upgrade + " Gun damage: " + str(var.gun_damage) +
-                                    " Player speed: " + str(player.speed)
+                                     " INTER" + str(var.round_start_interval) + " spawn: " + str(enemies_to_spawn)
                                     )
-        roundsys.check_round(enemies)
+        # Update the display
+        dt = clock.tick(var.FPS) / 1000
+        var.ticks += 1 / var.FPS
     else:
         pygame.mouse.set_visible(True)
         # DRAW MENU
         screen.fill((34, 0, 0))
-        functions.buy_menu(screen, player, enemies, bullets)
+        if var.shop_open:
+            functions.shop_menu_btns(screen)
+        else:
+            functions.start_menu_btns(screen, player, enemies, bullets)
         
         
     pygame.display.flip()
