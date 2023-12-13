@@ -168,7 +168,12 @@ def start_menu_btns(screen, player, enemies, bullets):
         screen.blit(button_texts[i][0], button_texts[i][1])
         screen.blit(button_info[i][0], button_info[i][1])
 
+ticks_in_full_second = var.ticks
+keeper = "img/shop1.png"
 def shop_menu_btns(screen):
+    global ticks_in_full_second
+    global keeper
+    
     pygame.mouse.set_visible(True)
     
     # buttons to upgrade player
@@ -179,8 +184,8 @@ def shop_menu_btns(screen):
     for i in range(len(buttons)):
         # add buttons to the center of the screen
         button_pos.append(pygame.math.Vector2(0, 0))
-        button_pos[i].x = var.screen_width + 400 * i - 400 * (len(buttons) - 1) / 2
-        button_pos[i].y = var.screen_height / 2 - 50
+        button_pos[i].x = var.screen_width + 720
+        button_pos[i].y = var.screen_height / 2 - 200 + 250 * i
         button_pos[i].x, button_pos[i].y = correct_scale(button_pos[i].x, button_pos[i].y)
         
     # button sizes
@@ -188,8 +193,7 @@ def shop_menu_btns(screen):
     button_size.x = 300
     button_size.y = 200
     button_size.x, button_size.y = correct_scale(button_size.x, button_size.y)
-    font_size = 30
-    desc_font_size = 20
+    font_size = 20
     # button rects
     button_rects = []
     for i in range(len(buttons)):
@@ -205,6 +209,11 @@ def shop_menu_btns(screen):
         text_rect = text.get_rect(center=button_rects[i].center)
         button_texts.append((text, text_rect))
             
+    # render buttons
+    for i in range(len(buttons)):
+        pygame.draw.rect(screen, (255, 255, 255), button_rects[i])
+        screen.blit(button_texts[i][0], button_texts[i][1])
+        
     #if clicked
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
     
@@ -226,8 +235,32 @@ def shop_menu_btns(screen):
                         var.shop_open = False
                         print("Shop closed")
                         return
-                    
-    # render buttons
-    for i in range(len(buttons)):
-        pygame.draw.rect(screen, (255, 255, 255), button_rects[i])
-        screen.blit(button_texts[i][0], button_texts[i][1])
+    # render background
+    if var.ticks > ticks_in_full_second:
+        ticks_in_full_second = var.ticks + 0.19
+        keeper = random_shopkeeper(keeper)
+        
+    background = pygame.image.load(keeper)
+    background = pygame.transform.scale(background, (var.screen_width, var.screen_height))
+    screen.blit(background, (0, 0))
+    
+
+def random_shopkeeper(keeper):
+    shopkeeper = random.randint(1, 4)
+    if keeper == "img/shop1.png" and shopkeeper == 1:
+        shopkeeper = 2
+    elif keeper == "img/shop2.png" and shopkeeper == 2:
+        shopkeeper = 3
+    elif keeper == "img/shop3.png" and shopkeeper == 3:
+        shopkeeper = 4
+    elif keeper == "img/shop4.png" and shopkeeper == 4:
+        shopkeeper = 1
+        
+    if shopkeeper == 1:
+        return "img/shop1.png"
+    elif shopkeeper == 2:
+        return "img/shop2.png"
+    elif shopkeeper == 3:
+        return "img/shop3.png"
+    elif shopkeeper == 4:
+        return "img/shop4.png"

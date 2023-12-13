@@ -11,6 +11,9 @@ difficulty = 1
 difficulty_curve = 0.6
 round_start_interval = 0
 
+current_bg_song = None
+bg_volume = 0.3
+
 player_speed = 70
 player_health = 100
 player_max_health = 5

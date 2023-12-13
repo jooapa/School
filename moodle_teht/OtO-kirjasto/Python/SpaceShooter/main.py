@@ -2,6 +2,7 @@ import pygame
 import math, functions, var, roundsys
 from enemy import Enemy
 from player import Player
+from audio_manager import AudioManager
 # Initialize pygame
 pygame.init()
 # SETUP PYGAME VARIABLES
@@ -57,7 +58,27 @@ def draw_enemy_health_bar(screen, current_health, max_health, enemy):
                      var.camera_offset.x, enemy.y + var.camera_offset.y + offset_y, width, height))
     pygame.draw.rect(screen, (0, 255, 0), (enemy.x - offset_x + var.camera_offset.x,
                      enemy.y + offset_y + var.camera_offset.y, bar_width, height))
+        
+# audio
+bg_channel = pygame.mixer.Channel(0)
+bg_audio = AudioManager()
 
+shots_channel = pygame.mixer.Channel(1)
+shots_audio = AudioManager()
+
+def change_bg_music(song):
+    if song == "menu" and var.current_bg_song != "menu":
+        var.current_bg_song = "menu"
+        bg_channel.play(bg_audio.load_sound("sfx/pig_d_1_1.mp3"), -1)
+        bg_audio.set_volume(bg_channel, var.bg_volume)
+    elif song == "game" and var.current_bg_song != "game":
+        var.current_bg_song = "game"
+        bg_channel.play(bg_audio.load_sound("sfx/pig_d_3_1.mp3"), -1)
+        bg_audio.set_volume(bg_channel, var.bg_volume)
+    elif song == "shop" and var.current_bg_song != "shop":
+        var.current_bg_song = "shop"
+        bg_channel.play(bg_audio.load_sound("sfx/shopkeep.mp3"), -1)
+        bg_audio.set_volume(bg_channel, var.bg_volume)
 
 # Game loopww
 running = True
@@ -70,6 +91,7 @@ while running:
     # Clear the screen
     screen.fill((0, 0, 0))
     if var.game_running:
+        change_bg_music("game")
         # Draw the player
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and player.y > 0: # UP
@@ -119,6 +141,7 @@ while running:
                 var.firerate = var.firerate_max
                 var.ammo -= 1
                 bullets.append(player.shoot(angle))
+                shots_channel.play(shots_audio.load_sound("sfx/laser.mp3"))
                              
         # CAMERA OFFSET
         var.camera_offset = pygame.math.Vector2(
@@ -140,6 +163,7 @@ while running:
                         bullets.remove(bullet)
                     if _enemy_.hitted(bullet.get_damage()):
                         enemies.remove(_enemy_)
+                        var.coins += 5
                     break
 
 
@@ -247,19 +271,21 @@ while running:
                                     str(round(var.reload_time)) + " Coins: " + str(var.coins) +
                                      " INTER" + str(var.round_start_interval) + " spawn: " + str(enemies_to_spawn)
                                     )
-        # Update the display
-        dt = clock.tick(var.FPS) / 1000
-        var.ticks += 1 / var.FPS
     else:
         pygame.mouse.set_visible(True)
         # DRAW MENU
         screen.fill((34, 0, 0))
         if var.shop_open:
+            change_bg_music("shop")
             functions.shop_menu_btns(screen)
         else:
+            change_bg_music("menu")
             functions.start_menu_btns(screen, player, enemies, bullets)
         
         
+    # Update the display
+    dt = clock.tick(var.FPS) / 1000
+    var.ticks += 1 / var.FPS
     pygame.display.flip()
 
 # Quit the game
