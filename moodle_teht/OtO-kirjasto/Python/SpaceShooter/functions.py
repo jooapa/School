@@ -51,6 +51,7 @@ def start_new_level(player, enemies, bullets):
     var.cooldown = 0
     var.cooldown_time = var.cooldown_time
     var.round = 0
+    var.invincibility_time = 0
 
     var.ammo_max = var.ammo_max  # can buy upgrades to increase this
     var.ammo = var.ammo_max

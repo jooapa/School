@@ -21,3 +21,4 @@ class AudioManager:
 
     def set_volume(self, sound, volume):
         sound.set_volume(volume)
+

@@ -274,6 +274,7 @@ while running:
                                     )
     else:
         pygame.mouse.set_visible(True)
+        enemies_to_spawn = 0
         # DRAW MENU
         screen.fill((34, 0, 0))
         if var.shop_open:

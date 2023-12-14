@@ -99,7 +99,5 @@ def shop_menu_btns(screen):
 
     render_shop_background(screen)
     render_shop_buttons(screen, buttons, button_rects, button_texts)
-
+    
     handle_shop_button_clicks(buttons, button_rects)
-
-
