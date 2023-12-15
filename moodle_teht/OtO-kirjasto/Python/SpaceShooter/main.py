@@ -26,6 +26,14 @@ player = Player(var.screen_width / 2,
                        var.screen_height / 2, 300, "img/räkä alus.png", var.player_health, "raka_ase", "MK1")
 player.set_upgrade("raka_ase", "MK1")
 
+# SMOKE EFFECT on player spawn
+smoke = pygame.image.load("img/smoke.png")
+smoke = pygame.transform.scale(
+    smoke, (player.rect.width * 1.5, player.rect.height * 1.5))
+smoke_rect = smoke.get_rect(center=(player.x, player.y))
+smoke_rect.x = player.x
+smoke_rect.y = player.y
+
 # BG
 bg_image = pygame.image.load("img/bg_space.png").convert()
 bg_image = pygame.transform.scale(
@@ -72,11 +80,11 @@ shots_audio = AudioManager()
 def change_bg_music(song):
     if song == "menu" and var.current_bg_song != "menu":
         var.current_bg_song = "menu"
-        bg_channel.play(bg_audio.load_sound("sfx/pig_d_1_1.mp3"), -1)
+        bg_channel.play(bg_audio.load_sound("sfx/klinoff_tropical.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
     elif song == "game" and var.current_bg_song != "game":
         var.current_bg_song = "game"
-        bg_channel.play(bg_audio.load_sound("sfx/pig_d_3_1.mp3"), -1)
+        bg_channel.play(bg_audio.load_sound("sfx/pigd4.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
     elif song == "shop" and var.current_bg_song != "shop":
         var.current_bg_song = "shop"
@@ -86,6 +94,7 @@ def change_bg_music(song):
 def distance_multiplier(x1, y1, x2, y2):
     return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
 
+  
 # Game loopww
 running = True
 while running:
@@ -96,6 +105,7 @@ while running:
 
     # Clear the screen
     if var.game_running:
+        var.start_game_animation = False
         screen.fill((0, 0, 0))
         
         change_bg_music("game")
@@ -184,21 +194,22 @@ while running:
                         elif bullet.get_gun_type() == "kakku_sinko":
                             enemy_x = _enemy_.get_x()
                             enemy_y = _enemy_.get_y()
-                            explosions.append(Explosion(enemy_x - 80, enemy_y - 50, 100))
+                            explosions.append(Explosion(bullet.get_center()[0], bullet.get_center()[1], 200))
                             bullets.remove(bullet)
                             # damage enemies in radius
                             for _enemy_2_ in enemies:
                                 enemy_x2 = _enemy_2_.get_x()
                                 enemy_y2 = _enemy_2_.get_y()
-                                if math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2) < 180:
+                                if math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2) < 200:
                                     if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(enemy_x, enemy_y, enemy_x2, enemy_y2), bullet):
                                         enemies.remove(_enemy_2_)
                                         var.coins += 5
+                                        print(str(var.ticks)+str(_enemy_2_) + " Enemy killed by explosion")
                                     else:
                                         print(
-                                            str(var.ticks) + str(_enemy_2_) + " Enemy survived explosion")
+                                            str(var.ticks)+str(_enemy_2_) + " Enemy survived explosion")
                                 else:
-                                    print(str(var.ticks) + str(_enemy_2_) + " Enemy too far away from explosion")
+                                    print(str(var.ticks)+str(_enemy_2_) + " Enemy too far away from explosion: " + str(math.sqrt( (enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2 )) + " units")
 
                     break
                 
@@ -240,7 +251,12 @@ while running:
                 player.draw(screen, player.rect, rotated_player)
         else:
             player.draw(screen, player.rect, rotated_player)
-
+        
+        # SMOKE EFFECT first second start fade out
+        if var.ticks < 2:
+            smoke.set_alpha(255 - (255 / 1) * var.ticks)
+            screen.blit(smoke, (smoke_rect.x - var.camera_offset.x - 620, smoke_rect.y - var.camera_offset.y - 420))
+            
         # BUY ROUND
         if var.buy_round:       
             functions.start_menu_btns(screen)            
@@ -317,17 +333,17 @@ while running:
     else:
         if var.start_game_animation:
             menu_screen.background_zoom_animation(screen)
-            
-        pygame.mouse.set_visible(True)
-        enemies_to_spawn = 0
-        # DRAW MENU
-        screen.fill((34, 0, 0))
-        if var.shop_open:
-            change_bg_music("shop")
-            shop_menu_btns(screen)
         else:
-            change_bg_music("menu")
-            menu_screen.main_screen(screen, player, enemies, bullets)
+            pygame.mouse.set_visible(True)
+            enemies_to_spawn = 0
+            # DRAW MENU
+            screen.fill((34, 0, 0))
+            if var.shop_open:
+                change_bg_music("shop")
+                shop_menu_btns(screen)
+            else:
+                change_bg_music("menu")
+                menu_screen.main_screen(screen, player, enemies, bullets)
 
         
     # Update the display

@@ -33,7 +33,7 @@ def create_buttons():
         button_pos.append(pygame.math.Vector2(0, 0))
         button_pos[i].x = var.screen_width + \
             400 * i - 300 * (len(buttons) - 1) / 2
-        button_pos[i].y = var.screen_height / 2 - 50
+        button_pos[i].y = var.screen_height / 2 + 120
         button_pos[i].x, button_pos[i].y = correct_scale(
             button_pos[i].x, button_pos[i].y)
         if buttons[i] == "QUIT":
@@ -79,7 +79,14 @@ def render_main_buttons(screen, buttons, button_rects, button_icons):
     for i in range(len(buttons)):
         screen.blit(button_icons[i], button_rects[i])
     
-def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets):
+def render_main_title(screen):
+    title = pygame.image.load("img/title.png").convert_alpha()
+    title = pygame.transform.scale(
+        title, (1000, 150))
+    title_rect = title.get_rect(center=(var.screen_width / 2, var.screen_height / 2 - 200))
+    screen.blit(title, title_rect)
+    
+def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, screen):
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
@@ -97,6 +104,14 @@ def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets):
                     elif buttons[i] == "QUIT":
                         pygame.quit()
                         quit()
+                    elif buttons[i] == "FULLSCREEN":
+                        if screen.get_flags() & pygame.FULLSCREEN:
+                            pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
+                        else:
+                            screen = pygame.display.set_mode(
+                                (var.screen_width, var.screen_height), pygame.DOUBLEBUF | pygame.FULLSCREEN)
+                    else:
+                        print("Button not found")
 
 
 def main_screen(screen, player, enemies, bullets):
@@ -105,34 +120,50 @@ def main_screen(screen, player, enemies, bullets):
     background = pygame.transform.scale(
         background, (var.screen_width, var.screen_height))
     screen.blit(background, (0, 0))
+    render_main_title(screen)
     render_main_buttons(screen, buttons, button_rects, button_icons)
-    handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets)
+    handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, screen)
 
 
 def background_zoom_animation(screen):
     bg_image = pygame.image.load("img/bg_space.png").convert()
-    zoom_factor = 2.3
-    zoom_speed = 0.5  # Adjust this value to change the speed of the zoom
+    zoom_factor = 1
+    zoom_speed = 0.05  # Adjust this value to change the speed of the zoom
+
+    target_center = (var.screen_width // 2 + 130, var.screen_height // 1.5 - 50)
+    current_center = list(target_center)
 
     while var.start_game_animation:
-        # Zoom in
+        # Interpolate zoom factor
         zoom_factor += zoom_speed
+        if zoom_factor >= 2.3:
+            zoom_factor = 2.3
         scaled_width = int(var.screen_width * zoom_factor)
         scaled_height = int(var.screen_height * zoom_factor)
         bg_image_scaled = pygame.transform.scale(
             bg_image, (scaled_width, scaled_height))
-
-        # Center the image
         bg_rect = bg_image_scaled.get_rect()
-        bg_rect.center = (var.screen_width // 2, var.screen_height // 2)
+        bg_rect.center = current_center
 
+        # Interpolate center
+        current_center[0] += (target_center[0] - current_center[0]) * 0.1
+        current_center[1] += (target_center[1] - current_center[1]) * 0.1
+        
         # Draw the image to the screen
         screen.blit(bg_image_scaled, bg_rect.topleft)
 
+        buttons, button_rects, button_icons = create_buttons()
+        render_main_buttons(screen, buttons, button_rects, button_icons)
+        render_main_title(screen)
+        
+        # break when image is big enough
+        print(zoom_factor)
+        if zoom_factor >= 2.3:
+            break
+        
         # Update the display
         pygame.display.flip()
-
-        # break
+        pygame.time.Clock().tick(var.FPS)
 
     var.game_running = True
     var.start_round = False

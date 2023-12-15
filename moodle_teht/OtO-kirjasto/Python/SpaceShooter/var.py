@@ -62,7 +62,7 @@ raka_ase = {
     "MK2": {"Damage": 30, "Fire Rate": 0.4, "Reload Time": 4.5, "Magazine Size": 20, "Speed": 900, "Cost": 50},
     "MK3": {"Damage": 40, "Fire Rate": 0.35, "Reload Time": 4, "Magazine Size": 30, "Speed": 1000, "Cost": 100},
     "MK4": {"Damage": 50, "Fire Rate": 0.3, "Reload Time": 3.5, "Magazine Size": 40, "Speed": 1000, "Cost": 150},
-    "MK5": {"Damage": 60, "Fire Rate": 0.2, "Reload Time": 3, "Magazine Size": 50, "Speed": 1100, "Cost": 200},
+    "MK5": {"Damage": 60, "Fire Rate": 0.4, "Reload Time": 4, "Magazine Size": 40, "Speed": 1100, "Cost": 200},
 }
 current_raka_ase = "MK1"
 

@@ -1,3 +1,5 @@
+<img src="img/title.png" width="100%" height="100%">
+
 # SUUNNITELMA
 ## PELI
 Peli on ylhäältä päin kuvattu 2d peli, jossa kontrolloit WASD:illa ja osoitat asetta hiirillä. Pelaaja kääntyy hiiren cursoria päin ja painamalla LMOUSE, ammut panoksen hiiren suuntaan.
