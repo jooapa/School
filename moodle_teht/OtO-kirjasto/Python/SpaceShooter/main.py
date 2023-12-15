@@ -4,6 +4,8 @@ from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager
 from shop import shop_menu_btns
+from explosion import Explosion
+from menu_screen import main_screen
 # Initialize pygame
 pygame.init()
 # SETUP PYGAME VARIABLES
@@ -16,9 +18,9 @@ screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.D
 pygame.display.set_caption("PIG Defenders")
 
 # Load SPRITES
-enemies = []
-bullets = []
-
+enemies    = []
+bullets    = []
+explosions = []
 # PLAYER
 player = Player(var.screen_width / 2,
                        var.screen_height / 2, 300, "img/räkä alus.png", var.player_health, "raka_ase", "MK1")
@@ -81,6 +83,9 @@ def change_bg_music(song):
         bg_channel.play(bg_audio.load_sound("sfx/shopkeep.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
 
+def distance_multiplier(x1, y1, x2, y2):
+    return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
+
 # Game loopww
 running = True
 while running:
@@ -108,6 +113,12 @@ while running:
         if keys[pygame.K_o]:
             healthed = player.get_health() - 1
             player.set_health(healthed)
+        if keys[pygame.K_F11]:
+            if screen.get_flags() & pygame.FULLSCREEN:
+                pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
+            else:
+                screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF | fullscreen)
+            
         # SWITCH WEAPON
         if keys[pygame.K_1]:
             player.set_upgrade("raka_ase", "MK1")
@@ -124,6 +135,8 @@ while running:
             player.set_upgrade("raka_ase", "MK4")
         if keys[pygame.K_8]:
             player.set_upgrade("raka_ase", "MK5")
+        if keys[pygame.K_j]:
+            spawn_enemy()
             
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
@@ -161,13 +174,41 @@ while running:
                 enemy_rect = _enemy_.get_rect()
                 if bullet_rect.colliderect(enemy_rect):
                     if bullet in bullets:
-                        bullets.remove(bullet)
-                    if _enemy_.hitted(bullet.get_damage()):
-                        enemies.remove(_enemy_)
-                        var.coins += 5
+                        if bullet.get_gun_type() == "raka_ase":
+                            bullets.remove(bullet)
+                            if _enemy_.hitted(bullet.get_damage(), bullet):
+                                enemies.remove(_enemy_)
+                                var.coins += 5
+                            
+                        elif bullet.get_gun_type() == "kakku_sinko":
+                            enemy_x = _enemy_.get_x()
+                            enemy_y = _enemy_.get_y()
+                            explosions.append(Explosion(enemy_x - enemy_x % 100, enemy_y - enemy_y % 100, math.sqrt(180**2 + 180**2)))
+                            bullets.remove(bullet)
+                            print("EXPLOSION at: ", enemy_x - enemy_x % 100, enemy_y - enemy_y % 100)
+                            # damage enemies in radius
+                            for _enemy_2_ in enemies:
+                                enemy_x2 = _enemy_2_.get_x()
+                                enemy_y2 = _enemy_2_.get_y()
+                                if math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2) < 180:
+                                    if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(enemy_x, enemy_y, enemy_x2, enemy_y2), bullet):
+                                        enemies.remove(_enemy_2_)
+                                        var.coins += 5
+                                    else:
+                                        print(
+                                            str(var.ticks) + str(_enemy_2_) + " Enemy survived explosion")
+                                else:
+                                    print(str(var.ticks) + str(_enemy_2_) + " Enemy too far away from explosion")
+
                     break
-
-
+                
+        # render explosion
+        for explosion in explosions:                  
+            explosion.draw(screen)
+            explosion.update()
+            if explosion.done:
+                explosions.remove(explosion)
+                
         # detect collision between player and enemy
         for _enemy_ in enemies:
             # if enemy plus camera_offset is near player_pos, remove enemy
@@ -207,19 +248,20 @@ while running:
             pygame.mouse.set_visible(False)
             screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         
-        # # DEBUG
-        # # draw rect around player
-        # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
-        # # draw players center
-        # pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
-        # # draw rect around enemy
-        # for _enemy_ in enemies:
-        #     pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+        # DEBUG
+        # draw rect around player
+        pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
+        # draw players center
+        pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
 
-        # # draw rect around bullet
-        # for bullet in bullets:
-        #     pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
-        #     pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
+        # draw rect around enemy
+        for _enemy_ in enemies:
+            pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+
+        # draw rect around bullet
+        for bullet in bullets:
+            pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
+            pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
 
         # INVICIBILITY
         if var.invincibility_time > 0:
@@ -282,8 +324,8 @@ while running:
             shop_menu_btns(screen)
         else:
             change_bg_music("menu")
-            functions.start_menu_btns(screen, player, enemies, bullets)
-        
+            main_screen(screen, player, enemies, bullets)
+
         
     # Update the display
     dt = clock.tick(var.FPS) / 1000

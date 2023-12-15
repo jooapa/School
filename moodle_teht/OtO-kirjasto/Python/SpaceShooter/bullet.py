@@ -75,3 +75,5 @@ class Bullet:
     def set_damage(self, damage):
         self.damage = damage
     
+    def get_gun_type(self):
+        return self.gun_type

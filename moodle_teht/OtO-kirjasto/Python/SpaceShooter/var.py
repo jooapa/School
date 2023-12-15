@@ -5,7 +5,7 @@ screen_height = 720
 camera_offset = pygame.math.Vector2(0, 0)
 
 cooldown_time = 2
-round = 0
+round = 10
 start_round = False
 difficulty = 1
 difficulty_curve = 0.6

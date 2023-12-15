@@ -29,7 +29,7 @@ class Enemy:
 
         # Calculate net force to repel other enemies
         net_force = pygame.math.Vector2()
-        repulsion_distance = (self.image.get_width() / 2) * (2 ** 0.5)
+        repulsion_distance = (self.image.get_width() / 2) * (2)
 
         for enemy in enemies:
             if enemy != self:  # Skip checking against itself
@@ -103,8 +103,23 @@ class Enemy:
     def get_image(self):
         return self.image
     
-    def hitted(self, damage):
+    def hitted(self, damage, bullet):
         self.health -= damage
+        if bullet.get_gun_type() == "raka_ase":
+            bullet_vector = pygame.math.Vector2(bullet.get_x(), bullet.get_y())
+            enemy_vector = pygame.math.Vector2(self.x, self.y)
+            direction = bullet_vector - enemy_vector
+            direction = direction.normalize()
+            self.x -= direction.x * 10
+            self.y -= direction.y * 10
+        elif bullet.get_gun_type() == "kakku_sinko":
+            bullet_vector = pygame.math.Vector2(bullet.get_x(), bullet.get_y())
+            enemy_vector = pygame.math.Vector2(self.x, self.y)
+            direction = bullet_vector - enemy_vector
+            direction = direction.normalize()
+            self.x -= direction.x * 50
+            self.y -= direction.y * 50
+            
         if self.health <= 0:
             self.coins += var.coins
             return True
