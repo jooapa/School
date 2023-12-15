@@ -1,11 +1,11 @@
 import pygame
-import math, functions, var, roundsys
+import math, functions, var, roundsys, menu_screen
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager
 from shop import shop_menu_btns
 from explosion import Explosion
-from menu_screen import main_screen
+
 # Initialize pygame
 pygame.init()
 # SETUP PYGAME VARIABLES
@@ -95,8 +95,9 @@ while running:
             running = False
 
     # Clear the screen
-    screen.fill((0, 0, 0))
     if var.game_running:
+        screen.fill((0, 0, 0))
+        
         change_bg_music("game")
         # Draw the player
         keys = pygame.key.get_pressed()
@@ -183,9 +184,8 @@ while running:
                         elif bullet.get_gun_type() == "kakku_sinko":
                             enemy_x = _enemy_.get_x()
                             enemy_y = _enemy_.get_y()
-                            explosions.append(Explosion(enemy_x - enemy_x % 100, enemy_y - enemy_y % 100, math.sqrt(180**2 + 180**2)))
+                            explosions.append(Explosion(enemy_x - 80, enemy_y - 50, 100))
                             bullets.remove(bullet)
-                            print("EXPLOSION at: ", enemy_x - enemy_x % 100, enemy_y - enemy_y % 100)
                             # damage enemies in radius
                             for _enemy_2_ in enemies:
                                 enemy_x2 = _enemy_2_.get_x()
@@ -248,20 +248,20 @@ while running:
             pygame.mouse.set_visible(False)
             screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         
-        # DEBUG
-        # draw rect around player
-        pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
-        # draw players center
-        pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
+        # # DEBUG
+        # # draw rect around player
+        # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
+        # # draw players center
+        # pygame.draw.circle(screen, (255, 0, 0), player.get_center(), 2)
 
-        # draw rect around enemy
-        for _enemy_ in enemies:
-            pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
+        # # draw rect around enemy
+        # for _enemy_ in enemies:
+        #     pygame.draw.rect(screen, (255, 0, 0), _enemy_.rect, 2)
 
-        # draw rect around bullet
-        for bullet in bullets:
-            pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
-            pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
+        # # draw rect around bullet
+        # for bullet in bullets:
+        #     pygame.draw.rect(screen, (255, 0, 0), bullet.rect, 2)
+        #     pygame.draw.circle(screen, (255, 0, 0), bullet.get_center(), 2)
 
         # INVICIBILITY
         if var.invincibility_time > 0:
@@ -315,6 +315,9 @@ while running:
                                      " INTER" + str(var.round_start_interval) + " spawn: " + str(enemies_to_spawn)
                                     )
     else:
+        if var.start_game_animation:
+            menu_screen.background_zoom_animation(screen)
+            
         pygame.mouse.set_visible(True)
         enemies_to_spawn = 0
         # DRAW MENU
@@ -324,7 +327,7 @@ while running:
             shop_menu_btns(screen)
         else:
             change_bg_music("menu")
-            main_screen(screen, player, enemies, bullets)
+            menu_screen.main_screen(screen, player, enemies, bullets)
 
         
     # Update the display

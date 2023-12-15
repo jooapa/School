@@ -10,6 +10,7 @@ start_round = False
 difficulty = 1
 difficulty_curve = 0.6
 round_start_interval = 0
+start_game_animation = False
 
 current_bg_song = None
 bg_volume = 0.3

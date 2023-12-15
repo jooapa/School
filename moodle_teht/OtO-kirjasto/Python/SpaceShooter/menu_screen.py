@@ -23,37 +23,31 @@ def start_new_level(player, enemies, bullets):
 
     enemies.clear()
     bullets.clear()
-    var.game_running = True
-    var.start_round = False
-
-
-def start_menu_btns():
-
-    buttons, button_rects, button_texts = create_buttons()
-
-    return buttons, button_rects, button_texts
+    var.start_game_animation = True
 
 
 def create_buttons():
-    buttons = ["TUTORIAL", "START", "SHOP", "QUIT"]
+    buttons = ["TUTORIAL", "START", "SHOP", "QUIT", "FULLSCREEN"]
     button_pos = []
     for i in range(len(buttons)):
         button_pos.append(pygame.math.Vector2(0, 0))
         button_pos[i].x = var.screen_width + \
-            400 * i - 400 * (len(buttons) - 1) / 2
+            400 * i - 300 * (len(buttons) - 1) / 2
         button_pos[i].y = var.screen_height / 2 - 50
         button_pos[i].x, button_pos[i].y = correct_scale(
             button_pos[i].x, button_pos[i].y)
         if buttons[i] == "QUIT":
             button_pos[i].y = var.screen_height - 50
             button_pos[i].x = var.screen_width - 50
+        if buttons[i] == "FULLSCREEN":
+            button_pos[i].y = 0
+            button_pos[i].x = 0
 
     button_size = pygame.math.Vector2(0, 0)
     button_size.x = 300
     button_size.y = 300
     button_size.x, button_size.y = correct_scale(button_size.x, button_size.y)
-    font_size = 30
-
+    
     button_rects = []
     for i in range(len(buttons)):
         button_rects.append(pygame.Rect(0, 0, 0, 0))
@@ -62,21 +56,28 @@ def create_buttons():
         if buttons[i] == "QUIT":
             button_rects[i].size = pygame.math.Vector2(100, 100)
             button_rects[i].center = button_pos[i]
-
-    button_texts = []
+        if buttons[i] == "FULLSCREEN":
+            button_rects[i].size = pygame.math.Vector2(100, 100)
+            button_rects[i].center = button_pos[i]
+            button_rects[i].x = button_pos[i].x
+            button_rects[i].y = button_pos[i].y
+            
+    button_icons = []
     for i in range(len(buttons)):
-        text = pygame.font.SysFont("Arial", font_size).render(
-            buttons[i], True, (0, 0, 0))
-        text_rect = text.get_rect(center=button_rects[i].center)
-        button_texts.append((text, text_rect))
+        button_icons.append(pygame.image.load(
+            "img/ico/" + buttons[i] + ".png").convert_alpha())
+        button_icons[i] = pygame.transform.scale(
+            button_icons[i], (button_rects[i].size[0], button_rects[i].size[1]))
+        if buttons[i] == "QUIT":
+            button_icons[i] = pygame.transform.scale(
+                button_icons[i], (button_rects[i].size[0], button_rects[i].size[1]))
 
-    return buttons, button_rects, button_texts
+    return buttons, button_rects, button_icons
 
 
-def render_buttons(screen, buttons, button_rects, button_texts):
+def render_main_buttons(screen, buttons, button_rects, button_icons):
     for i in range(len(buttons)):
-        pygame.draw.rect(screen, (255, 255, 255), button_rects[i])
-        screen.blit(button_texts[i][0], button_texts[i][1])
+        screen.blit(button_icons[i], button_rects[i])
     
 def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets):
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
@@ -99,10 +100,39 @@ def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets):
 
 
 def main_screen(screen, player, enemies, bullets):
-    buttons, button_rects, button_texts = start_menu_btns()
-
-    # Only render buttons after creating them
-    render_buttons(screen, buttons, button_rects, button_texts)
-
-    # Event handling loop
+    buttons, button_rects, button_icons = create_buttons()
+    background = pygame.image.load("img/bg_space.png").convert_alpha()
+    background = pygame.transform.scale(
+        background, (var.screen_width, var.screen_height))
+    screen.blit(background, (0, 0))
+    render_main_buttons(screen, buttons, button_rects, button_icons)
     handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets)
+
+
+def background_zoom_animation(screen):
+    bg_image = pygame.image.load("img/bg_space.png").convert()
+    zoom_factor = 2.3
+    zoom_speed = 0.5  # Adjust this value to change the speed of the zoom
+
+    while var.start_game_animation:
+        # Zoom in
+        zoom_factor += zoom_speed
+        scaled_width = int(var.screen_width * zoom_factor)
+        scaled_height = int(var.screen_height * zoom_factor)
+        bg_image_scaled = pygame.transform.scale(
+            bg_image, (scaled_width, scaled_height))
+
+        # Center the image
+        bg_rect = bg_image_scaled.get_rect()
+        bg_rect.center = (var.screen_width // 2, var.screen_height // 2)
+
+        # Draw the image to the screen
+        screen.blit(bg_image_scaled, bg_rect.topleft)
+
+        # Update the display
+        pygame.display.flip()
+
+        # break
+
+    var.game_running = True
+    var.start_round = False
