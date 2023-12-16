@@ -2,8 +2,8 @@ import pygame, var
 
 class Explosion:
     def __init__(self, x, y, radius):
-        self.x = x
-        self.y = y
+        self.x = x - radius
+        self.y = y - radius
         self.radius = radius
         self.image = pygame.image.load("img/explosion.png")
         self.image = pygame.transform.scale(self.image, (radius*2, radius*2))

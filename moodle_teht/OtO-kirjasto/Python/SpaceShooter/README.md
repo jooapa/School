@@ -39,3 +39,42 @@ Aseita voi päivittää kolikoilla, joka tekee aseista tehokkaampia.
 | MK5         | 90     | 1.2           | 3               | 7             | 200  |
 
 # Testiraportti
+
+**Raportti: Pygame-ongelman ratkaisu**
+
+*Päivämäärä: [16.12.2023]*
+
+
+### Ongelman Kuvaus:
+
+Ongelmana oli, että ammuttaessa vihollista kakku singolla ja lisättäessä räjähdysanimaatio, animaatio tapahtui väärässä paikassa. Alkuperäinen koodi sijoitti räjähdyksen koordinaatit vihollisen keskelle, mutta räjähdyksen animaatio alkoi silti (0,0)-kohdasta, mikä johti epätoivottuun sijaintiin.
+
+### Ratkaisuvaiheet:
+
+1. **Räjähdyksen sijainti:**
+   - Alkuperäinen koodi:
+     ```python
+     enemy_x = _enemy_.get_x() - _enemy_.rect.width / 2
+     enemy_y = _enemy_.get_y() - _enemy_.rect.height / 2
+     explosions.append(Explosion(enemy_x, enemy_y, 200))
+     ```
+   - Ongelma: Räjähdys tapahtui vihollisen keskellä, mutta sen animaatio alkoi väärästä paikasta.
+   - Ratkaisu: Muutin Explosion-luokassa koordinaatteja seuraavasti:
+     ```python
+     self.x = x - radius
+     self.y = y - radius
+     ```
+   - Tämä korjasi ongelman, ja räjähdys tapahtui nyt oikeassa paikassa suhteessa viholliseen.
+
+2. **Panoksen sijainti:**
+   - Alkuperäinen koodi:
+     ```python
+     bullet_x = bullet.get_x() - bullet_x.rect.width / 2
+     bullet_y = bullet.get_y() - bullet_y.rect.height / 2
+     explosions.append(Explosion(bullet_x, bullet_y, 200))
+     ```
+   - Ongelma: Panoksen räjähdys tapahtui panoksen keskellä, joka jhti että räjähdyksen nolla-piste alkoi keskeltä panosta.
+   - Ratkaisu: Käytin suoraan panoksen koordinaatteja Explosion-luokassa:
+     ```python
+     explosions.append(Explosion(bullet.get_x(), bullet.get_y(), 200))
+     ```

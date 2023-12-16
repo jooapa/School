@@ -213,19 +213,19 @@ while running:
                                 var.coins += 5
                             
                         elif bullet.get_gun_type() == "kakku_sinko":
-                            enemy_x = _enemy_.get_x() - _enemy_.rect.width / 2
-                            enemy_y = _enemy_.get_y() - _enemy_.rect.height / 2
+                            bullet_x  = bullet.get_x() - _enemy_.rect.width / 2
+                            bullet_y = bullet.get_y() - _enemy_.rect.height / 2
                             # explosion rect at the center of the explosion
                             explosions.append(
-                                Explosion(enemy_x, enemy_y, 200))
+                                Explosion(bullet.get_x(), bullet.get_y(), 200))
                             bullets.remove(bullet)
                             # damage enemies in radius
                             for _enemy_2_ in enemies:
                                 enemy_x2 = _enemy_2_.get_x() - _enemy_2_.rect.width / 2
                                 enemy_y2 = _enemy_2_.get_y() - _enemy_2_.rect.height / 2
-                                if math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2) < 200:
-                                    print(enemy_x, enemy_y, enemy_x2, enemy_y2, math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2))                                  
-                                    if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(enemy_x, enemy_y, enemy_x2, enemy_y2), bullet):
+                                if math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2) < 200:
+                                    print(bullet_x , bullet_y, enemy_x2, enemy_y2, math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2))                                  
+                                    if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(bullet_x , bullet_y, enemy_x2, enemy_y2), bullet):
                                         enemies.remove(_enemy_2_)
                                         var.coins += 5
                                         print(str(var.ticks) + str(_enemy_2_) + " Enemy killed by explosion")
@@ -234,7 +234,7 @@ while running:
                                             str(var.ticks) + str(_enemy_2_) + " Enemy survived explosion")
                                 else:
                                     print(str(var.ticks) + str(_enemy_2_) + " Enemy too far away from explosion: " + str(
-                                        math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2)) + " units")
+                                        math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2)) + " units")
 
                     break
                 
