@@ -9,6 +9,8 @@ class Player:
         self.health = health
         self.max_health = health
         self.gun = gun
+        self.raka_ase_ammo = 0
+        self.kakku_sinko_ammo = 0
         self.upgrade = upgrade
         self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(
@@ -113,22 +115,35 @@ class Player:
                 var.firerate_max = var.raka_ase[upgrade]["Fire Rate"]
                 var.reload_time_max = var.raka_ase[upgrade]["Reload Time"]
                 var.reload_time = var.reload_time_max
-                var.ammo_max = var.raka_ase[upgrade]["Magazine Size"]
-                var.ammo = var.ammo_max
                 var.gun_damage = var.raka_ase[upgrade]["Damage"]
                 self.upgrade = upgrade
                 self.gun = gun
+                var.ammo = self.get_raka_ase_ammo()
+                var.ammo_max = var.raka_ase[upgrade]["Magazine Size"]
+                
         elif gun == "kakku_sinko":
             if upgrade == "MK1" or upgrade == "MK2" or upgrade == "MK3" or upgrade == "MK4" or upgrade == "MK5":
                 self.damage = var.kakku_sinko[upgrade]["Damage"]
                 var.firerate_max = var.kakku_sinko[upgrade]["Fire Rate"]
                 var.reload_time_max = var.kakku_sinko[upgrade]["Reload Time"]
                 var.reload_time = var.reload_time_max
-                var.ammo_max = var.kakku_sinko[upgrade]["Magazine Size"]
                 var.gun_damage = var.kakku_sinko[upgrade]["Damage"]
-                var.ammo = var.ammo_max
                 self.upgrade = upgrade
                 self.gun = gun
-            
+                var.ammo = self.get_kakku_sinko_ammo()
+                var.ammo_max = var.kakku_sinko[upgrade]["Magazine Size"]
+                
     def get_upgrade(self):
         return self.upgrade
+    
+    def get_raka_ase_ammo(self):
+        return self.raka_ase_ammo
+    
+    def set_raka_ase_ammo(self, raka_ase_ammo):
+        self.raka_ase_ammo = raka_ase_ammo
+        
+    def get_kakku_sinko_ammo(self):
+        return self.kakku_sinko_ammo
+    
+    def set_kakku_sinko_ammo(self, kakku_sinko_ammo):
+        self.kakku_sinko_ammo = kakku_sinko_ammo

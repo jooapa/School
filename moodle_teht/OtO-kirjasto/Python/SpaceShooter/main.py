@@ -24,7 +24,6 @@ explosions = []
 # PLAYER
 player = Player(var.screen_width / 2,
                        var.screen_height / 2, 300, "img/räkä alus.png", var.player_health, "raka_ase", "MK1")
-player.set_upgrade("raka_ase", "MK1")
 
 # SMOKE EFFECT on player spawn
 smoke = pygame.image.load("img/smoke.png")
@@ -94,7 +93,17 @@ def change_bg_music(song):
 def distance_multiplier(x1, y1, x2, y2):
     return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
 
-  
+# get upgrades in SAVE file
+player.set_upgrade("raka_ase", "MK2")
+
+# ammo
+player.set_kakku_sinko_ammo(
+    var.kakku_sinko[player.get_upgrade()]["Magazine Size"])
+player.set_raka_ase_ammo(
+    var.raka_ase[player.get_upgrade()]["Magazine Size"])
+var.ammo_max = var.raka_ase[player.get_upgrade()]["Magazine Size"]
+var.ammo = var.ammo_max
+    
 # Game loopww
 running = True
 while running:
@@ -132,9 +141,21 @@ while running:
             
         # SWITCH WEAPON
         if keys[pygame.K_1]:
+            if player.gun == "kakku_sinko":
+                player.set_kakku_sinko_ammo(
+                    var.ammo)        
+            elif player.gun == "raka_ase":
+                player.set_raka_ase_ammo(
+                    var.ammo)
             player.set_upgrade("raka_ase", "MK1")
         if keys[pygame.K_2]:
-            player.set_upgrade("kakku_sinko", "MK1")
+            if player.gun == "kakku_sinko":
+                player.set_kakku_sinko_ammo(
+                    var.ammo)
+            elif player.gun == "raka_ase":
+                player.set_raka_ase_ammo(
+                    var.ammo)
+            player.set_upgrade("kakku_sinko", "MK2")
             
         if keys[pygame.K_4]:
             player.set_upgrade("raka_ase", "MK1")
@@ -192,24 +213,28 @@ while running:
                                 var.coins += 5
                             
                         elif bullet.get_gun_type() == "kakku_sinko":
-                            enemy_x = _enemy_.get_x()
-                            enemy_y = _enemy_.get_y()
-                            explosions.append(Explosion(bullet.get_center()[0], bullet.get_center()[1], 200))
+                            enemy_x = _enemy_.get_x() - _enemy_.rect.width / 2
+                            enemy_y = _enemy_.get_y() - _enemy_.rect.height / 2
+                            # explosion rect at the center of the explosion
+                            explosions.append(
+                                Explosion(enemy_x, enemy_y, 200))
                             bullets.remove(bullet)
                             # damage enemies in radius
                             for _enemy_2_ in enemies:
-                                enemy_x2 = _enemy_2_.get_x()
-                                enemy_y2 = _enemy_2_.get_y()
+                                enemy_x2 = _enemy_2_.get_x() - _enemy_2_.rect.width / 2
+                                enemy_y2 = _enemy_2_.get_y() - _enemy_2_.rect.height / 2
                                 if math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2) < 200:
+                                    print(enemy_x, enemy_y, enemy_x2, enemy_y2, math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2))                                  
                                     if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(enemy_x, enemy_y, enemy_x2, enemy_y2), bullet):
                                         enemies.remove(_enemy_2_)
                                         var.coins += 5
-                                        print(str(var.ticks)+str(_enemy_2_) + " Enemy killed by explosion")
+                                        print(str(var.ticks) + str(_enemy_2_) + " Enemy killed by explosion")
                                     else:
                                         print(
-                                            str(var.ticks)+str(_enemy_2_) + " Enemy survived explosion")
+                                            str(var.ticks) + str(_enemy_2_) + " Enemy survived explosion")
                                 else:
-                                    print(str(var.ticks)+str(_enemy_2_) + " Enemy too far away from explosion: " + str(math.sqrt( (enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2 )) + " units")
+                                    print(str(var.ticks) + str(_enemy_2_) + " Enemy too far away from explosion: " + str(
+                                        math.sqrt((enemy_x - enemy_x2)**2 + (enemy_y - enemy_y2)**2)) + " units")
 
                     break
                 
@@ -229,14 +254,12 @@ while running:
             player_x = var.player_pos.x
             if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90 and var.invincibility_time <= 0:
                 enemies.remove(_enemy_)
-                if player.hitted(_enemy_.get_damage()):
-                    var.game_running = False
-                    print("GAME OVER")
+                player.hitted(_enemy_.get_damage())
         
         if player.is_dead():
-            var.game_running = False
-            print("GAME OVER")
-            
+            # var.game_running = False
+            pass
+        
         # FOREGROUND
         draw_health_bar(screen, player.get_health(), player.get_max_health())
         for _enemy_ in enemies:

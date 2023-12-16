@@ -26,7 +26,7 @@ mouse_x = 0
 mouse_y = 0
 player_pos = pygame.math.Vector2()
 enemy_spawn_offset = 500
-FPS = 144
+FPS = 40
 play_area = 10
 game_running = False # False when player dies, showing the menu
 shop_open = False
@@ -47,6 +47,7 @@ invincibility_time_max = 1
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
 coins = 100000
+kakku_sinko_explosion_radius = 100
 
 # Dont change these
 firerate = 0
@@ -65,12 +66,14 @@ raka_ase = {
     "MK5": {"Damage": 60, "Fire Rate": 0.4, "Reload Time": 4, "Magazine Size": 40, "Speed": 1100, "Cost": 200},
 }
 current_raka_ase = "MK1"
+raka_ase_ammo = 0
 
 kakku_sinko = {
-    "MK1": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
+    "MK1": {"Damage": 50, "Fire Rate": 1.0, "Reload Time": 2, "Magazine Size": 3, "Speed": 300, "Cost": None},
     "MK2": {"Damage": 60, "Fire Rate": 1.8, "Reload Time": 4.5, "Magazine Size": 4, "Speed": 400, "Cost": 50},
     "MK3": {"Damage": 70, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 100},
     "MK4": {"Damage": 80, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 150},
     "MK5": {"Damage": 90, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 200},
 }
 current_kakku_sinko = "MK1"
+kakku_sinko_ammo = 0
