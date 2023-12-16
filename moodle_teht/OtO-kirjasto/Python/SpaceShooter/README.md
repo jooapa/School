@@ -17,7 +17,7 @@ Aseita on 3 erilaista, joita voi päivittää kolikoilla. Aseet ovat räkä ase,
 Räkä ase on perus ase, joka ampuu yhden panoksen kerrallaan. Panos on nopea ja tekee vähän vahinkoa.
 
 #### Päivitykset
-| Räkä-ase   | Vahinko | Tulenopeus (s) | Latausaika (s) | Magazinen koko | Hinta |
+| Räkä-ase   | Vahinko | Tulenopeus (s) | Latausaika (s) | Lippaan koko   | Hinta |
 |------------|---------|----------------|----------------|----------------|-------|
 | MK1        | 20      | 0.5            | 5              | 10             | -     |
 | MK2        | 30      | 0.4            | 4              | 20             | 50    |
@@ -30,7 +30,7 @@ Kakku sinko ampuu yhden ison kakun, joka tekee paljon vahinkoa, mutta on hidas j
 Aseita voi päivittää kolikoilla, joka tekee aseista tehokkaampia.
 
 #### Päivitykset
-| Kakku-sinko | Vahinko | Tulenopeus (s) | Latausaika (s) | Magazinen koko | Hinta |
+| Kakku-sinko | Vahinko | Tulenopeus (s) | Latausaika (s) | Lippaan koko   | Hinta |
 |-------------|---------|----------------|----------------|----------------|-------|
 | MK1         | 50      | 2.0            | 5              | 3              | -     |
 | MK2         | 60      | 1.8            | 4.5            | 4              | 50    |
