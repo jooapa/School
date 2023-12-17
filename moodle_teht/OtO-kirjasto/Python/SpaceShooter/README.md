@@ -79,3 +79,9 @@ Ongelmana oli, että ammuttaessa vihollista kakku singolla ja lisättäessä rä
      ```python
      explosions.append(Explosion(bullet.get_x(), bullet.get_y(), 200))
      ```
+
+
+## onkelmas
+
+[x] cooldown kun roundi alkaa, jotta pelaaja kerkee valmistautua tai tapella loput viholliset
+[ ] viholliset pitäisi saada enemmän healthia, mutta ei niin paljoa spawnaa sitten

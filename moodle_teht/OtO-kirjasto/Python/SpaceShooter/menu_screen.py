@@ -1,13 +1,15 @@
-import pygame, var
+import pygame, var, roundsys
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
-    var.difficulty = 10
+    var.difficulty = 1
     var.ticks = 0
     var.cooldown = 0
+    var.start_round = False
     var.cooldown_time = var.cooldown_time
     var.round = 0
     var.invincibility_time = 0
+
 
     var.ammo_max = var.ammo_max  # can buy upgrades to increase this
     var.ammo = var.ammo_max

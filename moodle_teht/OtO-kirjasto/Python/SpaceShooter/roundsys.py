@@ -2,17 +2,13 @@ import math, var
 
 def check_round(enemies):
     if len(enemies) == 0 and not var.start_round and not var.buy_round:
-        var.round += 1
-        var.cooldown = var.ticks
-        var.round_start_interval = var.ticks + 5
-        # if var.round in var.buy_rounds:
-        #     var.buy_round = True
-        #     var.start_round = False
-        # else:
-        var.start_round = True
+        print("Round " + str(var.round) + " cleared!")
+        next_round()
+        
 def next_round():
+    var.cooldown = var.ticks
     var.start_round = True
-    var.round_start_interval = var.ticks + calculate_spawn_interval()
+    var.round_start_interval = var.ticks + calculate_new_round_start_interval()
     var.round += 1
         
 def calculate_difficulty():
@@ -25,9 +21,12 @@ def calculate_enemy_spawn_amount():
     enemy_spawn_amount = round(2 * math.sqrt(var.difficulty) * math.log(var.difficulty + 1))
     if var.round == 2:
         return 2
+    if var.round == 1:
+        return 2
     return max(enemy_spawn_amount, 1)
 
-def calculate_spawn_interval():
-    # from 20 to 10 seconds slowly
-    spawn_interval = 20 - (var.round * 0.2)
-    return max(spawn_interval, 0.5)
+def calculate_new_round_start_interval():
+    # take in the spawn interval and the amount of enemies spwaning in the round
+    spawn_interval = calculate_enemy_spawn_amount() * var.cooldown_time + var.next_round_cooldown
+    print("Next round in " + str(spawn_interval) + " seconds")
+    return spawn_interval

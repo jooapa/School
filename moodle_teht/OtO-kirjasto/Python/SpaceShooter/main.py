@@ -103,7 +103,7 @@ player.set_raka_ase_ammo(
     var.raka_ase[player.get_upgrade()]["Magazine Size"])
 var.ammo_max = var.raka_ase[player.get_upgrade()]["Magazine Size"]
 var.ammo = var.ammo_max
-    
+
 # Game loopww
 running = True
 while running:
@@ -147,7 +147,7 @@ while running:
             elif player.gun == "raka_ase":
                 player.set_raka_ase_ammo(
                     var.ammo)
-            player.set_upgrade("raka_ase", "MK1")
+            player.set_upgrade("raka_ase", var.current_raka_ase_upgrade)
         if keys[pygame.K_2]:
             if player.gun == "kakku_sinko":
                 player.set_kakku_sinko_ammo(
@@ -155,18 +155,23 @@ while running:
             elif player.gun == "raka_ase":
                 player.set_raka_ase_ammo(
                     var.ammo)
-            player.set_upgrade("kakku_sinko", "MK2")
+            player.set_upgrade("kakku_sinko", var.current_kakku_sinko_upgrade)
             
-        if keys[pygame.K_4]:
-            player.set_upgrade("raka_ase", "MK1")
-        if keys[pygame.K_5]:
-            player.set_upgrade("raka_ase", "MK2")
-        if keys[pygame.K_6]:
-            player.set_upgrade("raka_ase", "MK3")
-        if keys[pygame.K_7]:
-            player.set_upgrade("raka_ase", "MK4")
-        if keys[pygame.K_8]:
-            player.set_upgrade("raka_ase", "MK5")
+        if keys[pygame.K_F1]:
+            var.current_raka_ase_upgrade = "MK1"
+            var.current_kakku_sinko_upgrade = "MK1"
+        if keys[pygame.K_F2]:
+            var.current_raka_ase_upgrade = "MK2"
+            var.current_kakku_sinko_upgrade = "MK2"
+        if keys[pygame.K_F3]:
+            var.current_raka_ase_upgrade = "MK3"
+            var.current_kakku_sinko_upgrade = "MK3"
+        if keys[pygame.K_F4]:
+            var.current_raka_ase_upgrade = "MK4"
+            var.current_kakku_sinko_upgrade = "MK4"
+        if keys[pygame.K_F5]:
+            var.current_raka_ase_upgrade = "MK5"
+            var.current_kakku_sinko_upgrade = "MK5"
         if keys[pygame.K_j]:
             spawn_enemy()
             
@@ -317,9 +322,13 @@ while running:
                 var.reload_time = var.reload_time_max
         
         # ROUND SYSTEM
+        # start new round
         if round(var.ticks,2) == round(var.round_start_interval, 2) and not var.buy_round:
+            print(str(var.ticks), str(var.round_start_interval))
             print("Next round")
             roundsys.next_round()
+            # calculate cooldown time, so that the all the enemies are spawned before the next round
+            # var.cooldown_time = 1 / roundsys.calculate_enemy_spawn_amount()
             
         if var.start_round and not var.buy_round:
             if var.ticks >= var.cooldown + var.cooldown_time:
