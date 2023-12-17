@@ -262,7 +262,7 @@ while running:
                 player.hitted(_enemy_.get_damage())
         
         if player.is_dead():
-            # var.game_running = False
+            var.game_running = False
             pass
         
         # FOREGROUND
@@ -324,7 +324,7 @@ while running:
         # ROUND SYSTEM
         # start new round
         if round(var.ticks,2) == round(var.round_start_interval, 2) and not var.buy_round:
-            print(str(var.ticks), str(var.round_start_interval))
+            print("Round start interval: ", var.round_start_interval)
             print("Next round")
             roundsys.next_round()
             # calculate cooldown time, so that the all the enemies are spawned before the next round
@@ -334,7 +334,6 @@ while running:
             if var.ticks >= var.cooldown + var.cooldown_time:
                 prev_ticks = var.ticks
                 var.start_round = False
-                roundsys.calculate_difficulty()
                 enemies_to_spawn += roundsys.calculate_enemy_spawn_amount()
                 # spawn_enemies(roundsys.calculate_enemy_spawn_amount())
                 print("\nRound: ", var.round, " >> Difficulty: ", var.difficulty, " >> Enemy Spawn Amount: ", roundsys.calculate_enemy_spawn_amount())

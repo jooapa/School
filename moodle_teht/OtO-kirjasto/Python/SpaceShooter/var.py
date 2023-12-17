@@ -4,7 +4,7 @@ screen_width = 1280
 screen_height = 720
 camera_offset = pygame.math.Vector2(0, 0)
 
-cooldown_time = 2
+cooldown_time = 4
 next_round_cooldown = 15
 round = 0
 start_round = False
@@ -71,10 +71,10 @@ raka_ase_ammo = 0
 
 kakku_sinko = {
     "MK1": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
-    "MK2": {"Damage": 60, "Fire Rate": 1.8, "Reload Time": 4.5, "Magazine Size": 4, "Speed": 400, "Cost": 300},
-    "MK3": {"Damage": 70, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 400},
-    "MK4": {"Damage": 80, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 550},
-    "MK5": {"Damage": 90, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 600},
+    "MK2": {"Damage": 80, "Fire Rate": 1.8, "Reload Time": 4.5, "Magazine Size": 4, "Speed": 400, "Cost": 300},
+    "MK3": {"Damage": 90, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 400},
+    "MK4": {"Damage": 100, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 550},
+    "MK5": {"Damage": 150, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 600},
 }
 current_kakku_sinko_upgrade = "MK1"
 kakku_sinko_ammo = 0

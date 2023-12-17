@@ -80,7 +80,7 @@ class Player:
         elif self.gun == "kakku_sinko":
             gun_type = "kakku_sinko"
             rand_x, rand_y = 80, 120
-            
+                        
         return Bullet(bullet_x, bullet_y, 1000, angle, functions.rando_bullet(gun_type), var.gun_damage, rand_x, rand_y, gun_type)
     
     def get_health(self):
