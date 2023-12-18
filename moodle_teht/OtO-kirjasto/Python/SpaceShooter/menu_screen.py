@@ -7,7 +7,7 @@ def start_new_level(player, enemies, bullets):
     var.cooldown = 0
     var.start_round = False
     var.cooldown_time = var.cooldown_time
-    var.round = 30
+    var.round = 0
     var.invincibility_time = 0
 
 

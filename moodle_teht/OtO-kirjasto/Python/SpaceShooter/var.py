@@ -65,6 +65,7 @@ raka_ase = {
     "MK3": {"Damage": 30, "Fire Rate": 0.4, "Reload Time": 4.5, "Magazine Size": 30, "Speed": 1000, "Cost": 300},
     "MK4": {"Damage": 40, "Fire Rate": 0.35, "Reload Time": 4, "Magazine Size": 40, "Speed": 1000, "Cost": 500},
     "MK5": {"Damage": 50, "Fire Rate": 0.4, "Reload Time": 3.5, "Magazine Size": 40, "Speed": 1100, "Cost": 600},
+    "MK6": {"Damage": 60, "Fire Rate": 0.35, "Reload Time": 3, "Magazine Size": 50, "Speed": 1200, "Cost": 700},
 }
 current_raka_ase_upgrade = "MK1"
 raka_ase_ammo = 0
@@ -72,9 +73,10 @@ raka_ase_ammo = 0
 kakku_sinko = {
     "MK1": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
     "MK2": {"Damage": 80, "Fire Rate": 1.8, "Reload Time": 4.5, "Magazine Size": 4, "Speed": 400, "Cost": 300},
-    "MK3": {"Damage": 90, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 400},
-    "MK4": {"Damage": 100, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 550},
+    "MK3": {"Damage": 100, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 400},
+    "MK4": {"Damage": 125, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 550},
     "MK5": {"Damage": 150, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 600},
+    "MK5": {"Damage": 200, "Fire Rate": 1.2, "Reload Time": 3, "Magazine Size": 7, "Speed": 700, "Cost": 600},
 }
 current_kakku_sinko_upgrade = "MK1"
 kakku_sinko_ammo = 0

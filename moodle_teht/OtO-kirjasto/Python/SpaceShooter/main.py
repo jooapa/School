@@ -5,6 +5,7 @@ from player import Player
 from audio_manager import AudioManager
 from shop import shop_menu_btns
 from explosion import Explosion
+from roundsys import calculate_enemy_health
 
 # Initialize pygame
 pygame.init()
@@ -46,7 +47,8 @@ crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
 
 # ENEMY
 def spawn_enemy():
-    enemies.append(Enemy(*functions.spawn_enemy(), var.enemy_speed, "img/enemy.png", 100, 1, 10))
+    enemies.append(Enemy(*functions.spawn_enemy(), var.enemy_speed,
+                   "img/enemy.png", calculate_enemy_health(), 1, 10))
     
 enemies_to_spawn = 1
 def spawn_enemies(num):

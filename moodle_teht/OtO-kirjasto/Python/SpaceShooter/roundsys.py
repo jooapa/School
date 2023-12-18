@@ -50,3 +50,10 @@ def cooldown_time_calculator(round_number):
 
     # Ensure the calculated value is not less than 0.8
     return max(cooldown_time, 1)
+
+def calculate_enemy_health():
+    min_health = 100
+    max_health = 200
+    health = min_health * (1 + var.difficulty / 100)
+    print("Enemy health: " + str(health))
+    return max(min(health, max_health), min_health)
