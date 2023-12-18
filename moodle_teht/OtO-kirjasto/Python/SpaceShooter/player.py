@@ -147,3 +147,6 @@ class Player:
     
     def set_kakku_sinko_ammo(self, kakku_sinko_ammo):
         self.kakku_sinko_ammo = kakku_sinko_ammo
+        
+    def get_gun(self):
+        return self.gun

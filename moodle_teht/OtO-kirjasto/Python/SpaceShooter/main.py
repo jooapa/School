@@ -1,11 +1,12 @@
 import pygame
-import math, functions, var, roundsys, menu_screen
+import math, functions, var, roundsys, menu_screen, random
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager
 from shop import shop_menu_btns
 from explosion import Explosion
 from roundsys import calculate_enemy_health
+import ui_screen
 
 # Initialize pygame
 pygame.init()
@@ -42,7 +43,7 @@ bg_rect = bg_image.get_rect()
 bg_rect.center = (var.screen_width, var.screen_height)
 
 # Crosshair
-crosshair_image = pygame.image.load("img/crosshair.png")
+crosshair_image = pygame.image.load("img/crosshair.png").convert_alpha()
 crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
 
 # ENEMY
@@ -92,6 +93,9 @@ def change_bg_music(song):
         bg_channel.play(bg_audio.load_sound("sfx/shopkeep.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
 
+def speaker_speaker(speaker_audio, speaker_channel):
+    speaker_channel.play(speaker_audio.load_sound("sfx/oinks/oink" + str(random.randint(1, 5)) + ".wav"))
+    
 def distance_multiplier(x1, y1, x2, y2):
     return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
 
@@ -176,7 +180,8 @@ while running:
             var.current_kakku_sinko_upgrade = "MK5"
         if keys[pygame.K_j]:
             spawn_enemy()
-            
+        if keys[pygame.K_k]:
+            ui_screen.speak()
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
 
@@ -262,6 +267,7 @@ while running:
             if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90 and var.invincibility_time <= 0:
                 enemies.remove(_enemy_)
                 player.hitted(_enemy_.get_damage())
+                ui_screen.hitted()
         
         if player.is_dead():
             var.game_running = False
@@ -287,12 +293,22 @@ while running:
             smoke.set_alpha(255 - (255 / 1) * var.ticks)
             screen.blit(smoke, (smoke_rect.x - var.camera_offset.x - 620, smoke_rect.y - var.camera_offset.y - 420))
             
-        # BUY ROUND
-        if var.buy_round:       
-            functions.start_menu_btns(screen)            
-        else:
-            pygame.mouse.set_visible(False)
-            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+
+        
+        # RENDER UI
+        ui_screen.render(screen, ui_screen.move_mouth(), player)
+        
+        # speaker speak
+        if ui_screen.speaker_channel != None:
+            if ui_screen.random_speker_time != 0:
+                ui_screen.random_speker_time -= dt
+                
+            if ui_screen.random_speker_time <= 0:   
+                ui_screen.speak()
+                ui_screen.random_speker_time = ui_screen.pick_random_time_interval()
+        
+        pygame.mouse.set_visible(False)
+        screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         
         # # DEBUG
         # # draw rect around player
@@ -313,7 +329,6 @@ while running:
         if var.invincibility_time > 0:
             var.invincibility_time -= dt
         
-            
         # FIRERATE
         var.firerate -= dt
         # RELOAD
