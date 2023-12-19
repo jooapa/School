@@ -1,5 +1,5 @@
 import pygame
-import math, functions, var, roundsys, menu_screen, random
+import math, functions, var, roundsys, menu_screen, random, intro
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager
@@ -82,7 +82,7 @@ shots_audio = AudioManager()
 def change_bg_music(song):
     if song == "menu" and var.current_bg_song != "menu":
         var.current_bg_song = "menu"
-        bg_channel.play(bg_audio.load_sound("sfx/klinoff_tropical.mp3"), -1)
+        bg_channel.play(bg_audio.load_sound("sfx/menu.wav"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
     elif song == "game" and var.current_bg_song != "game":
         var.current_bg_song = "game"
@@ -96,7 +96,11 @@ def change_bg_music(song):
         var.current_bg_song = "paused"
         bg_channel.play(bg_audio.load_sound("sfx/pig_d_3_1.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
-
+    elif song == "intro" and var.current_bg_song != "intro" and not intro.intro_done:
+        var.current_bg_song = "intro"
+        bg_channel.play(bg_audio.load_sound("sfx/intro.mp3"), -1)
+        bg_audio.set_volume(bg_channel, var.bg_volume)
+        
 def speaker_speaker(speaker_audio, speaker_channel):
     speaker_channel.play(speaker_audio.load_sound("sfx/oinks/oink" + str(random.randint(1, 5)) + ".wav"))
     
@@ -114,6 +118,7 @@ player.set_raka_ase_ammo(
 var.ammo_max = var.raka_ase[player.get_upgrade()]["Magazine Size"]
 var.ammo = var.ammo_max
 
+
 # Game loopww
 running = True
 while running:
@@ -123,22 +128,27 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                var.paused = not var.paused
-                if var.paused:
-                    print("Paused")
-                    change_bg_music("paused")
+                if not intro.intro_done:
+                    intro.intro_done = True
                 else:
-                    change_bg_music("game")
+                    var.paused = not var.paused
+                    if var.paused:
+                        print("Paused")
+                        change_bg_music("paused")
+                    else:
+                        change_bg_music("game")
                     
             if event.key == pygame.K_F11:
                 if not keys[pygame.K_F11]:  # Check if the key is not already pressed
                     if screen.get_flags() & pygame.FULLSCREEN:
                         pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
-                
 
+    change_bg_music("intro")
+    intro.start(dt)
+    
     # Clear the screen
     if var.game_running:
-        var.start_game_animation = False
+        var.start_game_animation = False # stop zoom animation
         screen.fill((0, 0, 0))
         
         # Draw the player
@@ -410,7 +420,7 @@ while running:
                                     str(round(var.reload_time)) + " Coins: " + str(var.coins) +
                                      " INTER" + str(var.round_start_interval) + " spawn: " + str(enemies_to_spawn)
                                     )
-    else:
+    elif var.game_running == False and intro.intro_done:
         if var.start_game_animation:
             menu_screen.background_zoom_animation(screen)
         else:
