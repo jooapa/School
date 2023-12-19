@@ -92,6 +92,10 @@ def change_bg_music(song):
         var.current_bg_song = "shop"
         bg_channel.play(bg_audio.load_sound("sfx/shopkeep.mp3"), -1)
         bg_audio.set_volume(bg_channel, var.bg_volume)
+    elif song == "paused" and var.current_bg_song != "paused":
+        var.current_bg_song = "paused"
+        bg_channel.play(bg_audio.load_sound("sfx/pig_d_3_1.mp3"), -1)
+        bg_audio.set_volume(bg_channel, var.bg_volume)
 
 def speaker_speaker(speaker_audio, speaker_channel):
     speaker_channel.play(speaker_audio.load_sound("sfx/oinks/oink" + str(random.randint(1, 5)) + ".wav"))
@@ -118,14 +122,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE and event.type == pygame.KEYUP:
+            if event.key == pygame.K_ESCAPE:
                 var.paused = not var.paused
+                if var.paused:
+                    print("Paused")
+                    change_bg_music("paused")
+                else:
+                    change_bg_music("game")
+                    
             if event.key == pygame.K_F11:
-                if keys[pygame.K_F11]:
+                if not keys[pygame.K_F11]:  # Check if the key is not already pressed
                     if screen.get_flags() & pygame.FULLSCREEN:
                         pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
-                    else:
-                        screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF | fullscreen)
                 
 
     # Clear the screen
@@ -133,7 +141,6 @@ while running:
         var.start_game_animation = False
         screen.fill((0, 0, 0))
         
-        change_bg_music("game")
         # Draw the player
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and player.y > 0: # UP
@@ -187,15 +194,13 @@ while running:
             spawn_enemy()
         if keys[pygame.K_k]:
             ui_screen.speak()
-        ### if esc is pressed up add var.paused to true, then if pressed another time to false
-        if keys[pygame.K_ESCAPE]:
-            var.paused = not var.paused
-            print("pasd")
-        ###
+
         if var.paused:
             var.dt_kerroin_miska_edition = 0
         else:
             var.dt_kerroin_miska_edition = 1
+            change_bg_music("game")
+            
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
 
@@ -244,11 +249,22 @@ while running:
                             # explosion rect at the center of the explosion
                             explosions.append(
                                 Explosion(bullet.get_x(), bullet.get_y(), 200))
-                            bullets.remove(bullet)
+                            
+                            bullet_damage = bullet.get_damage()
+                            # hit the first enemy
+                            _enemy_.hitted(bullet.get_damage(
+                            ) * distance_multiplier(bullet_x, bullet_y, _enemy_.get_x(), _enemy_.get_y()), bullet)
+                            if _enemy_.get_health() <= 0:
+                                enemies.remove(_enemy_)
+                                var.coins += 5
+                                print(str(var.ticks) + str(_enemy_) + " Enemy killed by explosion")
+                            else:
+                                _enemy_.set_health(_enemy_.get_health() + bullet_damage)
+                                
                             # damage enemies in radius
                             for _enemy_2_ in enemies:
-                                enemy_x2 = _enemy_2_.get_x() - _enemy_2_.rect.width / 2
-                                enemy_y2 = _enemy_2_.get_y() - _enemy_2_.rect.height / 2
+                                enemy_x2 = _enemy_2_.get_x()
+                                enemy_y2 = _enemy_2_.get_y()
                                 if math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2) < 200:
                                     print(bullet_x , bullet_y, enemy_x2, enemy_y2, math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2))                                  
                                     if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(bullet_x , bullet_y, enemy_x2, enemy_y2), bullet):
@@ -261,6 +277,8 @@ while running:
                                 else:
                                     print(str(var.ticks) + str(_enemy_2_) + " Enemy too far away from explosion: " + str(
                                         math.sqrt((bullet_x  - enemy_x2)**2 + (bullet_y - enemy_y2)**2)) + " units")
+                                    
+                            bullets.remove(bullet)
 
                     break
                 
@@ -410,7 +428,8 @@ while running:
         
     # Update the display
     dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition
-    var.ticks += 1 / var.FPS
+    if not var.paused:
+        var.ticks += 1 / var.FPS
     pygame.display.flip()
 
 # Quit the game

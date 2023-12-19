@@ -32,6 +32,7 @@ play_area = 10
 game_running = False # False when player dies, showing the menu
 shop_open = False
 paused = False
+pause_toggle = False
 dt_kerroin_miska_edition = 1
 
 buy_rounds = [3, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]
@@ -72,7 +73,7 @@ current_raka_ase_upgrade = "MK1"
 raka_ase_ammo = 0
 
 kakku_sinko = {
-    "MK1": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
+    "kakku": {"Damage": 50, "Fire Rate": 2.0, "Reload Time": 5, "Magazine Size": 3, "Speed": 300, "Cost": None},
     "MK2": {"Damage": 80, "Fire Rate": 1.8, "Reload Time": 4.5, "Magazine Size": 4, "Speed": 400, "Cost": 300},
     "MK3": {"Damage": 100, "Fire Rate": 1.6, "Reload Time": 4, "Magazine Size": 5, "Speed": 500, "Cost": 400},
     "MK4": {"Damage": 125, "Fire Rate": 1.4, "Reload Time": 3.5, "Magazine Size": 6, "Speed": 600, "Cost": 550},
