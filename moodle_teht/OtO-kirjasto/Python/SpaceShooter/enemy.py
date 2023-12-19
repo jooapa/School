@@ -54,6 +54,7 @@ class Enemy:
         # Update rect coordinates
         self.rect.x = self.x + var.camera_offset.x
         self.rect.y = self.y + var.camera_offset.y
+        
 
 
 

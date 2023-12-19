@@ -56,10 +56,10 @@ def spawn_enemies(num):
     for _ in range(num):
         spawn_enemy()
 
-def draw_health_bar(screen, current_health, max_health):
-    bar_width = int((current_health / max_health) * 200)
-    pygame.draw.rect(screen, (255, 0, 0), (50, 50, 200, 20))
-    pygame.draw.rect(screen, (0, 255, 0), (50, 50, bar_width, 20))
+def draw_health_bar(screen, current_health, max_health, x, y):
+    bar_width = int((current_health / max_health) * 170)
+    pygame.draw.rect(screen, (255, 0, 0), (x, y, 170, 15))
+    pygame.draw.rect(screen, (0, 255, 0), (x, y, bar_width, 15))
 
 def draw_enemy_health_bar(screen, current_health, max_health, enemy):
     offset_x = -30
@@ -117,6 +117,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE and event.type == pygame.KEYUP:
+                var.paused = not var.paused
+            if event.key == pygame.K_F11:
+                if keys[pygame.K_F11]:
+                    if screen.get_flags() & pygame.FULLSCREEN:
+                        pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
+                    else:
+                        screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF | fullscreen)
+                
 
     # Clear the screen
     if var.game_running:
@@ -139,11 +149,6 @@ while running:
         if keys[pygame.K_o]:
             healthed = player.get_health() - 1
             player.set_health(healthed)
-        if keys[pygame.K_F11]:
-            if screen.get_flags() & pygame.FULLSCREEN:
-                pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
-            else:
-                screen = pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF | fullscreen)
             
         # SWITCH WEAPON
         if keys[pygame.K_1]:
@@ -182,6 +187,15 @@ while running:
             spawn_enemy()
         if keys[pygame.K_k]:
             ui_screen.speak()
+        ### if esc is pressed up add var.paused to true, then if pressed another time to false
+        if keys[pygame.K_ESCAPE]:
+            var.paused = not var.paused
+            print("pasd")
+        ###
+        if var.paused:
+            var.dt_kerroin_miska_edition = 0
+        else:
+            var.dt_kerroin_miska_edition = 1
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
 
@@ -274,7 +288,7 @@ while running:
             pass
         
         # FOREGROUND
-        draw_health_bar(screen, player.get_health(), player.get_max_health())
+        draw_health_bar(screen, player.get_health(), player.get_max_health(), var.screen_width - 185, var.screen_height - 23)
         for _enemy_ in enemies:
             # update and draw, but make sure that enemys cannot overlap with each other
             _enemy_.update(dt, enemies)
@@ -395,7 +409,7 @@ while running:
 
         
     # Update the display
-    dt = clock.tick(var.FPS) / 1000
+    dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition
     var.ticks += 1 / var.FPS
     pygame.display.flip()
 
