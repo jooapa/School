@@ -81,3 +81,5 @@ kakku_sinko = {
 }
 current_kakku_sinko_upgrade = "MK1"
 kakku_sinko_ammo = 0
+
+bought_weapons = ["raka_MK1", "kakku_MK1"]

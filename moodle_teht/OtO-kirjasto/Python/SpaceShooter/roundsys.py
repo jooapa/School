@@ -20,7 +20,7 @@ def calculate_difficulty():
         print("Enemy speed: " + str(var.enemy_speed))
 
 def calculate_enemy_spawn_amount():
-    enemy_spawn_amount = round(2 * math.sqrt(var.difficulty) * math.log(var.difficulty + 1))
+    enemy_spawn_amount = round(3 * math.sqrt(var.difficulty) * math.log(var.difficulty + 1))
     if var.round == 2:
         return 2
     if var.round == 1:

@@ -73,10 +73,43 @@ def create_shop_buttons(buttons, button_size, scale, font_size, offset_y, button
         
     return buttons, button_rects, button_texts, buttons_desc_texts
 
-def handle_shop_button_clicks(buttons, button_rects):
+def handle_shop_button_clicks(buttons, button_rects, screen):
     global menu_showing
     mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
-
+    
+    for i in range(len(buttons)):
+        if button_rects[i].collidepoint(mouse_pos):
+            if buttons[i] == "raka_MK1":
+                show_info_box(screen, "raka_MK1", mouse_pos)
+                return
+            elif buttons[i] == "raka_MK2":
+                show_info_box(screen, "raka_MK2", mouse_pos)
+                return
+            elif buttons[i] == "raka_MK3":
+                show_info_box(screen, "raka_MK3", mouse_pos)
+                return
+            elif buttons[i] == "raka_MK4":
+                show_info_box(screen, "raka_MK4", mouse_pos)
+                return
+            elif buttons[i] == "raka_MK5":
+                show_info_box(screen, "raka_MK5", mouse_pos)
+                return
+            elif buttons[i] == "kakku_MK1":
+                show_info_box(screen, "kakku_MK1", mouse_pos)
+                return
+            elif buttons[i] == "kakku_MK2":
+                show_info_box(screen, "kakku_MK2", mouse_pos)
+                return
+            elif buttons[i] == "kakku_MK3":
+                show_info_box(screen, "kakku_MK3", mouse_pos)
+                return
+            elif buttons[i] == "kakku_MK4":
+                show_info_box(screen, "kakku_MK4", mouse_pos)
+                return
+            elif buttons[i] == "kakku_MK5":
+                show_info_box(screen, "kakku_MK5", mouse_pos)
+                return
+            
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
@@ -168,4 +201,64 @@ def shop_menu_btns(screen):
     render_shop_background(screen)
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
     
-    handle_shop_button_clicks(buttons, button_rects)
+    handle_shop_button_clicks(buttons, button_rects, screen)
+
+def show_info_box(screen, text, mouse_pos):
+    upgrades = get_upgrade_details(text)
+    font_size = 24
+    font_color = (255, 255, 255)
+    text = pygame.font.SysFont("Arial", font_size).render(
+        upgrades, True, font_color)
+    text_rect = text.get_rect(center=(var.screen_width - 400, mouse_pos[1]))
+
+    padding = 10
+    # Draw box with padding
+    pygame.draw.rect(screen, (0, 0, 0), (text_rect.x - padding, text_rect.y - padding, text_rect.width + padding * 2, text_rect.height + padding * 2))
+    screen.blit(text, text_rect)
+    
+    
+def get_upgrade_details(upgrade):
+    if upgrade.startswith("raka_"):
+        new_upgrade = upgrade[5:]
+        gun_type = "raka_ase"
+    elif upgrade.startswith("kakku_"):
+        new_upgrade = upgrade[6:]
+        gun_type = "kakku_sinko"
+    else:
+        return "Invalid upgrade"
+    
+    print(upgrade)
+    if upgrade in var.bought_weapons:
+        if gun_type == "raka_ase":
+            damage = var.raka_ase[new_upgrade]["Damage"]
+            fire_rate = var.raka_ase[new_upgrade]["Fire Rate"]
+            reload_time = var.raka_ase[new_upgrade]["Reload Time"]
+            magazine_size = var.raka_ase[new_upgrade]["Magazine Size"]
+            speed = var.raka_ase[new_upgrade]["Speed"]
+        
+        elif gun_type == "kakku_sinko":
+            damage = var.kakku_sinko[new_upgrade]["Damage"]
+            fire_rate = var.kakku_sinko[new_upgrade]["Fire Rate"]
+            reload_time = var.kakku_sinko[new_upgrade]["Reload Time"]
+            magazine_size = var.kakku_sinko[new_upgrade]["Magazine Size"]
+            speed = var.kakku_sinko[new_upgrade]["Speed"]
+                    
+        return f"You already own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}"
+    else:
+        if gun_type == "raka_ase":
+            damage = var.raka_ase[new_upgrade]["Damage"]
+            fire_rate = var.raka_ase[new_upgrade]["Fire Rate"]
+            reload_time = var.raka_ase[new_upgrade]["Reload Time"]
+            magazine_size = var.raka_ase[new_upgrade]["Magazine Size"]
+            speed = var.raka_ase[new_upgrade]["Speed"]
+            cost = var.raka_ase[new_upgrade]["Cost"]
+        
+        elif gun_type == "kakku_sinko":
+            damage = var.kakku_sinko[new_upgrade]["Damage"]
+            fire_rate = var.kakku_sinko[new_upgrade]["Fire Rate"]
+            reload_time = var.kakku_sinko[new_upgrade]["Reload Time"]
+            magazine_size = var.kakku_sinko[new_upgrade]["Magazine Size"]
+            speed = var.kakku_sinko[new_upgrade]["Speed"]
+            cost = var.kakku_sinko[new_upgrade]["Cost"]
+        
+        return f"You don't own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}\nCost: {cost}"

@@ -139,12 +139,12 @@ while running:
                         change_bg_music("game")
                     
             if event.key == pygame.K_F11:
-                if not keys[pygame.K_F11]:  # Check if the key is not already pressed
                     if screen.get_flags() & pygame.FULLSCREEN:
                         pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
-
+                        
+    
     change_bg_music("intro")
-    intro.start(dt)
+    intro.start(screen, dt)
     
     # Clear the screen
     if var.game_running:
@@ -223,7 +223,7 @@ while running:
         player.rect = rotated_player.get_rect(center=(player.x, player.y))
         
         # SHOOT
-        if pygame.mouse.get_pressed()[0] and not var.buy_round:
+        if pygame.mouse.get_pressed()[0] and not var.buy_round and not var.paused:
             if var.firerate <= 0 and var.ammo > 0:
                 var.firerate = var.firerate_max
                 var.ammo -= 1
