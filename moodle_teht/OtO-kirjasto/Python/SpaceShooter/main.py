@@ -108,7 +108,7 @@ def distance_multiplier(x1, y1, x2, y2):
     return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
 
 # get upgrades in SAVE file
-player.set_upgrade("raka_ase", "MK2")
+player.set_upgrade("raka_ase", var.current_raka_ase_upgrade)
 
 # ammo
 player.set_kakku_sinko_ammo(
@@ -135,8 +135,11 @@ while running:
                     if var.paused:
                         print("Paused")
                         change_bg_music("paused")
+                        mouse_pos_beffore_pause = pygame.mouse.get_pos()
+
                     else:
                         change_bg_music("game")
+                        pygame.mouse.set_pos(mouse_pos_beffore_pause)
                     
             if event.key == pygame.K_F11:
                     if screen.get_flags() & pygame.FULLSCREEN:
@@ -166,7 +169,9 @@ while running:
         if keys[pygame.K_o]:
             healthed = player.get_health() - 1
             player.set_health(healthed)
-            
+        if keys[pygame.K_f]:
+            print("Playdd")
+            var.dt_kerroin_miska_edition = 0.5
         # SWITCH WEAPON
         if keys[pygame.K_1]:
             if player.gun == "kakku_sinko":
@@ -184,22 +189,7 @@ while running:
                 player.set_raka_ase_ammo(
                     var.ammo)
             player.set_upgrade("kakku_sinko", var.current_kakku_sinko_upgrade)
-            
-        if keys[pygame.K_F1]:
-            var.current_raka_ase_upgrade = "MK1"
-            var.current_kakku_sinko_upgrade = "MK1"
-        if keys[pygame.K_F2]:
-            var.current_raka_ase_upgrade = "MK2"
-            var.current_kakku_sinko_upgrade = "MK2"
-        if keys[pygame.K_F3]:
-            var.current_raka_ase_upgrade = "MK3"
-            var.current_kakku_sinko_upgrade = "MK3"
-        if keys[pygame.K_F4]:
-            var.current_raka_ase_upgrade = "MK4"
-            var.current_kakku_sinko_upgrade = "MK4"
-        if keys[pygame.K_F5]:
-            var.current_raka_ase_upgrade = "MK5"
-            var.current_kakku_sinko_upgrade = "MK5"
+
         if keys[pygame.K_j]:
             spawn_enemy()
         if keys[pygame.K_k]:
@@ -295,7 +285,7 @@ while running:
         # render explosion
         for explosion in explosions:                  
             explosion.draw(screen)
-            explosion.update()
+            explosion.update(dt)
             if explosion.done:
                 explosions.remove(explosion)
                 
@@ -351,6 +341,9 @@ while running:
         
         pygame.mouse.set_visible(False)
         screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+        if var.paused:
+        #     screen.fill((0, 0, 0, 100))
+            pass
         
         # # DEBUG
         # # draw rect around player
@@ -418,7 +411,9 @@ while running:
                                     " Health: " + str(player.get_health()) + " Ammo: " + str(var.ammo) + 
                                     " Firerate: " + str(var.firerate_max) + " Reload: " +
                                     str(round(var.reload_time)) + " Coins: " + str(var.coins) +
-                                     " INTER" + str(var.round_start_interval) + " spawn: " + str(enemies_to_spawn)
+                                     " INTER" + str(round(var.round_start_interval)) + " spawn: " + str(enemies_to_spawn) +
+                                     " raka ase: " + var.current_raka_ase_upgrade +
+                                        " kakku: " + var.current_kakku_sinko_upgrade
                                     )
     elif var.game_running == False and intro.intro_done:
         if var.start_game_animation:

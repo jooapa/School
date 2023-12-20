@@ -9,7 +9,7 @@ def return_create_shop_buttons():
     font_size = 24
     if menu_showing == "main":
         buttons = ["POWER_UPS", "RAKA_ASE", "KAKKU_SINKO", "BACK"]
-        buttons_text = ["POWER_UPS", "RAKA_ASE", "KAKKU_SINKO", "BACK"]
+        buttons_text = ["POWER UPS", "Räkä ase", "Kakku sinko", "BACK"]
         buttons_desc = ["Buy power ups", "Buy raka ase", "Buy kakku sinko", "Back to game"]
         button_size = pygame.math.Vector2(200, 100)
         buttons, button_rects, button_texts, buttons_decs = create_shop_buttons(buttons, button_size, 250, font_size, 200, buttons_text, buttons_desc)
@@ -25,7 +25,7 @@ def return_create_shop_buttons():
     elif menu_showing == "raka_ase":
         buttons = ["raka_MK1", "raka_MK2", "raka_MK3",
                "raka_MK4", "raka_MK5", "BACK2"]
-        buttons_text = ["MK1", "MK2", "MK3", "MK4", "MK5", "BACK"]
+        buttons_text = ["Räkä ase [MK1]", "Räkä ase [MK2]", "Räkä ase [MK3]", "Räkä ase [MK4]", "Räkä ase [MK5]", "BACK"]
         buttons_desc = ["Buy MK1", "Buy MK2", "Buy MK3", "Buy MK4", "Buy MK5", "Back to main menu"]
         button_size = pygame.math.Vector2(200, 80)
         buttons, button_rects, button_texts, buttons_decs = create_shop_buttons(
@@ -33,7 +33,7 @@ def return_create_shop_buttons():
         
     elif menu_showing == "kakku_sinko":
         buttons = ["kakku_MK1", "kakku_MK2", "kakku_MK3", "kakku_MK4", "kakku_MK5", "BACK2"]
-        buttons_text = ["MK1", "MK2", "MK3", "MK4", "MK5", "BACK"]
+        buttons_text = ["Kakku sinko [MK1]", "Kakku sinko [MK2]", "Kakku sinko [MK3]", "Kakku sinko [MK4]", "Kakku sinko [MK5]", "BACK"]
         buttons_desc = ["Buy MK1", "Buy MK2", "Buy MK3", "Buy MK4", "Buy MK5", "Back to main menu"]
         button_size = pygame.math.Vector2(200, 80)
         buttons, button_rects, button_texts, buttons_decs = create_shop_buttons(
@@ -81,34 +81,24 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
         if button_rects[i].collidepoint(mouse_pos):
             if buttons[i] == "raka_MK1":
                 show_info_box(screen, "raka_MK1", mouse_pos)
-                return
             elif buttons[i] == "raka_MK2":
                 show_info_box(screen, "raka_MK2", mouse_pos)
-                return
             elif buttons[i] == "raka_MK3":
                 show_info_box(screen, "raka_MK3", mouse_pos)
-                return
             elif buttons[i] == "raka_MK4":
                 show_info_box(screen, "raka_MK4", mouse_pos)
-                return
             elif buttons[i] == "raka_MK5":
                 show_info_box(screen, "raka_MK5", mouse_pos)
-                return
             elif buttons[i] == "kakku_MK1":
                 show_info_box(screen, "kakku_MK1", mouse_pos)
-                return
             elif buttons[i] == "kakku_MK2":
                 show_info_box(screen, "kakku_MK2", mouse_pos)
-                return
             elif buttons[i] == "kakku_MK3":
                 show_info_box(screen, "kakku_MK3", mouse_pos)
-                return
             elif buttons[i] == "kakku_MK4":
                 show_info_box(screen, "kakku_MK4", mouse_pos)
-                return
             elif buttons[i] == "kakku_MK5":
                 show_info_box(screen, "kakku_MK5", mouse_pos)
-                return
             
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
@@ -134,35 +124,36 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
                     elif buttons[i] == "BACK2":
                         menu_showing = "main"
                     elif buttons[i] == "raka_MK1":
-                        print("raka_MK1 bought")
+                        buy_upgrade("raka_MK1")
                         return
                     elif buttons[i] == "raka_MK2":
-                        print("raka_MK2 bought")
+                        buy_upgrade("raka_MK2")
                         return
                     elif buttons[i] == "raka_MK3":
-                        print("raka_MK3 bought")
+                        buy_upgrade("raka_MK3")
                         return
                     elif buttons[i] == "raka_MK4":
-                        print("raka_MK4 bought")
+                        buy_upgrade("raka_MK4")
                         return
                     elif buttons[i] == "raka_MK5":
-                        print("raka_MK5 bought")
+                        buy_upgrade("raka_MK5")
                         return
                     elif buttons[i] == "kakku_MK1":
-                        print("kakku_MK1 bought")
+                        buy_upgrade("kakku_MK1")
                         return
                     elif buttons[i] == "kakku_MK2":
-                        print("kakku_MK2 bought")
+                        buy_upgrade("kakku_MK2")
                         return
                     elif buttons[i] == "kakku_MK3":
-                        print("kakku_MK3 bought")
+                        buy_upgrade("kakku_MK3")
                         return
                     elif buttons[i] == "kakku_MK4":
-                        print("kakku_MK4 bought")
+                        buy_upgrade("kakku_MK4")
                         return
                     elif buttons[i] == "kakku_MK5":
-                        print("kakku_MK5 bought")
+                        buy_upgrade("kakku_MK5")
                         return
+                    print(buttons[i])
 
 # Function to render background and handle shopkeeper changes
 def render_shop_background(screen):
@@ -227,7 +218,6 @@ def get_upgrade_details(upgrade):
     else:
         return "Invalid upgrade"
     
-    print(upgrade)
     if upgrade in var.bought_weapons:
         if gun_type == "raka_ase":
             damage = var.raka_ase[new_upgrade]["Damage"]
@@ -262,3 +252,50 @@ def get_upgrade_details(upgrade):
             cost = var.kakku_sinko[new_upgrade]["Cost"]
         
         return f"You don't own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}\nCost: {cost}"
+    
+    
+def buy_upgrade(upgrade):
+    if upgrade.startswith("raka_"):
+        new_upgrade = upgrade[5:]
+        gun_type = "raka_ase"
+    elif upgrade.startswith("kakku_"):
+        new_upgrade = upgrade[6:]
+        gun_type = "kakku_sinko"
+    else:
+        return "Invalid upgrade"
+    
+    if upgrade in var.bought_weapons:
+        set_upgrade_to_current(upgrade)
+        return "You already own this upgrade"
+    else:
+        if gun_type == "raka_ase":
+            cost = var.raka_ase[new_upgrade]["Cost"]
+        elif gun_type == "kakku_sinko":
+            cost = var.kakku_sinko[new_upgrade]["Cost"]
+        
+        if var.coins >= cost:
+            var.coins -= cost
+            var.bought_weapons.append(upgrade)
+            set_upgrade_to_current(upgrade)                
+            return "Upgrade bought"
+        else:
+            return "Not enough coins"
+        
+def set_upgrade_to_current(upgrade):
+    if upgrade.startswith("raka_"):
+        new_upgrade = upgrade[5:]
+        gun_type = "raka_ase"
+    elif upgrade.startswith("kakku_"):
+        new_upgrade = upgrade[6:]
+        gun_type = "kakku_sinko"
+    else:
+        return "Invalid upgrade"
+    
+    if upgrade in var.bought_weapons:
+        if gun_type == "raka_ase":
+            var.current_raka_ase_upgrade = new_upgrade
+        elif gun_type == "kakku_sinko":
+            var.current_kakku_sinko_upgrade = new_upgrade
+        return "Upgrade set to current"
+    else:
+        return "You don't own this upgrade"

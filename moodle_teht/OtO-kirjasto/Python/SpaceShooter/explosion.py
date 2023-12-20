@@ -15,7 +15,7 @@ class Explosion:
         self.last_update = pygame.time.get_ticks()
         self.done = False
         
-    def update(self):
+    def update(self, dt):
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate * 1000:
             self.last_update = now

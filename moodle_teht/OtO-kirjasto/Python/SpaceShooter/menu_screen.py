@@ -1,4 +1,4 @@
-import pygame, var, roundsys
+import pygame, var, roundsys, math
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
@@ -85,7 +85,11 @@ def render_main_title(screen):
     title = pygame.image.load("img/title.png").convert_alpha()
     title = pygame.transform.scale(
         title, (1000, 150))
-    title_rect = title.get_rect(center=(var.screen_width / 2, var.screen_height / 2 - 200))
+    # sine wave animation
+    t = var.ticks * 3
+    title_rect = title.get_rect()
+    title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 200 + 5 * (-1 + math.sin(t)))
+    
     screen.blit(title, title_rect)
     
 def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, screen):
@@ -159,7 +163,6 @@ def background_zoom_animation(screen):
         render_main_title(screen)
         
         # break when image is big enough
-        print(zoom_factor)
         if zoom_factor >= 2.3:
             break
         
