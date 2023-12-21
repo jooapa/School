@@ -194,18 +194,23 @@ def shop_menu_btns(screen):
     
     handle_shop_button_clicks(buttons, button_rects, screen)
 
+
 def show_info_box(screen, text, mouse_pos):
-    upgrades = get_upgrade_details(text)
+    upgrades_text = get_upgrade_details(text)
+    lines = upgrades_text.split('\n')
     font_size = 24
     font_color = (255, 255, 255)
-    text = pygame.font.SysFont("Arial", font_size).render(
-        upgrades, True, font_color)
-    text_rect = text.get_rect(center=(var.screen_width - 400, mouse_pos[1]))
+    font = pygame.font.SysFont("Arial", font_size)
+    padding = 10  # Set the padding value here
+    y = mouse_pos[1]
+    x = var.screen_width - 580  # Set x to a fixed value
 
-    padding = 10
-    # Draw box with padding
-    pygame.draw.rect(screen, (0, 0, 0), (text_rect.x - padding, text_rect.y - padding, text_rect.width + padding * 2, text_rect.height + padding * 2))
-    screen.blit(text, text_rect)
+    # black box behind text
+    pygame.draw.rect(screen, (0, 0, 0), (x - padding, y - padding, 330, len(lines) * font_size + padding * 8))
+    for line in lines:
+        text = font.render(line, True, font_color)
+        screen.blit(text, (x, y))
+        y += font_size + padding  # Move y down for the next line
     
     
 def get_upgrade_details(upgrade):

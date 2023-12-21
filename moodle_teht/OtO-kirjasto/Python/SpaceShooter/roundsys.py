@@ -49,7 +49,7 @@ def cooldown_time_calculator(round_number):
         (1 / (1 + math.exp(decay_factor * (round_number - 5))))
 
     # Ensure the calculated value is not less than 0.8
-    return max(cooldown_time, 1)
+    return max(cooldown_time, 0.8)
 
 def calculate_enemy_health():
     min_health = 100

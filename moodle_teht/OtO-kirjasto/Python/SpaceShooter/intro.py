@@ -17,7 +17,6 @@ def start(screen, dt):
             # aplha 0 to 1 in 1 second
             klinoff_team.set_alpha((time_elapsed - 2) * 500 / 3)
             if time_elapsed > 4:
-                print("fade out")
                 klinoff_team.set_alpha(100 - ((time_elapsed - 4) * 500))
             
             screen.fill((0, 0, 0))
@@ -34,7 +33,6 @@ def start(screen, dt):
             
             if time_elapsed > 7:
                 text.set_alpha(100 - ((time_elapsed - 5) * 100))
-                print(100 - ((time_elapsed - 7) * 2))
             
             screen.fill((0, 0, 0))
             screen.blit(text, (var.screen_width / 2, var.screen_height / 2))
@@ -44,14 +42,16 @@ def start(screen, dt):
             # logo slide
             title = pygame.image.load("img/title.png").convert_alpha()
             title = pygame.transform.scale(title, (1000, 150))
+            title.set_alpha(0)
             
             if title_slide < 1:
                 title_slide += dt * (time_elapsed * 0.045)  # Adjust the speed here
+                # alpha 0 to 1 in 1 second
+                title.set_alpha(title_slide * 260)
             else:
                 title_slide = 1
 
             eased_slide = cubic_ease_out(title_slide) * 200  # Apply the easing function
-            print(eased_slide)
             title_rect = title.get_rect(center=(var.screen_width / 2, var.screen_height / 2 - eased_slide))
             screen.blit(title, title_rect)
         

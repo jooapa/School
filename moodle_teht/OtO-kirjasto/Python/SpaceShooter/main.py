@@ -2,7 +2,7 @@ import pygame
 import math, functions, var, roundsys, menu_screen, random, intro
 from enemy import Enemy
 from player import Player
-from audio_manager import AudioManager
+from audio_manager import AudioManager, MusicManager
 from shop import shop_menu_btns
 from explosion import Explosion
 from roundsys import calculate_enemy_health
@@ -73,42 +73,59 @@ def draw_enemy_health_bar(screen, current_health, max_health, enemy):
                      enemy.y + offset_y + var.camera_offset.y, bar_width, height))
         
 # audio
-bg_channel = pygame.mixer.Channel(0)
-bg_audio = AudioManager()
+bg_audio = MusicManager()
 
 shots_channel = pygame.mixer.Channel(1)
 shots_audio = AudioManager()
 
-def change_bg_music(song):
+def change_bg_music(song, keep_position=False):
     if song == "menu" and var.current_bg_song != "menu":
         var.current_bg_song = "menu"
-        bg_channel.play(bg_audio.load_sound("sfx/menu.wav"), -1)
-        bg_audio.set_volume(bg_channel, var.bg_volume)
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/menu.wav"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/menu.wav"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
     elif song == "game" and var.current_bg_song != "game":
         var.current_bg_song = "game"
-        bg_channel.play(bg_audio.load_sound("sfx/pigd4.mp3"), -1)
-        bg_audio.set_volume(bg_channel, var.bg_volume)
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
     elif song == "shop" and var.current_bg_song != "shop":
         var.current_bg_song = "shop"
-        bg_channel.play(bg_audio.load_sound("sfx/shopkeep.mp3"), -1)
-        bg_audio.set_volume(bg_channel, var.bg_volume)
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/shopkeep.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/shopkeep.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
     elif song == "paused" and var.current_bg_song != "paused":
         var.current_bg_song = "paused"
-        bg_channel.play(bg_audio.load_sound("sfx/pig_d_3_1.mp3"), -1)
-        bg_audio.set_volume(bg_channel, var.bg_volume)
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4_2.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4_2.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
     elif song == "intro" and var.current_bg_song != "intro" and not intro.intro_done:
         var.current_bg_song = "intro"
-        bg_channel.play(bg_audio.load_sound("sfx/intro.mp3"), -1)
-        bg_audio.set_volume(bg_channel, var.bg_volume)
-        
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/intro.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/intro.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
+
+
 def speaker_speaker(speaker_audio, speaker_channel):
     speaker_channel.play(speaker_audio.load_sound("sfx/oinks/oink" + str(random.randint(1, 5)) + ".wav"))
     
 def distance_multiplier(x1, y1, x2, y2):
     return 1 - (math.sqrt((x1 - x2)**2 + (y1 - y2)**2) / var.screen_width)
-
-# get upgrades in SAVE file
-player.set_upgrade("raka_ase", var.current_raka_ase_upgrade)
 
 # ammo
 player.set_kakku_sinko_ammo(
@@ -118,10 +135,27 @@ player.set_raka_ase_ammo(
 var.ammo_max = var.raka_ase[player.get_upgrade()]["Magazine Size"]
 var.ammo = var.ammo_max
 
-
 # Game loopww
 running = True
 while running:
+
+    # if music ender
+    if pygame.mixer.music.get_busy() == 0:
+        print("Music ended")
+        if var.current_bg_song == "menu":
+            bg_audio.play_music(bg_audio.load_music("sfx/menu.wav"))
+        elif var.current_bg_song == "game":
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4.mp3"))
+            var.total_bg_music_position = 0
+        elif var.current_bg_song == "shop":
+            bg_audio.play_music(bg_audio.load_music("sfx/shopkeep.mp3"))
+        elif var.current_bg_song == "paused":
+            bg_audio.play_music(bg_audio.load_music("sfx/pigd4_2.mp3"))
+            var.total_bg_music_position = 0
+        elif var.current_bg_song == "intro":
+            bg_audio.play_music(bg_audio.load_music("sfx/intro.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
+        
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -132,20 +166,18 @@ while running:
                     intro.intro_done = True
                 else:
                     var.paused = not var.paused
-                    if var.paused:
-                        print("Paused")
-                        change_bg_music("paused")
-                        mouse_pos_beffore_pause = pygame.mouse.get_pos()
-
-                    else:
-                        change_bg_music("game")
-                        pygame.mouse.set_pos(mouse_pos_beffore_pause)
+                    var.bg_music_position = pygame.mixer.music.get_pos() / 1000
+                    var.total_bg_music_position += var.bg_music_position
                     
+                    if var.paused:
+                        change_bg_music("paused", True)
+                    else:
+                        change_bg_music("game", True)
+                        
             if event.key == pygame.K_F11:
                     if screen.get_flags() & pygame.FULLSCREEN:
                         pygame.display.set_mode((var.screen_width, var.screen_height), pygame.DOUBLEBUF)
-                        
-    
+                
     change_bg_music("intro")
     intro.start(screen, dt)
     
@@ -339,12 +371,29 @@ while running:
                 ui_screen.speak()
                 ui_screen.random_speker_time = ui_screen.pick_random_time_interval()
         
-        pygame.mouse.set_visible(False)
         screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         if var.paused:
-        #     screen.fill((0, 0, 0, 100))
-            pass
+            pygame.mouse.set_visible(True)
+            info_font = pygame.font.SysFont("Arial", 50)
+            info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
+            
+            screen.blit(info_text, (var.screen_width / 2 - info_text.get_width() / 2, var.screen_height / 2 - info_text.get_height() / 2 - 100))
         
+            # exit button
+            exit_button = pygame.Rect(0, 0, 200, 100)
+            exit_button.center = (var.screen_width / 2, var.screen_height / 2 + 100)
+            pygame.draw.rect(screen, (255, 255, 255), exit_button)
+            exit_font = pygame.font.SysFont("Arial", 50)
+            exit_text = exit_font.render("EXIT", True, (0, 0, 0))
+            screen.blit(exit_text, (exit_button.x + exit_button.width / 2 - exit_text.get_width() / 2, exit_button.y + exit_button.height / 2 - exit_text.get_height() / 2))
+            
+            # handle exit button
+            if pygame.mouse.get_pressed()[0]:
+                if exit_button.collidepoint(pygame.mouse.get_pos()):
+                    player.set_health(0)
+        else:
+            pygame.mouse.set_visible(False)
+                  
         # # DEBUG
         # # draw rect around player
         # pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)

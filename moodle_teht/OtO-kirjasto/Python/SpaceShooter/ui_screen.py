@@ -42,7 +42,7 @@ def rando_speaking_sound(speaker_channel, speaker_audio):
     # randomize sound
     sound = random.randint(1, 5)
     # volume
-    speaker_channel.set_volume(0.5)
+    speaker_channel.set_volume(0.2)
     if sound == 1:
         speaker_channel.play(speaker_audio.load_sound("sfx/oinks/oink1.wav"))
     elif sound == 2:
@@ -58,7 +58,7 @@ def rando_hit_sound(speaker_channel, speaker_audio):
     # randomize sound
     sound = random.randint(1, 3)
     # volume
-    speaker_channel.set_volume(1)
+    speaker_channel.set_volume(0.2)
     if sound == 1:
         speaker_channel.play(speaker_audio.load_sound("sfx/hits/hit1.wav"))
     elif sound == 2:

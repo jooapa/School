@@ -38,6 +38,12 @@ dt_kerroin_miska_edition = 1
 buy_rounds = [3, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 buy_round = False
 
+# save the music position
+# bg_music_position is the current position of the music from the last pause
+# total_bg_music_position is the total position of the music from the start of the game
+total_bg_music_position = 0
+bg_music_position = 0
+
 ammo_max = 20
 ammo_max_limit = 100
 firerate_max = 0.05

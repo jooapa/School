@@ -2,12 +2,13 @@ import pygame, var, roundsys, math
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
+    player.set_upgrade("raka_ase", var.current_raka_ase_upgrade)
     var.difficulty = 1
     var.ticks = 0
     var.cooldown = 0
     var.start_round = False
     var.cooldown_time = var.cooldown_time
-    var.round = 30
+    var.round = 0
     var.invincibility_time = 0
     var.paused = False
 
@@ -22,7 +23,7 @@ def start_new_level(player, enemies, bullets):
     player.set_x(var.screen_width / 2)
     player.set_y(var.screen_height / 2)
     player.set_speed(var.player_speed)
-
+    # get upgrades in SAVE file
     enemies.clear()
     bullets.clear()
     var.start_game_animation = True
@@ -88,7 +89,7 @@ def render_main_title(screen):
     # sine wave animation
     t = var.ticks * 3
     title_rect = title.get_rect()
-    title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 200 + 5 * (-1 + math.sin(t)))
+    title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 202.5 + 5 * (1 + math.sin(t)))
     
     screen.blit(title, title_rect)
     
