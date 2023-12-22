@@ -35,7 +35,7 @@ def start(screen, dt):
                 text.set_alpha(100 - ((time_elapsed - 5) * 100))
             
             screen.fill((0, 0, 0))
-            screen.blit(text, (var.screen_width / 2, var.screen_height / 2))
+            screen.blit(text, (var.screen_width // 2, var.screen_height // 2))
         
         if time_elapsed > 8:
             screen.fill((0, 0, 0))

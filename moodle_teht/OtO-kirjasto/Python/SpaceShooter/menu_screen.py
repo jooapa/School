@@ -89,7 +89,7 @@ def render_main_title(screen):
     # sine wave animation
     t = var.ticks * 3
     title_rect = title.get_rect()
-    title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 202.5 + 5 * (1 + math.sin(t)))
+    title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 202.5 + 5 * (1 + math.sin(t - 0.1 )))
     
     screen.blit(title, title_rect)
     

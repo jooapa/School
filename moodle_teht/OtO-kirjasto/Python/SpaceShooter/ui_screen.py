@@ -6,6 +6,7 @@ speaker_audio = None
 random_speker_time = 0
 speaking = False
 
+
 def render(screen, img, player):
     render_speaker(screen, img, player)
 
@@ -30,6 +31,10 @@ def render_speaker(screen, speak_image, player):
     gun_image_pos.x = var.screen_width - speaker_scale
     gun_image_pos.y = var.screen_height - speaker_scale - 30
     
+    # if mouse or åplayer is hovering over speaker add some padding
+    if speaker_pos.collidepoint(pygame.mouse.get_pos()) or speaker_pos.collidepoint(var.player_pos + var.camera_offset):
+        speaker.set_alpha(30)
+        gun_image.set_alpha(30)
     # render image
     screen.blit(speaker, (speaker_pos.x, speaker_pos.y))
     screen.blit(gun_image, (speaker_pos.x, speaker_pos.y))

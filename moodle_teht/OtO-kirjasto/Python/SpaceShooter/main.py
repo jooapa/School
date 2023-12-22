@@ -171,8 +171,10 @@ while running:
                     
                     if var.paused:
                         change_bg_music("paused", True)
+                        mouse_pos_beffore_pause = pygame.mouse.get_pos()
                     else:
                         change_bg_music("game", True)
+                        pygame.mouse.set_pos(mouse_pos_beffore_pause)
                         
             if event.key == pygame.K_F11:
                     if screen.get_flags() & pygame.FULLSCREEN:
@@ -235,12 +237,12 @@ while running:
             
         # Get mouse position
         var.mouse_x, var.mouse_y = pygame.mouse.get_pos()
-
-        # rotate the player to face the mouse
-        player_to_mouse_x = var.mouse_x - player.x
-        player_to_mouse_y = var.mouse_y - player.y
-        angle = math.atan2(player_to_mouse_y, player_to_mouse_x)
-        angle = math.degrees(angle)
+        if not var.paused:
+            # rotate the player to face the mouse
+            player_to_mouse_x = var.mouse_x - player.x
+            player_to_mouse_y = var.mouse_y - player.y
+            angle = math.atan2(player_to_mouse_y, player_to_mouse_x)
+            angle = math.degrees(angle)
         rotated_player = pygame.transform.rotate(player.image, -angle)
         player.rect = rotated_player.get_rect(center=(player.x, player.y))
         
@@ -371,7 +373,6 @@ while running:
                 ui_screen.speak()
                 ui_screen.random_speker_time = ui_screen.pick_random_time_interval()
         
-        screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
         if var.paused:
             pygame.mouse.set_visible(True)
             info_font = pygame.font.SysFont("Arial", 50)
@@ -393,6 +394,7 @@ while running:
                     player.set_health(0)
         else:
             pygame.mouse.set_visible(False)
+            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
                   
         # # DEBUG
         # # draw rect around player
