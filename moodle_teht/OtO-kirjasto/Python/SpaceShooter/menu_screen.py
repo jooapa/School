@@ -1,4 +1,4 @@
-import pygame, var, roundsys, math
+import pygame, var, roundsys, math, time
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
@@ -87,7 +87,7 @@ def render_main_title(screen):
     title = pygame.transform.scale(
         title, (1000, 150))
     # sine wave animation
-    t = var.ticks * 3
+    t = time.time() * 2
     title_rect = title.get_rect()
     title_rect.center = (var.screen_width / 2, var.screen_height / 2 - 202.5 + 5 * (1 + math.sin(t - 0.1 )))
     

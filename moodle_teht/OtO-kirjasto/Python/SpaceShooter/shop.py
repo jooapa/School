@@ -1,7 +1,7 @@
-import pygame, var, random
+import pygame, var, random, time
 from functions import correct_scale
 
-ticks_in_full_second = var.ticks
+ticks_in_full_second = time.time() + 0.19
 keeper = "img/shop1.png"
 menu_showing = "main" # main, power_ups, raka_ase, kakku_sinko
 
@@ -160,8 +160,8 @@ def render_shop_background(screen):
     global ticks_in_full_second
     global keeper
 
-    if var.ticks > ticks_in_full_second:
-        ticks_in_full_second = var.ticks + 0.19
+    if time.time() > ticks_in_full_second:
+        ticks_in_full_second = time.time() + 1.263
         keeper = random_shopkeeper(keeper)
 
     background = pygame.image.load(keeper)
@@ -202,9 +202,9 @@ def show_info_box(screen, text, mouse_pos):
     font_color = (255, 255, 255)
     font = pygame.font.SysFont("Arial", font_size)
     padding = 10  # Set the padding value here
-    y = mouse_pos[1]
+    y = mouse_pos[1] - 100
     x = var.screen_width - 580  # Set x to a fixed value
-
+        
     # black box behind text
     pygame.draw.rect(screen, (0, 0, 0), (x - padding, y - padding, 330, len(lines) * font_size + padding * 8))
     for line in lines:
