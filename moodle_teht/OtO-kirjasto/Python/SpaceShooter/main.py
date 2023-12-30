@@ -210,7 +210,9 @@ while running:
         if keys[pygame.K_1]:
             if player.gun == "kakku_sinko":
                 player.set_kakku_sinko_ammo(
-                    var.ammo)        
+                    var.ammo)
+                var.firerate_max = var.raka_ase[player.get_upgrade()]["Fire Rate"]
+                var.firerate = var.firerate_max
             elif player.gun == "raka_ase":
                 player.set_raka_ase_ammo(
                     var.ammo)
@@ -222,6 +224,8 @@ while running:
             elif player.gun == "raka_ase":
                 player.set_raka_ase_ammo(
                     var.ammo)
+                var.firerate_max = var.kakku_sinko[player.get_upgrade()]["Fire Rate"]
+                var.firerate = var.firerate_max
             player.set_upgrade("kakku_sinko", var.current_kakku_sinko_upgrade)
 
         if keys[pygame.K_j]:
@@ -372,6 +376,15 @@ while running:
             if ui_screen.random_speker_time <= 0:   
                 ui_screen.speak()
                 ui_screen.random_speker_time = ui_screen.pick_random_time_interval()
+                
+        # AMMO, bottom left corner, ammo / max ammo
+        ammo_font = pygame.font.SysFont("Arial", 50)
+        ammo_text = ammo_font.render(str(var.ammo) + " / " + str(var.ammo_max), True, (255, 255, 255))
+        ammo_text_width = ammo_text.get_width()
+        ammo_text_height = ammo_text.get_height()
+        ammo_text_x = 10
+        ammo_text_y = var.screen_height - ammo_text_height - 10
+        screen.blit(ammo_text, (ammo_text_x, ammo_text_y))
         
         if var.paused:
             pygame.mouse.set_visible(True)
@@ -395,6 +408,15 @@ while running:
         else:
             pygame.mouse.set_visible(False)
             screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+            # Fire rate bar indicator
+            print(var.firerate, var.firerate_max)
+            if var.firerate >= 0:
+                pygame.draw.arc(screen, (0, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / -2, math.pi * var.firerate / var.firerate_max + math.pi / -2, 5)
+
+            # Reload bar indicator
+            if var.reload_time != var.reload_time_max:
+                # Draw the half circle
+                pygame.draw.arc(screen, (255, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / 2, math.pi * var.reload_time / var.reload_time_max + math.pi / 2, 5)            
                   
         # # DEBUG
         # # draw rect around player
