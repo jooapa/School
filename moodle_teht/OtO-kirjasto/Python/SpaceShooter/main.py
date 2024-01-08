@@ -386,6 +386,14 @@ while running:
         ammo_text_y = var.screen_height - ammo_text_height - 10
         screen.blit(ammo_text, (ammo_text_x, ammo_text_y))
         
+        round_font = pygame.font.SysFont("Arial", 50)
+        round_text = ammo_font.render("Round: " + str(var.round), True, (255, 255, 255))
+        round_text_x = 10
+        round_text_y = 10
+        screen.blit(round_text, (round_text_x, round_text_y))
+
+        ui_screen.render_coin_animation(screen, var.screen_width, 20)
+        
         if var.paused:
             pygame.mouse.set_visible(True)
             info_font = pygame.font.SysFont("Arial", 50)
@@ -409,7 +417,6 @@ while running:
             pygame.mouse.set_visible(False)
             screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
             # Fire rate bar indicator
-            print(var.firerate, var.firerate_max)
             if var.firerate >= 0:
                 pygame.draw.arc(screen, (0, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / -2, math.pi * var.firerate / var.firerate_max + math.pi / -2, 5)
 
@@ -507,7 +514,7 @@ while running:
     # Update the display
     dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition
     if not var.paused:
-        var.ticks += 1 / var.FPS
+        var.ticks += dt
     pygame.display.flip()
 
 # Quit the game

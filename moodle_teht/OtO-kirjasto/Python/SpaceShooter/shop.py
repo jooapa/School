@@ -1,5 +1,6 @@
 import pygame, var, random, time
 from functions import correct_scale
+from ui_screen import render_coin_animation
 
 ticks_in_full_second = time.time() + 0.19
 keeper = "img/shop1.png"
@@ -191,7 +192,7 @@ def shop_menu_btns(screen):
 
     render_shop_background(screen)
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
-    
+    render_coin_animation(screen, 160, 10)
     handle_shop_button_clicks(buttons, button_rects, screen)
 
 

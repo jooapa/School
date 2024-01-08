@@ -11,6 +11,8 @@ def start_new_level(player, enemies, bullets):
     var.round = 0
     var.invincibility_time = 0
     var.paused = False
+    var.bg_music_position = 0
+    var.total_bg_music_position = 0
 
     var.ammo_max = var.ammo_max  # can buy upgrades to increase this
     var.ammo = var.ammo_max

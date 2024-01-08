@@ -1,5 +1,5 @@
 from audio_manager import AudioManager
-import var, pygame, random
+import var, pygame, random, time
 zeroVar = 0
 speaker_channel = None
 speaker_audio = None
@@ -32,9 +32,14 @@ def render_speaker(screen, speak_image, player):
     gun_image_pos.y = var.screen_height - speaker_scale - 30
     
     # if mouse or åplayer is hovering over speaker add some padding
-    if speaker_pos.collidepoint(pygame.mouse.get_pos()) or speaker_pos.collidepoint(var.player_pos + var.camera_offset):
+    if speaker_pos.collidepoint(pygame.mouse.get_pos()) and not var.paused or speaker_pos.collidepoint(var.player_pos + var.camera_offset) and not var.paused:
         speaker.set_alpha(30)
         gun_image.set_alpha(30)
+        
+    # if pressed speaker
+    if speaker_pos.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and var.paused:
+        speak()
+        
     # render image
     screen.blit(speaker, (speaker_pos.x, speaker_pos.y))
     screen.blit(gun_image, (speaker_pos.x, speaker_pos.y))
@@ -109,3 +114,17 @@ def if_playing():
         return True
     else:
         return False
+
+def render_coin_animation(screen, x, y):
+    # render animation img/coins/coin0.png to coin9.png
+    coin_animation_speed = 8
+    coin_animation = pygame.image.load(
+        "img/coins/coin" + str(int(time.time() * coin_animation_speed % 10)) + ".png").convert_alpha()
+    coin_animation = pygame.transform.scale(coin_animation, (50, 50))
+    screen.blit(coin_animation, (x - 150, y))
+    # render coin amount
+    coin_font = pygame.font.SysFont("Arial", 40)
+    coin_text = coin_font.render(str(var.coins), True, (255, 255, 255))
+    coin_text_x = x - 100
+    coin_text_y = y
+    screen.blit(coin_text, (coin_text_x, coin_text_y))

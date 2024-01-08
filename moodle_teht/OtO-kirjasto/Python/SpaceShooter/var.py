@@ -56,7 +56,7 @@ gun_damage_max_limit = 100
 invincibility_time_max = 1
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
-coins = 100000
+coins = 100
 kakku_sinko_explosion_radius = 100
 
 # Dont change these
