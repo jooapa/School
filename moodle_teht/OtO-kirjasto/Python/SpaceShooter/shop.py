@@ -157,7 +157,7 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
                     print(buttons[i])
 
 # Function to render background and handle shopkeeper changes
-def render_shop_background(screen):
+def render_shop_keeper(screen):
     global ticks_in_full_second
     global keeper
 
@@ -170,6 +170,11 @@ def render_shop_background(screen):
         background, (var.screen_width, var.screen_height))
     screen.blit(background, (0, 0))
 
+def render_shop_background(screen):
+    background = pygame.image.load("img/shop_bg.png")
+    background = pygame.transform.scale(
+        background, (var.screen_width, var.screen_height))
+    screen.blit(background, (0, 0))
 
 def random_shopkeeper(keeper):
     shopkeeper = random.randint(1, 4)
@@ -190,6 +195,7 @@ def shop_menu_btns(screen):
     
     buttons, button_rects, button_texts, buttons_desc = return_create_shop_buttons()
 
+    render_shop_keeper(screen)
     render_shop_background(screen)
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
     render_coin_animation(screen, 160, 10)
