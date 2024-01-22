@@ -190,6 +190,16 @@ def render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_des
         screen.blit(button_texts[i][0], button_texts[i][1])
         screen.blit(buttons_desc[i][0], buttons_desc[i][1])
 
+def render_current_weapon(screen):
+    font_size = 30
+    font_color = (0, 0, 0)
+    x = var.screen_width - 650
+    y = 70
+    font = pygame.font.SysFont("Arial", font_size)
+    text = font.render(f"Current Räkä Ase: {var.current_raka_ase_upgrade}", True, font_color)
+    screen.blit(text, (x, y))
+    text = font.render(f"Current Kakku Sinko: {var.current_kakku_sinko_upgrade}", True, font_color)
+    screen.blit(text, (x, y + 30))
 
 def shop_menu_btns(screen):
     
@@ -198,7 +208,8 @@ def shop_menu_btns(screen):
     render_shop_keeper(screen)
     render_shop_background(screen)
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
-    render_coin_animation(screen, 160, 10)
+    render_coin_animation(screen, 190, 40, (0,0,0))
+    render_current_weapon(screen)
     handle_shop_button_clicks(buttons, button_rects, screen)
 
 
@@ -218,6 +229,7 @@ def show_info_box(screen, text, mouse_pos):
         text = font.render(line, True, font_color)
         screen.blit(text, (x, y))
         y += font_size + padding  # Move y down for the next line
+        
     
     
 def get_upgrade_details(upgrade):
@@ -244,7 +256,7 @@ def get_upgrade_details(upgrade):
             reload_time = var.kakku_sinko[new_upgrade]["Reload Time"]
             magazine_size = var.kakku_sinko[new_upgrade]["Magazine Size"]
             speed = var.kakku_sinko[new_upgrade]["Speed"]
-                    
+           
         return f"You already own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}"
     else:
         if gun_type == "raka_ase":

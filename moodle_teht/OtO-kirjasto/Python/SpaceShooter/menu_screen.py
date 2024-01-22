@@ -122,6 +122,14 @@ def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, 
                     else:
                         print("Button not found")
 
+def render_best_round(screen):
+    best_round_text = "Best round: " + str(var.best_round)
+    best_round_font = pygame.font.SysFont("Arial", 30)
+    best_round_text_render = best_round_font.render(
+        best_round_text, True, (255, 255, 255))
+    best_round_text_rect = best_round_text_render.get_rect()
+    best_round_text_rect.center = (var.screen_width / 2, 50)
+    screen.blit(best_round_text_render, best_round_text_rect)
 
 def main_screen(screen, player, enemies, bullets):
     buttons, button_rects, button_icons = create_buttons()
@@ -129,6 +137,7 @@ def main_screen(screen, player, enemies, bullets):
     background = pygame.transform.scale(
         background, (var.screen_width, var.screen_height))
     screen.blit(background, (0, 0))
+    render_best_round(screen)
     render_main_title(screen)
     render_main_buttons(screen, buttons, button_rects, button_icons)
     handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, screen)

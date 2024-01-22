@@ -12,6 +12,7 @@ difficulty = 1
 difficulty_curve = 0.6
 round_start_interval = 0
 start_game_animation = False
+best_round = 0
 
 current_bg_song = None
 bg_volume = 0.3
@@ -56,7 +57,7 @@ gun_damage_max_limit = 100
 invincibility_time_max = 1
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
-coins = 100
+coins = 1000
 kakku_sinko_explosion_radius = 100
 
 # Dont change these

@@ -341,6 +341,7 @@ while running:
         
         if player.is_dead():
             var.game_running = False
+            var.best_round = max(var.round, var.best_round)
             pass
         
         # FOREGROUND
@@ -392,7 +393,7 @@ while running:
         round_text_y = 10
         screen.blit(round_text, (round_text_x, round_text_y))
 
-        ui_screen.render_coin_animation(screen, var.screen_width, 20)
+        ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
         
         if var.paused:
             pygame.mouse.set_visible(True)
@@ -493,7 +494,8 @@ while running:
                                     str(round(var.reload_time)) + " Coins: " + str(var.coins) +
                                      " INTER" + str(round(var.round_start_interval)) + " spawn: " + str(enemies_to_spawn) +
                                      " raka ase: " + var.current_raka_ase_upgrade +
-                                        " kakku: " + var.current_kakku_sinko_upgrade
+                                        " kakku: " + var.current_kakku_sinko_upgrade +
+                                        "Best round" + str(var.best_round)
                                     )
     elif var.game_running == False and intro.intro_done:
         if var.start_game_animation:

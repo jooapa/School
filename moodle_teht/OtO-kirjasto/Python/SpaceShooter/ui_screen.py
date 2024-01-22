@@ -115,7 +115,7 @@ def if_playing():
     else:
         return False
 
-def render_coin_animation(screen, x, y):
+def render_coin_animation(screen, x, y, color):
     # render animation img/coins/coin0.png to coin9.png
     coin_animation_speed = 8
     coin_animation = pygame.image.load(
@@ -124,7 +124,7 @@ def render_coin_animation(screen, x, y):
     screen.blit(coin_animation, (x - 150, y))
     # render coin amount
     coin_font = pygame.font.SysFont("Arial", 40)
-    coin_text = coin_font.render(str(var.coins), True, (255, 255, 255))
+    coin_text = coin_font.render(str(var.coins), True, color)
     coin_text_x = x - 100
     coin_text_y = y
     screen.blit(coin_text, (coin_text_x, coin_text_y))
