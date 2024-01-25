@@ -1,5 +1,5 @@
 import pygame
-import math, functions, var, roundsys, menu_screen, random, intro, outro
+import math, functions, var, roundsys, menu_screen, random, intro, outro, shop
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager, MusicManager
@@ -23,6 +23,9 @@ pygame.display.set_caption("PIG Defenders")
 enemies    = []
 bullets    = []
 explosions = []
+
+## ENDING VARIABLES
+
 # PLAYER
 player = Player(var.screen_width / 2,
                        var.screen_height / 2, 300, "img/räkä alus.png", var.player_health, "raka_ase", "MK1")
@@ -127,6 +130,22 @@ def change_bg_music(song, keep_position=False):
         else:
             bg_audio.play_music(bg_audio.load_music("sfx/bad_ending.mp3"))
         bg_audio.set_volume(bg_audio, var.bg_volume)
+    elif song == "good" and var.current_bg_song != "good":
+        var.current_bg_song = "good"
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/good_ending.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/good_ending.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
+    elif song == "very bad" and var.current_bg_song != "very bad":
+        var.current_bg_song = "very bad"
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/sirkus ahh musiikki_reversed OOOOOOOOOOOOH.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/sirkus ahh musiikki_reversed OOOOOOOOOOOOH.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
 
 
 def speaker_speaker(speaker_audio, speaker_channel):
@@ -146,7 +165,17 @@ var.ammo = var.ammo_max
 # Game loopww
 running = True
 while running:
+    # start bad ending
+    if var.round >= 2:
+        var.bad_ending_completed = True
+        var.round -= 1
+        var.best_round = max(var.round, var.best_round)
+        change_bg_music("bad")
+        outro.outro_type = "bad"
+        var.game_running = False
 
+        screen.fill((0, 0, 0))
+        
     # if music ender
     if pygame.mixer.music.get_busy() == 0:
         print("Music ended")
@@ -169,20 +198,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                if not intro.intro_done:
-                    intro.intro_done = True
-                else:
-                    var.paused = not var.paused
-                    var.bg_music_position = pygame.mixer.music.get_pos() / 1000
-                    var.total_bg_music_position += var.bg_music_position
-                    
-                    if var.paused:
-                        change_bg_music("paused", True)
-                        mouse_pos_beffore_pause = pygame.mouse.get_pos()
+            if event.key == pygame.K_ESCAPE and outro.outro_type == "":
+                if not shop.have_tsar_bomba:
+                    if not intro.intro_done:
+                        intro.intro_done = True
                     else:
-                        change_bg_music("game", True)
-                        pygame.mouse.set_pos(mouse_pos_beffore_pause)
+                        var.paused = not var.paused
+                        var.bg_music_position = pygame.mixer.music.get_pos() / 1000
+                        var.total_bg_music_position += var.bg_music_position
+                        
+                        if var.paused:
+                            change_bg_music("paused", True)
+                            mouse_pos_beffore_pause = pygame.mouse.get_pos()
+                        else:
+                            change_bg_music("game", True)
+                            pygame.mouse.set_pos(mouse_pos_beffore_pause)
                         
             if event.key == pygame.K_F11:
                     if screen.get_flags() & pygame.FULLSCREEN:
@@ -425,7 +455,10 @@ while running:
                     player.set_health(0)
         else:
             pygame.mouse.set_visible(False)
-            screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+            if not shop.have_tsar_bomba:
+                screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
+            else:
+                pygame.mouse.set_visible(True)
             # Fire rate bar indicator
             if var.firerate >= 0:
                 pygame.draw.arc(screen, (0, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / -2, math.pi * var.firerate / var.firerate_max + math.pi / -2, 5)
@@ -491,18 +524,55 @@ while running:
                     enemies_to_spawn += 1
                 print("Spawned enemy, ", enemies_to_spawn, " enemies left to spawn")
                 
-        roundsys.check_round(enemies)
+        # ENDING----------------------------------------
+        if shop.have_tsar_bomba:
+            
+            dt_kerroin_miska_edition = 0
+            
+            # YEs or No button
+            yes_button = pygame.Rect(0, 0, 200, 100)
+            yes_button.center = (var.screen_width / 2 - 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), yes_button)
+            yes_font = pygame.font.SysFont("Arial", 50)
+            yes_text = yes_font.render("YES", True, (0, 0, 0))
+            
+            no_button = pygame.Rect(0, 0, 200, 100)
+            no_button.center = (var.screen_width / 2 + 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), no_button)
+            no_font = pygame.font.SysFont("Arial", 50)
+            no_text = no_font.render("NO", True, (0, 0, 0))
+            
+            # draw text
+            text_font = pygame.font.SysFont("Arial", 50)
+            text = text_font.render("Launch Tsar?", True, (255, 255, 255))
+            
+            screen.blit(text, (var.screen_width / 2 - text.get_width() / 2, var.screen_height / 2 - text.get_height() / 2 - 100))
+            screen.blit(yes_text, (yes_button.x + yes_button.width / 2 - yes_text.get_width() / 2, yes_button.y + yes_button.height / 2 - yes_text.get_height() / 2))
+            screen.blit(no_text, (no_button.x + no_button.width / 2 - no_text.get_width() / 2, no_button.y + no_button.height / 2 - no_text.get_height() / 2))
+            
+            # handle buttons
+            if pygame.mouse.get_pressed()[0]:
+                if yes_button.collidepoint(pygame.mouse.get_pos()):
+                    outro.outro_type = "very bad"
+                    shop.have_tsar_bomba = False
+                    change_bg_music("very bad")
+                    var.game_running = False
+                    outro.start(screen, dt)
+                    screen.fill((0, 0, 0))
+                    pass
+                elif no_button.collidepoint(pygame.mouse.get_pos()):
+                    outro.outro_type = "good"
+                    shop.have_tsar_bomba = False
+                    change_bg_music("bad")
+                    var.game_running = False
+                    outro.start(screen, dt)
+                    screen.fill((0, 0, 0))
+                    pass
+        # ENDING----------------------------------------
         
-        # start bad ending
-        if var.round >= 2:
-            var.bad_ending_completed = True
-            var.round -= 1
-            var.best_round = max(var.round, var.best_round)
-            change_bg_music("bad")
-            outro.outro_type = "bad"
-            var.game_running = False
-
-            screen.fill((0, 0, 0))
+            
+                
+        roundsys.check_round(enemies)
             
         pygame.display.set_caption("PIG Defenders - Ticks: " + 
                                     str(round(var.ticks))+ " FPS: " + 

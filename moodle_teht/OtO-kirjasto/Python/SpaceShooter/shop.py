@@ -204,10 +204,21 @@ def render_current_weapon(screen):
     screen.blit(text, (x, y + 30))
 
 def render_tsar_bomba(screen):
+    global have_tsar_bomba
     background = pygame.image.load("img/tsar_bomba_shop.png")
     background = pygame.transform.scale(
         background, (var.screen_width, var.screen_height))
+    
+    # hande cklicks
+    mouse_pos = pygame.math.Vector2(pygame.mouse.get_pos())
+    if pygame.mouse.get_pressed()[0]:
+        print(mouse_pos)
+        if pygame.Rect(107, 249, 865, 489).collidepoint(mouse_pos):
+            print("tsar_bomba bought")
+            have_tsar_bomba = True
+            return
     screen.blit(background, (0, 0))
+        
     
     
 def shop_menu_btns(screen):
@@ -219,7 +230,7 @@ def shop_menu_btns(screen):
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
     render_coin_animation(screen, 190, 40, (0,0,0))
     render_current_weapon(screen)
-    if var.bad_ending_completed:
+    if var.bad_ending_completed and not have_tsar_bomba:
         render_tsar_bomba(screen)
     handle_shop_button_clicks(buttons, button_rects, screen)
 
