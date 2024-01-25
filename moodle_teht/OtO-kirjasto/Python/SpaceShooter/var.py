@@ -91,6 +91,6 @@ kakku_sinko_ammo = 0
 
 bought_weapons = ["raka_MK1", "kakku_MK1"]
 
-bad_ending_completed = False
+bad_ending_completed = True
 very_bad_ending_completed = False
 good_ending_completed = False

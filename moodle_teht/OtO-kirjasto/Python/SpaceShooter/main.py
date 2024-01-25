@@ -141,10 +141,10 @@ def change_bg_music(song, keep_position=False):
     elif song == "very bad" and var.current_bg_song != "very bad":
         var.current_bg_song = "very bad"
         if keep_position:
-            bg_audio.play_music(bg_audio.load_music("sfx/sirkus ahh musiikki_reversed OOOOOOOOOOOOH.mp3"))
+            bg_audio.play_music(bg_audio.load_music("sfx/very_bad_ending.mp3"))
             pygame.mixer.music.set_pos(var.total_bg_music_position)
         else:
-            bg_audio.play_music(bg_audio.load_music("sfx/sirkus ahh musiikki_reversed OOOOOOOOOOOOH.mp3"))
+            bg_audio.play_music(bg_audio.load_music("sfx/very_bad_ending.mp3"))
         bg_audio.set_volume(bg_audio, var.bg_volume)
 
 
@@ -271,7 +271,7 @@ while running:
         if keys[pygame.K_k]:
             ui_screen.speak()
 
-        if var.paused:
+        if var.paused and not shop.have_tsar_bomba:
             var.dt_kerroin_miska_edition = 0
         else:
             var.dt_kerroin_miska_edition = 1
@@ -402,8 +402,6 @@ while running:
         if var.ticks < 2:
             smoke.set_alpha(255 - (255 / 1) * var.ticks)
             screen.blit(smoke, (smoke_rect.x - var.camera_offset.x - 620, smoke_rect.y - var.camera_offset.y - 420))
-            
-
         
         # RENDER UI
         ui_screen.render(screen, ui_screen.move_mouth(), player)
@@ -434,7 +432,7 @@ while running:
 
         ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
         
-        if var.paused:
+        if var.paused and not shop.have_tsar_bomba:
             pygame.mouse.set_visible(True)
             info_font = pygame.font.SysFont("Arial", 50)
             info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
@@ -498,7 +496,7 @@ while running:
         
         # ROUND SYSTEM
         # start new round
-        if round(var.ticks,2) >= round(var.round_start_interval, 2) and not var.buy_round:
+        if round(var.ticks, 2) >= round(var.round_start_interval, 2) and not var.buy_round:
             print("Round start interval: ", var.round_start_interval)
             print("Next round")
             roundsys.next_round()
@@ -527,7 +525,7 @@ while running:
         # ENDING----------------------------------------
         if shop.have_tsar_bomba:
             
-            dt_kerroin_miska_edition = 0
+            var.paused = True
             
             # YEs or No button
             yes_button = pygame.Rect(0, 0, 200, 100)
@@ -553,21 +551,23 @@ while running:
             # handle buttons
             if pygame.mouse.get_pressed()[0]:
                 if yes_button.collidepoint(pygame.mouse.get_pos()):
+                    var.paused = False
                     outro.outro_type = "very bad"
                     shop.have_tsar_bomba = False
                     change_bg_music("very bad")
                     var.game_running = False
                     outro.start(screen, dt)
                     screen.fill((0, 0, 0))
-                    pass
+
                 elif no_button.collidepoint(pygame.mouse.get_pos()):
+                    var.paused = False
                     outro.outro_type = "good"
                     shop.have_tsar_bomba = False
-                    change_bg_music("bad")
+                    change_bg_music("good")
                     var.game_running = False
                     outro.start(screen, dt)
                     screen.fill((0, 0, 0))
-                    pass
+                    
         # ENDING----------------------------------------
         
             

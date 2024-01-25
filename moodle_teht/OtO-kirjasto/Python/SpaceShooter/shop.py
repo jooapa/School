@@ -198,9 +198,9 @@ def render_current_weapon(screen):
     x = var.screen_width - 650
     y = 70
     font = pygame.font.SysFont("Arial", font_size)
-    text = font.render(f"Current Räkä Ase: {var.current_raka_ase_upgrade}", True, font_color)
+    text = font.render(f"Räkä Ase: {var.current_raka_ase_upgrade}", True, font_color)
     screen.blit(text, (x, y))
-    text = font.render(f"Current Kakku Sinko: {var.current_kakku_sinko_upgrade}", True, font_color)
+    text = font.render(f"Kakku Sinko: {var.current_kakku_sinko_upgrade}", True, font_color)
     screen.blit(text, (x, y + 30))
 
 def render_tsar_bomba(screen):
