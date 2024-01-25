@@ -6,6 +6,8 @@ ticks_in_full_second = time.time() + 0.19
 keeper = "img/shop1.png"
 menu_showing = "main" # main, power_ups, raka_ase, kakku_sinko
 
+have_tsar_bomba = False
+
 def return_create_shop_buttons():
     font_size = 24
     if menu_showing == "main":
@@ -201,6 +203,13 @@ def render_current_weapon(screen):
     text = font.render(f"Current Kakku Sinko: {var.current_kakku_sinko_upgrade}", True, font_color)
     screen.blit(text, (x, y + 30))
 
+def render_tsar_bomba(screen):
+    background = pygame.image.load("img/tsar_bomba_shop.png")
+    background = pygame.transform.scale(
+        background, (var.screen_width, var.screen_height))
+    screen.blit(background, (0, 0))
+    
+    
 def shop_menu_btns(screen):
     
     buttons, button_rects, button_texts, buttons_desc = return_create_shop_buttons()
@@ -210,6 +219,8 @@ def shop_menu_btns(screen):
     render_shop_buttons(screen, buttons, button_rects, button_texts, buttons_desc)
     render_coin_animation(screen, 190, 40, (0,0,0))
     render_current_weapon(screen)
+    if var.bad_ending_completed:
+        render_tsar_bomba(screen)
     handle_shop_button_clicks(buttons, button_rects, screen)
 
 

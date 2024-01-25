@@ -1,5 +1,5 @@
 import pygame
-import math, functions, var, roundsys, menu_screen, random, intro
+import math, functions, var, roundsys, menu_screen, random, intro, outro
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager, MusicManager
@@ -118,6 +118,14 @@ def change_bg_music(song, keep_position=False):
             pygame.mixer.music.set_pos(var.total_bg_music_position)
         else:
             bg_audio.play_music(bg_audio.load_music("sfx/intro.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
+    elif song == "bad" and var.current_bg_song != "bad":
+        var.current_bg_song = "bad"
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/bad_ending.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/bad_ending.mp3"))
         bg_audio.set_volume(bg_audio, var.bg_volume)
 
 
@@ -341,6 +349,7 @@ while running:
         
         if player.is_dead():
             var.game_running = False
+            var.round -= 1
             var.best_round = max(var.round, var.best_round)
             pass
         
@@ -456,7 +465,7 @@ while running:
         
         # ROUND SYSTEM
         # start new round
-        if round(var.ticks,2) == round(var.round_start_interval, 2) and not var.buy_round:
+        if round(var.ticks,2) >= round(var.round_start_interval, 2) and not var.buy_round:
             print("Round start interval: ", var.round_start_interval)
             print("Next round")
             roundsys.next_round()
@@ -484,6 +493,17 @@ while running:
                 
         roundsys.check_round(enemies)
         
+        # start bad ending
+        if var.round >= 2:
+            var.bad_ending_completed = True
+            var.round -= 1
+            var.best_round = max(var.round, var.best_round)
+            change_bg_music("bad")
+            outro.outro_type = "bad"
+            var.game_running = False
+
+            screen.fill((0, 0, 0))
+            
         pygame.display.set_caption("PIG Defenders - Ticks: " + 
                                     str(round(var.ticks))+ " FPS: " + 
                                     str(round(clock.get_fps())) + " Round: " + 
@@ -495,22 +515,25 @@ while running:
                                      " INTER" + str(round(var.round_start_interval)) + " spawn: " + str(enemies_to_spawn) +
                                      " raka ase: " + var.current_raka_ase_upgrade +
                                         " kakku: " + var.current_kakku_sinko_upgrade +
-                                        "Best round" + str(var.best_round)
+                                        " Best round" + str(var.best_round)
                                     )
     elif var.game_running == False and intro.intro_done:
-        if var.start_game_animation:
-            menu_screen.background_zoom_animation(screen)
+        if not outro.outro_type == "":
+            outro.start(screen, dt)
         else:
-            pygame.mouse.set_visible(True)
-            enemies_to_spawn = 0
-            # DRAW MENU
-            screen.fill((34, 0, 0))
-            if var.shop_open:
-                change_bg_music("shop")
-                shop_menu_btns(screen)
+            if var.start_game_animation:
+                menu_screen.background_zoom_animation(screen)
             else:
-                change_bg_music("menu")
-                menu_screen.main_screen(screen, player, enemies, bullets)
+                pygame.mouse.set_visible(True)
+                enemies_to_spawn = 0
+                # DRAW MENU
+                screen.fill((34, 0, 0))
+                if var.shop_open:
+                    change_bg_music("shop")
+                    shop_menu_btns(screen)
+                else:
+                    change_bg_music("menu")
+                    menu_screen.main_screen(screen, player, enemies, bullets)
 
         
     # Update the display
