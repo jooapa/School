@@ -1,4 +1,4 @@
-import pygame, var, roundsys, math, time
+import pygame, var, roundsys, math, time, functions
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
@@ -29,6 +29,16 @@ def start_new_level(player, enemies, bullets):
     enemies.clear()
     bullets.clear()
     var.start_game_animation = True
+    
+    # PLAYER SKIN
+    if var.good_ending_completed and var.very_bad_ending_completed and var.bad_ending_completed:
+        player.set_image(pygame.image.load("img/räkä alus1.png").convert_alpha())
+        player.set_image(pygame.transform.scale(
+            player.get_image(), (functions.correct_scale(300, 300))))
+    else:
+        player.set_image(pygame.image.load("img/räkä alus.png").convert_alpha())
+        player.set_image(pygame.transform.scale(
+            player.get_image(), (functions.correct_scale(300, 300))))
 
 
 def create_buttons():
@@ -131,6 +141,32 @@ def render_best_round(screen):
     best_round_text_rect.center = (var.screen_width / 2, 50)
     screen.blit(best_round_text_render, best_round_text_rect)
 
+def render_stars(screen):
+    if var.good_ending_completed:
+        star1 = pygame.image.load("img/star.png").convert_alpha()
+    else:
+        star1 = pygame.image.load("img/no_star.png").convert_alpha()
+    star1 = pygame.transform.scale(
+        star1, (80, 80))
+    
+    if var.bad_ending_completed:
+        star2 = pygame.image.load("img/star.png").convert_alpha()
+    else:
+        star2 = pygame.image.load("img/no_star.png").convert_alpha()
+    star2 = pygame.transform.scale(
+        star2, (80, 80))
+    
+    if var.very_bad_ending_completed:
+        star3 = pygame.image.load("img/star.png").convert_alpha()
+    else:
+        star3 = pygame.image.load("img/no_star.png").convert_alpha()
+    star3 = pygame.transform.scale(
+        star3, (80, 80))
+    
+    screen.blit(star1, (10, var.screen_height - star1.get_height() - 10))
+    screen.blit(star2, (10 + star1.get_width() + 10, var.screen_height - star2.get_height() - 10))
+    screen.blit(star3, (10 + star1.get_width() + 10 + star2.get_width() + 10, var.screen_height - star3.get_height() - 10))
+    
 def main_screen(screen, player, enemies, bullets):
     buttons, button_rects, button_icons = create_buttons()
     background = pygame.image.load("img/bg_space.png").convert_alpha()
@@ -140,6 +176,7 @@ def main_screen(screen, player, enemies, bullets):
     render_best_round(screen)
     render_main_title(screen)
     render_main_buttons(screen, buttons, button_rects, button_icons)
+    render_stars(screen)
     handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, screen)
 
 

@@ -54,6 +54,11 @@ reload_time_max_limit = 1
 gun_damage = 30
 gun_damage_max_limit = 100
 
+dash_cooldown_max = 1
+dashing = False
+dash_cooldown_time = 5 * 1.8
+dash_speed = 400
+
 invincibility_time_max = 1
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
@@ -92,5 +97,5 @@ kakku_sinko_ammo = 0
 bought_weapons = ["raka_MK1", "kakku_MK1"]
 
 bad_ending_completed = True
-very_bad_ending_completed = False
-good_ending_completed = False
+very_bad_ending_completed = True
+good_ending_completed = True

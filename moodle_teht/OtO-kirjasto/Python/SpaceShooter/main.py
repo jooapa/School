@@ -10,6 +10,7 @@ import ui_screen
 
 # Initialize pygame
 pygame.init()
+pygame.display.set_icon(pygame.image.load("img/icon.png"))
 # SETUP PYGAME VARIABLES
 clock = pygame.time.Clock()
 dt = clock.tick(var.FPS) / 1000
@@ -48,6 +49,11 @@ bg_rect.center = (var.screen_width, var.screen_height)
 # Crosshair
 crosshair_image = pygame.image.load("img/crosshair.png").convert_alpha()
 crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
+
+# DASH VARS
+dash_direction = pygame.math.Vector2(0, 0)
+dash_direction.x = 0
+dash_direction.y = 0
 
 # ENEMY
 def spawn_enemy():
@@ -166,7 +172,7 @@ var.ammo = var.ammo_max
 running = True
 while running:
     # start bad ending
-    if var.round >= 2:
+    if var.round >= 20:
         var.bad_ending_completed = True
         var.round -= 1
         var.best_round = max(var.round, var.best_round)
@@ -300,6 +306,32 @@ while running:
         var.camera_offset = pygame.math.Vector2(
             var.screen_width // var.play_area - player.x, var.screen_height // var.play_area - player.y)
         
+        # DASH
+        if keys[pygame.K_LSHIFT] and not var.dashing and var.dash_cooldown_max >= var.dash_cooldown_time:
+            var.dash_cooldown_max = -1
+            var.dashing = True
+            dash_direction.x = var.mouse_x - player.x
+            dash_direction.y = var.mouse_y - player.y
+            dash_direction.normalize_ip()
+            dash_direction.x *= var.dash_speed
+            dash_direction.y *= var.dash_speed
+            
+        if var.dashing:
+            player.x += dash_direction.x * dt
+            player.y += dash_direction.y * dt
+            var.camera_offset = pygame.math.Vector2(
+                var.screen_width // var.play_area - player.x, var.screen_height // var.play_area - player.y)
+            if player.x> var.screen_width or player.x < 0 or player.y > var.screen_height or player.y < 0:
+                var.dashing = False
+                var.dash_cooldown_max = -1
+            player.get_image().set_alpha(100)
+        else:
+            player.get_image().set_alpha(255)
+                
+        if var.dashing and var.dash_cooldown_max >= 0:
+            var.dashing = False
+        
+        print(var.dashing, var.dash_cooldown_max)
         # DRAW SPRITES
         screen.blit(bg_image, (bg_rect.x + var.camera_offset.x, bg_rect.y + var.camera_offset.y))
 
@@ -373,9 +405,10 @@ while running:
             player_y = var.player_pos.y
             player_x = var.player_pos.x
             if math.sqrt((enemy_x - player_x)**2 + (enemy_y - player_y)**2) < 90 and var.invincibility_time <= 0:
-                enemies.remove(_enemy_)
-                player.hitted(_enemy_.get_damage())
-                ui_screen.hitted()
+                if not var.dashing:  
+                    enemies.remove(_enemy_)
+                    player.hitted(_enemy_.get_damage())
+                    ui_screen.hitted()
         
         if player.is_dead():
             var.game_running = False
@@ -484,6 +517,10 @@ while running:
         # INVICIBILITY
         if var.invincibility_time > 0:
             var.invincibility_time -= dt
+            
+        # DASH
+        if var.dash_cooldown_max <= var.dash_cooldown_time:
+            var.dash_cooldown_max += dt * 1.8
         
         # FIRERATE
         var.firerate -= dt
@@ -553,6 +590,7 @@ while running:
                 if yes_button.collidepoint(pygame.mouse.get_pos()):
                     var.paused = False
                     outro.outro_type = "very bad"
+                    var.very_bad_ending_completed = True
                     shop.have_tsar_bomba = False
                     change_bg_music("very bad")
                     var.game_running = False
@@ -562,6 +600,7 @@ while running:
                 elif no_button.collidepoint(pygame.mouse.get_pos()):
                     var.paused = False
                     outro.outro_type = "good"
+                    var.good_ending_completed = True
                     shop.have_tsar_bomba = False
                     change_bg_music("good")
                     var.game_running = False
@@ -604,8 +643,7 @@ while running:
                 else:
                     change_bg_music("menu")
                     menu_screen.main_screen(screen, player, enemies, bullets)
-
-        
+            
     # Update the display
     dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition
     if not var.paused:
