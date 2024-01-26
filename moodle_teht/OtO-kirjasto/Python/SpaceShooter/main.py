@@ -80,7 +80,7 @@ def draw_enemy_health_bar(screen, current_health, max_health, enemy):
                      var.camera_offset.x, enemy.y + var.camera_offset.y + offset_y, width, height))
     pygame.draw.rect(screen, (0, 255, 0), (enemy.x - offset_x + var.camera_offset.x,
                      enemy.y + offset_y + var.camera_offset.y, bar_width, height))
-        
+
 # audio
 bg_audio = MusicManager()
 
@@ -331,7 +331,7 @@ while running:
         if var.dashing and var.dash_cooldown_max >= 0:
             var.dashing = False
         
-        print(var.dashing, var.dash_cooldown_max)
+        print(var.dashing, var.dash_cooldown_max, var.dash_indicator_fake_cooldown)
         # DRAW SPRITES
         screen.blit(bg_image, (bg_rect.x + var.camera_offset.x, bg_rect.y + var.camera_offset.y))
 
@@ -439,6 +439,16 @@ while running:
         # RENDER UI
         ui_screen.render(screen, ui_screen.move_mouth(), player)
         
+        # DASH INCICATOR FAKE COOLDOWN using arc
+        dash_cooldown_color = (255, 255, 255)
+        dash_cooldown_radius = 30
+        dash_cooldown_thickness = 5
+        dash_cooldown_start_angle = 0
+        dash_cooldown_end_angle = -2*math.pi * 4 * (var.dash_indicator_fake_cooldown / var.dash_cooldown_time)
+        dash_cooldown_center = (var.screen_width - 50, var.screen_height - 50)
+        pygame.draw.arc(screen, dash_cooldown_color, (dash_cooldown_center[0] - dash_cooldown_radius, dash_cooldown_center[1] - dash_cooldown_radius, dash_cooldown_radius * 2, dash_cooldown_radius * 2), dash_cooldown_start_angle, dash_cooldown_end_angle, dash_cooldown_thickness)
+        
+         
         # speaker speak
         if ui_screen.speaker_channel != None:
             if ui_screen.random_speker_time != 0:
@@ -464,7 +474,7 @@ while running:
         screen.blit(round_text, (round_text_x, round_text_y))
 
         ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
-        
+                   
         if var.paused and not shop.have_tsar_bomba:
             pygame.mouse.set_visible(True)
             info_font = pygame.font.SysFont("Arial", 50)
@@ -521,6 +531,18 @@ while running:
         # DASH
         if var.dash_cooldown_max <= var.dash_cooldown_time:
             var.dash_cooldown_max += dt * 1.8
+        
+        # DASH INDICATOR FAKE COOLDOWN
+        if var.dashing:
+            if var.dash_indicator_fake_cooldown < 1:
+                var.dash_indicator_fake_cooldown += dt * 1.8
+            else:
+                var.dash_indicator_fake_cooldown = 1
+        else:
+            if var.dash_indicator_fake_cooldown > 0:
+                var.dash_indicator_fake_cooldown -= dt * 1.8
+            else:
+                var.dash_indicator_fake_cooldown = 0
         
         # FIRERATE
         var.firerate -= dt

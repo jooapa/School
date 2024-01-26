@@ -57,6 +57,7 @@ gun_damage_max_limit = 100
 dash_cooldown_max = 1
 dashing = False
 dash_cooldown_time = 5 * 1.8
+dash_indicator_fake_cooldown = 0
 dash_speed = 400
 
 invincibility_time_max = 1
