@@ -49,6 +49,8 @@ bg_rect.center = (var.screen_width, var.screen_height)
 # Crosshair
 crosshair_image = pygame.image.load("img/crosshair.png").convert_alpha()
 crosshair_image = pygame.transform.scale(crosshair_image, (50, 50))
+cursor_image = pygame.image.load("img/cursor.png").convert_alpha()
+cursor_image = pygame.transform.scale(cursor_image, (50, 50))
 
 # DASH VARS
 dash_direction = pygame.math.Vector2(0, 0)
@@ -172,7 +174,7 @@ var.ammo = var.ammo_max
 running = True
 while running:
     # start bad ending
-    if var.round >= 20:
+    if var.round >= 10:
         var.bad_ending_completed = True
         var.round -= 1
         var.best_round = max(var.round, var.best_round)
@@ -476,7 +478,8 @@ while running:
         ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
                    
         if var.paused and not shop.have_tsar_bomba:
-            pygame.mouse.set_visible(True)
+            pygame.mouse.set_visible(False)
+            screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
             info_font = pygame.font.SysFont("Arial", 50)
             info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
             
@@ -499,7 +502,7 @@ while running:
             if not shop.have_tsar_bomba:
                 screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
             else:
-                pygame.mouse.set_visible(True)
+                screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
             # Fire rate bar indicator
             if var.firerate >= 0:
                 pygame.draw.arc(screen, (0, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / -2, math.pi * var.firerate / var.firerate_max + math.pi / -2, 5)
@@ -649,13 +652,13 @@ while running:
                                         " Best round" + str(var.best_round)
                                     )
     elif var.game_running == False and intro.intro_done:
+        
         if not outro.outro_type == "":
             outro.start(screen, dt)
         else:
             if var.start_game_animation:
                 menu_screen.background_zoom_animation(screen)
             else:
-                pygame.mouse.set_visible(True)
                 enemies_to_spawn = 0
                 # DRAW MENU
                 screen.fill((34, 0, 0))
@@ -666,6 +669,9 @@ while running:
                     change_bg_music("menu")
                     menu_screen.main_screen(screen, player, enemies, bullets)
             
+        pygame.mouse.set_visible(False)
+        screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
+        
     # Update the display
     dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition
     if not var.paused:
