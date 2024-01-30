@@ -479,7 +479,6 @@ while running:
                    
         if var.paused and not shop.have_tsar_bomba:
             pygame.mouse.set_visible(False)
-            screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
             info_font = pygame.font.SysFont("Arial", 50)
             info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
             
@@ -492,6 +491,7 @@ while running:
             exit_font = pygame.font.SysFont("Arial", 50)
             exit_text = exit_font.render("EXIT", True, (0, 0, 0))
             screen.blit(exit_text, (exit_button.x + exit_button.width / 2 - exit_text.get_width() / 2, exit_button.y + exit_button.height / 2 - exit_text.get_height() / 2))
+            screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
             
             # handle exit button
             if pygame.mouse.get_pressed()[0]:
@@ -652,7 +652,7 @@ while running:
                                         " Best round" + str(var.best_round)
                                     )
     elif var.game_running == False and intro.intro_done:
-        
+        pygame.display.set_caption("PIG Defenders - FPS " + str(round(clock.get_fps())))
         if not outro.outro_type == "":
             outro.start(screen, dt)
         else:
