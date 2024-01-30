@@ -8,6 +8,11 @@ menu_showing = "main" # main, power_ups, raka_ase, kakku_sinko
 
 have_tsar_bomba = False
 
+shop_keeper_image = pygame.image.load("img/shop1.png")
+shop_keeper_image = pygame.transform.scale(shop_keeper_image, (var.screen_width, var.screen_height))
+render_shop_background_image = pygame.image.load("img/shop_bg.png")
+render_shop_background_image = pygame.transform.scale(render_shop_background_image, (var.screen_width, var.screen_height))
+
 def return_create_shop_buttons():
     font_size = 24
     if menu_showing == "main":
@@ -161,22 +166,18 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
 # Function to render background and handle shopkeeper changes
 def render_shop_keeper(screen):
     global ticks_in_full_second
-    global keeper
+    global keeper, shop_keeper_image
 
     if time.time() > ticks_in_full_second:
         ticks_in_full_second = time.time() + 1.263
         keeper = random_shopkeeper(keeper)
+        shop_keeper_image = pygame.image.load(keeper)
 
-    background = pygame.image.load(keeper)
-    background = pygame.transform.scale(
-        background, (var.screen_width, var.screen_height))
-    screen.blit(background, (0, 0))
+    screen.blit(shop_keeper_image, (0, 0))
 
 def render_shop_background(screen):
-    background = pygame.image.load("img/shop_bg.png")
-    background = pygame.transform.scale(
-        background, (var.screen_width, var.screen_height))
-    screen.blit(background, (0, 0))
+    global render_shop_background_image
+    screen.blit(render_shop_background_image, (0, 0))
 
 def random_shopkeeper(keeper):
     shopkeeper = random.randint(1, 4)
