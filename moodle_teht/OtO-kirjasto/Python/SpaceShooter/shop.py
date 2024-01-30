@@ -1,4 +1,4 @@
-import pygame, var, random, time
+import pygame, var, random, time, save_file
 from functions import correct_scale
 from ui_screen import render_coin_animation
 
@@ -299,7 +299,7 @@ def get_upgrade_details(upgrade):
             cost = var.kakku_sinko[new_upgrade]["Cost"]
         
         return f"You don't own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}\nCost: {cost}"
-    
+    background1
     
 def buy_upgrade(upgrade):
     if upgrade.startswith("raka_"):
@@ -323,7 +323,8 @@ def buy_upgrade(upgrade):
         if var.coins >= cost:
             var.coins -= cost
             var.bought_weapons.append(upgrade)
-            set_upgrade_to_current(upgrade)                
+            set_upgrade_to_current(upgrade)    
+            save_file.save_variables()         
             return "Upgrade bought"
         else:
             return "Not enough coins"

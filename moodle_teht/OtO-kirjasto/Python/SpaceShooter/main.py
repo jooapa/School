@@ -1,5 +1,5 @@
 import pygame
-import math, functions, var, roundsys, menu_screen, random, intro, outro, shop
+import math, functions, var, roundsys, menu_screen, random, intro, outro, shop, save_file
 from enemy import Enemy
 from player import Player
 from audio_manager import AudioManager, MusicManager
@@ -26,6 +26,9 @@ bullets    = []
 explosions = []
 
 ## ENDING VARIABLES
+
+## SAVING
+first_save = False
 
 # PLAYER
 player = Player(var.screen_width / 2,
@@ -172,7 +175,13 @@ var.ammo = var.ammo_max
 
 # Game loopww
 running = True
+pygame.mouse.set_visible(False)
+
+# FIRST LOAD
+save_file.load_variables()
 while running:
+    
+        
     # start bad ending
     if var.round >= 10:
         var.bad_ending_completed = True
@@ -416,6 +425,7 @@ while running:
             var.game_running = False
             var.round -= 1
             var.best_round = max(var.round, var.best_round)
+            save_file.save_variables()
             pass
         
         # FOREGROUND
@@ -476,9 +486,58 @@ while running:
         screen.blit(round_text, (round_text_x, round_text_y))
 
         ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
-                   
+        
+                # ENDING----------------------------------------
+        if shop.have_tsar_bomba:
+            
+            var.paused = True
+            
+            # YEs or No button
+            yes_button = pygame.Rect(0, 0, 200, 100)
+            yes_button.center = (var.screen_width / 2 - 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), yes_button)
+            yes_font = pygame.font.SysFont("Arial", 50)
+            yes_text = yes_font.render("YES", True, (0, 0, 0))
+            
+            no_button = pygame.Rect(0, 0, 200, 100)
+            no_button.center = (var.screen_width / 2 + 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), no_button)
+            no_font = pygame.font.SysFont("Arial", 50)
+            no_text = no_font.render("NO", True, (0, 0, 0))
+            
+            # draw text
+            text_font = pygame.font.SysFont("Arial", 50)
+            text = text_font.render("Launch Tsar?", True, (255, 255, 255))
+            
+            screen.blit(text, (var.screen_width / 2 - text.get_width() / 2, var.screen_height / 2 - text.get_height() / 2 - 100))
+            screen.blit(yes_text, (yes_button.x + yes_button.width / 2 - yes_text.get_width() / 2, yes_button.y + yes_button.height / 2 - yes_text.get_height() / 2))
+            screen.blit(no_text, (no_button.x + no_button.width / 2 - no_text.get_width() / 2, no_button.y + no_button.height / 2 - no_text.get_height() / 2))
+            
+            # handle buttons
+            if pygame.mouse.get_pressed()[0]:
+                if yes_button.collidepoint(pygame.mouse.get_pos()):
+                    var.paused = False
+                    outro.outro_type = "very bad"
+                    var.very_bad_ending_completed = True
+                    shop.have_tsar_bomba = False
+                    change_bg_music("very bad")
+                    var.game_running = False
+                    outro.start(screen, dt)
+                    screen.fill((0, 0, 0))
+
+                elif no_button.collidepoint(pygame.mouse.get_pos()):
+                    var.paused = False
+                    outro.outro_type = "good"
+                    var.good_ending_completed = True
+                    shop.have_tsar_bomba = False
+                    change_bg_music("good")
+                    var.game_running = False
+                    outro.start(screen, dt)
+                    screen.fill((0, 0, 0))
+                    
+        # ENDING----------------------------------------
+          
         if var.paused and not shop.have_tsar_bomba:
-            pygame.mouse.set_visible(False)
             info_font = pygame.font.SysFont("Arial", 50)
             info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
             
@@ -491,18 +550,16 @@ while running:
             exit_font = pygame.font.SysFont("Arial", 50)
             exit_text = exit_font.render("EXIT", True, (0, 0, 0))
             screen.blit(exit_text, (exit_button.x + exit_button.width / 2 - exit_text.get_width() / 2, exit_button.y + exit_button.height / 2 - exit_text.get_height() / 2))
-            screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
-            
+            screen.blit(cursor_image, (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))            
             # handle exit button
             if pygame.mouse.get_pressed()[0]:
                 if exit_button.collidepoint(pygame.mouse.get_pos()):
                     player.set_health(0)
         else:
-            pygame.mouse.set_visible(False)
             if not shop.have_tsar_bomba:
                 screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
             else:
-                screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
+                screen.blit(cursor_image, (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
             # Fire rate bar indicator
             if var.firerate >= 0:
                 pygame.draw.arc(screen, (0, 255, 0), (var.mouse_x - 20, var.mouse_y - 20, 40, 40), math.pi / -2, math.pi * var.firerate / var.firerate_max + math.pi / -2, 5)
@@ -584,58 +641,6 @@ while running:
                     enemies_to_spawn += 1
                 print("Spawned enemy, ", enemies_to_spawn, " enemies left to spawn")
                 
-        # ENDING----------------------------------------
-        if shop.have_tsar_bomba:
-            
-            var.paused = True
-            
-            # YEs or No button
-            yes_button = pygame.Rect(0, 0, 200, 100)
-            yes_button.center = (var.screen_width / 2 - 100, var.screen_height / 2)
-            pygame.draw.rect(screen, (255, 255, 255), yes_button)
-            yes_font = pygame.font.SysFont("Arial", 50)
-            yes_text = yes_font.render("YES", True, (0, 0, 0))
-            
-            no_button = pygame.Rect(0, 0, 200, 100)
-            no_button.center = (var.screen_width / 2 + 100, var.screen_height / 2)
-            pygame.draw.rect(screen, (255, 255, 255), no_button)
-            no_font = pygame.font.SysFont("Arial", 50)
-            no_text = no_font.render("NO", True, (0, 0, 0))
-            
-            # draw text
-            text_font = pygame.font.SysFont("Arial", 50)
-            text = text_font.render("Launch Tsar?", True, (255, 255, 255))
-            
-            screen.blit(text, (var.screen_width / 2 - text.get_width() / 2, var.screen_height / 2 - text.get_height() / 2 - 100))
-            screen.blit(yes_text, (yes_button.x + yes_button.width / 2 - yes_text.get_width() / 2, yes_button.y + yes_button.height / 2 - yes_text.get_height() / 2))
-            screen.blit(no_text, (no_button.x + no_button.width / 2 - no_text.get_width() / 2, no_button.y + no_button.height / 2 - no_text.get_height() / 2))
-            
-            # handle buttons
-            if pygame.mouse.get_pressed()[0]:
-                if yes_button.collidepoint(pygame.mouse.get_pos()):
-                    var.paused = False
-                    outro.outro_type = "very bad"
-                    var.very_bad_ending_completed = True
-                    shop.have_tsar_bomba = False
-                    change_bg_music("very bad")
-                    var.game_running = False
-                    outro.start(screen, dt)
-                    screen.fill((0, 0, 0))
-
-                elif no_button.collidepoint(pygame.mouse.get_pos()):
-                    var.paused = False
-                    outro.outro_type = "good"
-                    var.good_ending_completed = True
-                    shop.have_tsar_bomba = False
-                    change_bg_music("good")
-                    var.game_running = False
-                    outro.start(screen, dt)
-                    screen.fill((0, 0, 0))
-                    
-        # ENDING----------------------------------------
-        
-            
-                
         roundsys.check_round(enemies)
             
         pygame.display.set_caption("PIG Defenders - Ticks: " + 
@@ -668,9 +673,9 @@ while running:
                 else:
                     change_bg_music("menu")
                     menu_screen.main_screen(screen, player, enemies, bullets)
-            
-        pygame.mouse.set_visible(False)
-        screen.blit(cursor_image, (pygame.mouse.get_pos()[0] - cursor_image.get_width(), pygame.mouse.get_pos()[1] - cursor_image.get_height()))
+                    
+        if outro.outro_type == "":
+            screen.blit(cursor_image, (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
         
     # Update the display
     dt = (clock.tick(var.FPS) / 1000) * var.dt_kerroin_miska_edition

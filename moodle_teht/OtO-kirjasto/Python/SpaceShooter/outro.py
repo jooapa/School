@@ -6,6 +6,12 @@ outro_type = "" # bad, very bad, good
 text_slide = 0
 exit_slide = 0
 
+bad_ending_background = pygame.image.load("img/pig defenders bad gooding.png")
+very_bad_ending_background = pygame.image.load("img/pig defenders very bad gooding.png")
+good_ending_background1 = pygame.image.load("img/good gooding2.png")
+good_ending_background2 = pygame.image.load("img/good gooding1.png")
+good_ending_background3 = pygame.image.load("img/good gooding3.png")
+
 good_engind_img1_slide = 0
 good_engind_img2_slide = 0
 good_engind_img3_slide = 0
@@ -14,9 +20,9 @@ def good_endings(screen, dt):
     global good_engind_img1_slide, good_engind_img2_slide, good_engind_img3_slide, outro_done, title_slide, outro_type, text_slide, exit_slide
     
     font = pygame.font.SysFont("Arial", 40)
-    background1 = pygame.image.load("img/good gooding2.png")
-    background2 = pygame.image.load("img/good gooding1.png")
-    background3 = pygame.image.load("img/good gooding3.png")
+    background1 = good_ending_background1
+    background2 = good_ending_background2
+    background3 = good_ending_background3
     
     background1 = pygame.transform.scale(
     background1, (var.screen_width, var.screen_height))
@@ -105,12 +111,12 @@ def start(screen, dt):
     
     font = pygame.font.SysFont("Arial", 40)
     if outro_type == "bad":
-        background = pygame.image.load("img/pig defenders bad gooding.png")
+        background = bad_ending_background
         background = pygame.transform.scale(
         background, (var.screen_width, var.screen_height))
         text = font.render("Bad endiing", True, (255, 255, 255))
     elif outro_type == "very bad":
-        background = pygame.image.load("img/pig defenders very bad gooding.png")
+        background = very_bad_ending_background
         background = pygame.transform.scale(
         background, (var.screen_width, var.screen_height))
         text = font.render("Very bad endiing", True, (255, 255, 255))
@@ -141,7 +147,7 @@ def start(screen, dt):
         screen.blit(text, text_rect)
         
     screen.blit(background, (0, 0))
-    print(title_slide, text_slide)
+
     if title_slide == 0.3 and text_slide == 0.3:
         
         # fade in exit text by pressing sapce
