@@ -18,14 +18,14 @@ def save_variables():
         var.best_round,
         var.bg_volume
     ]
-    with open("save_file.dat", "wb") as file:
+    with open("pig", "wb") as file:
         pickle.dump(variables_to_save, file)
     
 # Load variables from a file
 def load_variables():
     print("Loading variables...")
     try:
-        with open("save_file.dat", "rb") as file:
+        with open("pig", "rb") as file:
             variables = pickle.load(file)
         var.good_ending_completed = variables[0]
         var.very_bad_ending_completed = variables[1]
