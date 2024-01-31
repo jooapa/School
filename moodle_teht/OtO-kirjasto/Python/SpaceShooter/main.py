@@ -60,10 +60,16 @@ dash_direction = pygame.math.Vector2(0, 0)
 dash_direction.x = 0
 dash_direction.y = 0
 
+def random_enemy_image():
+    if random.randint(0, 1) == 0:
+        return "img/enemy.png"
+    else:
+        return "img/shooter.png"
+    
 # ENEMY
 def spawn_enemy():
     enemies.append(Enemy(*functions.spawn_enemy(), var.enemy_speed,
-                   "img/enemy.png", calculate_enemy_health(), 1, 10))
+                   random_enemy_image(), calculate_enemy_health(), 1, 10))
     
 enemies_to_spawn = 1
 def spawn_enemies(num):
@@ -183,7 +189,7 @@ while running:
     
         
     # start bad ending
-    if var.round >= 10:
+    if var.round >= 2:
         var.bad_ending_completed = True
         var.round -= 1
         var.best_round = max(var.round, var.best_round)

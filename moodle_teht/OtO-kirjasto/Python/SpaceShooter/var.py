@@ -32,6 +32,7 @@ FPS = 144
 play_area = 10
 game_running = False # False when player dies, showing the menu
 shop_open = False
+tutorial_open = False
 paused = False
 pause_toggle = False
 dt_kerroin_miska_edition = 1

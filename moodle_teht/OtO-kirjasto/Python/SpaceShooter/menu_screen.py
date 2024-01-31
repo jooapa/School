@@ -1,4 +1,4 @@
-import pygame, var, roundsys, math, time, functions
+import pygame, var, roundsys, math, time, functions, ui_screen
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
