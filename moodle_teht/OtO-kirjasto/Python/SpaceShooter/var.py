@@ -33,9 +33,12 @@ play_area = 10
 game_running = False # False when player dies, showing the menu
 shop_open = False
 tutorial_open = False
+history_open = False
 paused = False
 pause_toggle = False
 dt_kerroin_miska_edition = 1
+
+whole_history = ""
 
 buy_rounds = [3, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 buy_round = False
@@ -98,6 +101,7 @@ kakku_sinko_ammo = 0
 
 bought_weapons = ["raka_MK1", "kakku_MK1"]
 
+bad_ending_round = 20
 bad_ending_completed = False
 very_bad_ending_completed = False
 good_ending_completed = False

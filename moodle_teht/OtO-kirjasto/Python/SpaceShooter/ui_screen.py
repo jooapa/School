@@ -1,5 +1,5 @@
 from audio_manager import AudioManager
-import var, pygame, random, time
+import var, pygame, random, time, save_file
 zeroVar = 0
 speaker_channel = None
 speaker_audio = None
@@ -128,3 +128,47 @@ def render_coin_animation(screen, x, y, color):
     coin_text_x = x - 100
     coin_text_y = y
     screen.blit(coin_text, (coin_text_x, coin_text_y))
+
+scroll_position = 0  # initialize scroll position
+scroll_speed = 1  # adjust scroll speed as needed
+
+def history_screen(screen):
+    global scroll_position, scroll_speed
+        
+    history = var.whole_history
+    
+    screen.fill((0, 0, 0))
+    # button to top right corner
+    button_pos = pygame.math.Vector2(0, 0)
+    button_pos.x = var.screen_width - 100
+    button_pos.y = 0
+    button_size = pygame.math.Vector2(100, 100)
+    button_rect = pygame.Rect(0, 0, 0, 0)
+    button_rect.center = button_pos
+    button_rect.size = button_size
+    button_icon = pygame.image.load("img/ico/QUIT.png").convert_alpha()
+    button_icon = pygame.transform.scale(button_icon, (button_rect.size[0], button_rect.size[1]))
+    screen.blit(button_icon, button_rect)
+    
+    # if pressed
+    if button_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        var.history_open = False
+        
+    # calculate the number of visible lines
+    visible_lines = min(len(history), var.screen_height // 50)
+    
+    # calculate the starting index based on the scroll position
+    if pygame.key.get_pressed()[pygame.K_UP] and scroll_position > 0:
+        scroll_position -= scroll_speed
+    if pygame.key.get_pressed()[pygame.K_DOWN] and scroll_position < len(history) - visible_lines:
+        scroll_position += scroll_speed
+    start_index = max(0, min(len(history) - visible_lines, scroll_position))
+    
+    # loop through history lines and render visible lines
+    for i in range(visible_lines): 
+        line = history[start_index + i]
+        line_font = pygame.font.SysFont("Arial", 40)
+        line_text = line_font.render(line, True, (255, 255, 255))
+        line_text_x = 50
+        line_text_y = 50 * i
+        screen.blit(line_text, (line_text_x, line_text_y))

@@ -1,4 +1,4 @@
-import pygame, var, roundsys, math, time, functions, ui_screen
+import pygame, var, roundsys, math, time, functions, ui_screen, save_file
 from functions import correct_scale
 
 def start_new_level(player, enemies, bullets):
@@ -168,6 +168,14 @@ def render_stars(screen):
     screen.blit(star3, (10 + star1.get_width() + 10 + star2.get_width() + 10, var.screen_height - star3.get_height() - 10))
     
 def main_screen(screen, player, enemies, bullets):
+    
+    # if h is pressed
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_h]:
+        var.whole_history = save_file.load_history()
+        var.history_open = True
+        print("History opened")
+    
     buttons, button_rects, button_icons = create_buttons()
     background = pygame.image.load("img/bg_space.png").convert_alpha()
     background = pygame.transform.scale(

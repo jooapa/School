@@ -185,14 +185,24 @@ pygame.mouse.set_visible(False)
 
 # FIRST LOAD
 save_file.load_variables()
+
+coins_collected = 0
+enemies_killed = 0
+
 while running:
     
         
     # start bad ending
-    if var.round >= 2:
-        var.bad_ending_completed = True
+    if var.round == var.bad_ending_round:
+        save_file.history(var.round, coins_collected, enemies_killed)
+        var.game_running = False
         var.round -= 1
         var.best_round = max(var.round, var.best_round)
+        save_file.save_variables()
+        
+        enemies_killed = 0
+        coins_collected = 0
+        var.bad_ending_completed = True
         change_bg_music("bad")
         outro.outro_type = "bad"
         var.game_running = False
@@ -221,7 +231,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE and outro.outro_type == "":
+            if event.key == pygame.K_ESCAPE and outro.outro_type == "" and not var.history_open:
                 if not shop.have_tsar_bomba:
                     if not intro.intro_done:
                         intro.intro_done = True
@@ -367,6 +377,8 @@ while running:
                             if _enemy_.hitted(bullet.get_damage(), bullet):
                                 enemies.remove(_enemy_)
                                 var.coins += 5
+                                enemies_killed += 1
+                                coins_collected += 5
                             
                         elif bullet.get_gun_type() == "kakku_sinko":
                             bullet_x  = bullet.get_x() - _enemy_.rect.width / 2
@@ -382,6 +394,8 @@ while running:
                             if _enemy_.get_health() <= 0:
                                 enemies.remove(_enemy_)
                                 var.coins += 5
+                                enemies_killed += 1
+                                coins_collected += 5
                                 print(str(var.ticks) + str(_enemy_) + " Enemy killed by explosion")
                             else:
                                 _enemy_.set_health(_enemy_.get_health() + bullet_damage)
@@ -395,6 +409,8 @@ while running:
                                     if _enemy_2_.hitted(bullet.get_damage() * distance_multiplier(bullet_x , bullet_y, enemy_x2, enemy_y2), bullet):
                                         enemies.remove(_enemy_2_)
                                         var.coins += 5
+                                        enemies_killed += 1
+                                        coins_collected += 5
                                         print(str(var.ticks) + str(_enemy_2_) + " Enemy killed by explosion")
                                     else:
                                         print(
@@ -428,10 +444,13 @@ while running:
                     ui_screen.hitted()
         
         if player.is_dead():
+            save_file.history(var.round, coins_collected, enemies_killed)
             var.game_running = False
             var.round -= 1
             var.best_round = max(var.round, var.best_round)
             save_file.save_variables()
+            enemies_killed = 0
+            coins_collected = 0
             pass
         
         # FOREGROUND
@@ -676,6 +695,8 @@ while running:
                 if var.shop_open:
                     change_bg_music("shop")
                     shop_menu_btns(screen)
+                if var.history_open:
+                    ui_screen.history_screen(screen)
                 else:
                     change_bg_music("menu")
                     menu_screen.main_screen(screen, player, enemies, bullets)
