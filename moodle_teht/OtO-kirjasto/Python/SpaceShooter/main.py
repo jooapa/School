@@ -163,6 +163,14 @@ def change_bg_music(song, keep_position=False):
         else:
             bg_audio.play_music(bg_audio.load_music("sfx/very_bad_ending.mp3"))
         bg_audio.set_volume(bg_audio, var.bg_volume)
+    elif song == "history" and var.current_bg_song != "history":
+        var.current_bg_song = "history"
+        if keep_position:
+            bg_audio.play_music(bg_audio.load_music("sfx/history.mp3"))
+            pygame.mixer.music.set_pos(var.total_bg_music_position)
+        else:
+            bg_audio.play_music(bg_audio.load_music("sfx/history.mp3"))
+        bg_audio.set_volume(bg_audio, var.bg_volume)
 
 
 def speaker_speaker(speaker_audio, speaker_channel):
@@ -189,25 +197,14 @@ save_file.load_variables()
 coins_collected = 0
 enemies_killed = 0
 
+on_final_round = False
+
 while running:
     
         
     # start bad ending
     if var.round == var.bad_ending_round:
-        save_file.history(var.round, coins_collected, enemies_killed)
-        var.game_running = False
-        var.round -= 1
-        var.best_round = max(var.round, var.best_round)
-        save_file.save_variables()
-        
-        enemies_killed = 0
-        coins_collected = 0
-        var.bad_ending_completed = True
-        change_bg_music("bad")
-        outro.outro_type = "bad"
-        var.game_running = False
-
-        screen.fill((0, 0, 0))
+        on_final_round = True
         
     # if music ender
     if pygame.mixer.music.get_busy() == 0:
@@ -224,6 +221,15 @@ while running:
             var.total_bg_music_position = 0
         elif var.current_bg_song == "intro":
             bg_audio.play_music(bg_audio.load_music("sfx/intro.mp3"))
+        elif var.current_bg_song == "bad":
+            bg_audio.play_music(bg_audio.load_music("sfx/bad_ending.mp3"))
+        elif var.current_bg_song == "good":
+            bg_audio.play_music(bg_audio.load_music("sfx/good_ending.mp3"))
+        elif var.current_bg_song == "very bad":
+            bg_audio.play_music(bg_audio.load_music("sfx/very_bad_ending.mp3"))
+        elif var.current_bg_song == "history":
+            bg_audio.play_music(bg_audio.load_music("sfx/history.mp3"))
+    
         bg_audio.set_volume(bg_audio, var.bg_volume)
         
     # Handle events
@@ -231,7 +237,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE and outro.outro_type == "" and not var.history_open:
+            if event.key == pygame.K_ESCAPE and outro.outro_type == "" and not var.history_open and not on_final_round:
                 if not shop.have_tsar_bomba:
                     if not intro.intro_done:
                         intro.intro_done = True
@@ -304,7 +310,7 @@ while running:
         if keys[pygame.K_k]:
             ui_screen.speak()
 
-        if var.paused and not shop.have_tsar_bomba:
+        if var.paused and not shop.have_tsar_bomba and not on_final_round:
             var.dt_kerroin_miska_edition = 0
         else:
             var.dt_kerroin_miska_edition = 1
@@ -512,7 +518,7 @@ while running:
 
         ui_screen.render_coin_animation(screen, var.screen_width, 20, (255, 255, 255))
         
-                # ENDING----------------------------------------
+        # ENDING----------------------------------------
         if shop.have_tsar_bomba:
             
             var.paused = True
@@ -560,9 +566,57 @@ while running:
                     outro.start(screen, dt)
                     screen.fill((0, 0, 0))
                     
+        if on_final_round:
+            var.paused = True
+            
+            # YEs or No button
+            yes_button = pygame.Rect(0, 0, 200, 100)
+            yes_button.center = (var.screen_width / 2 - 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), yes_button)
+            yes_font = pygame.font.SysFont("Arial", 50)
+            yes_text = yes_font.render("YES", True, (0, 0, 0))
+            
+            no_button = pygame.Rect(0, 0, 200, 100)
+            no_button.center = (var.screen_width / 2 + 100, var.screen_height / 2)
+            pygame.draw.rect(screen, (255, 255, 255), no_button)
+            no_font = pygame.font.SysFont("Arial", 50)
+            no_text = no_font.render("NO", True, (0, 0, 0))
+            
+            win_text = "Congrats! You have reached round " + str(var.round) + "!\nDo you want to continue?\n"
+            # draw text
+            text_font = pygame.font.SysFont("Arial", 50)
+            text = text_font.render(win_text, True, (255, 255, 255))
+            
+            screen.blit(text, (var.screen_width / 2 - text.get_width() / 2, var.screen_height / 2 - text.get_height() / 2 - 100))
+            screen.blit(yes_text, (yes_button.x + yes_button.width / 2 - yes_text.get_width() / 2, yes_button.y + yes_button.height / 2 - yes_text.get_height() / 2))
+            screen.blit(no_text, (no_button.x + no_button.width / 2 - no_text.get_width() / 2, no_button.y + no_button.height / 2 - no_text.get_height() / 2))
+            
+            # handle buttons
+            if pygame.mouse.get_pressed()[0]:
+                if yes_button.collidepoint(pygame.mouse.get_pos()):
+                    var.paused = False
+                    on_final_round = False
+                    var.round += 1
+
+                elif no_button.collidepoint(pygame.mouse.get_pos()):
+                    save_file.history(var.round, coins_collected, enemies_killed)
+                    var.game_running = False
+                    var.round -= 1
+                    var.best_round = max(var.round, var.best_round)
+                    save_file.save_variables()
+        
+                    enemies_killed = 0
+                    coins_collected = 0
+                    var.bad_ending_completed = True
+                    change_bg_music("bad")
+                    outro.outro_type = "bad"
+                    var.game_running = False
+
+                    screen.fill((0, 0, 0))
+                    
         # ENDING----------------------------------------
           
-        if var.paused and not shop.have_tsar_bomba:
+        if var.paused and not shop.have_tsar_bomba and not on_final_round:
             info_font = pygame.font.SysFont("Arial", 50)
             info_text = info_font.render("Press ESC to continue", True, (255, 255, 255))
             
@@ -581,7 +635,7 @@ while running:
                 if exit_button.collidepoint(pygame.mouse.get_pos()):
                     player.set_health(0)
         else:
-            if not shop.have_tsar_bomba:
+            if not shop.have_tsar_bomba and not on_final_round:
                 screen.blit(crosshair_image, (var.mouse_x - crosshair_image.get_width() / 2, var.mouse_y - crosshair_image.get_height() / 2))
             else:
                 screen.blit(cursor_image, (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]))
@@ -695,7 +749,8 @@ while running:
                 if var.shop_open:
                     change_bg_music("shop")
                     shop_menu_btns(screen)
-                if var.history_open:
+                elif var.history_open:
+                    change_bg_music("history")
                     ui_screen.history_screen(screen)
                 else:
                     change_bg_music("menu")

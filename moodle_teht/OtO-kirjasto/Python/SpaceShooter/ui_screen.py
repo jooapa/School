@@ -154,13 +154,20 @@ def history_screen(screen):
     if button_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
         var.history_open = False
         
+    header_font = pygame.font.SysFont("Arial", 60)
+    header_text = header_font.render("Game History", True, (255, 255, 255))
+    header_text_x = var.screen_width // 2 - header_text.get_width() // 2
+    header_text_y = 0
+    
+    screen.blit(header_text, (header_text_x, header_text_y))
+    
     # calculate the number of visible lines
     visible_lines = min(len(history), var.screen_height // 50)
     
     # calculate the starting index based on the scroll position
-    if pygame.key.get_pressed()[pygame.K_UP] and scroll_position > 0:
+    if pygame.key.get_pressed()[pygame.K_UP] and scroll_position > 0 or pygame.key.get_pressed()[pygame.K_w] and scroll_position > 0:
         scroll_position -= scroll_speed
-    if pygame.key.get_pressed()[pygame.K_DOWN] and scroll_position < len(history) - visible_lines:
+    if pygame.key.get_pressed()[pygame.K_DOWN] and scroll_position < len(history) - visible_lines or pygame.key.get_pressed()[pygame.K_s] and scroll_position < len(history) - visible_lines:
         scroll_position += scroll_speed
     start_index = max(0, min(len(history) - visible_lines, scroll_position))
     
