@@ -67,7 +67,7 @@ dash_speed = 400
 invincibility_time_max = 3
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
-coins = 1000
+coins = 100
 kakku_sinko_explosion_radius = 100
 
 # Dont change these
