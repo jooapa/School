@@ -42,12 +42,12 @@ def start_new_level(player, enemies, bullets):
 
 
 def create_buttons():
-    buttons = ["TUTORIAL", "START", "SHOP", "QUIT", "FULLSCREEN"]
+    buttons = ["TUTORIAL", "START", "SHOP", "QUIT", "FULLSCREEN", "HISTORY"]
     button_pos = []
     for i in range(len(buttons)):
         button_pos.append(pygame.math.Vector2(0, 0))
         button_pos[i].x = var.screen_width + \
-            400 * i - 300 * (len(buttons) - 1) / 2
+            400 * i - 300 * (len(buttons) - 2) / 2
         button_pos[i].y = var.screen_height / 2 + 120
         button_pos[i].x, button_pos[i].y = correct_scale(
             button_pos[i].x, button_pos[i].y)
@@ -57,6 +57,9 @@ def create_buttons():
         if buttons[i] == "FULLSCREEN":
             button_pos[i].y = 0
             button_pos[i].x = 0
+        if buttons[i] == "HISTORY":
+            button_pos[i].y = var.screen_height // 2 - 100
+            button_pos[i].x = 10
 
     button_size = pygame.math.Vector2(0, 0)
     button_size.x = 300
@@ -72,7 +75,7 @@ def create_buttons():
             button_rects[i].size = pygame.math.Vector2(100, 100)
             button_rects[i].center = button_pos[i]
         if buttons[i] == "FULLSCREEN":
-            button_rects[i].size = pygame.math.Vector2(100, 100)
+            button_rects[i].size = pygame.math.Vector2(90, 90)
             button_rects[i].center = button_pos[i]
             button_rects[i].x = button_pos[i].x
             button_rects[i].y = button_pos[i].y
@@ -98,6 +101,7 @@ def render_main_title(screen):
     title = pygame.image.load("img/title.png").convert_alpha()
     title = pygame.transform.scale(
         title, (1000, 150))
+    
     # sine wave animation
     t = time.time() * 2
     title_rect = title.get_rect()
@@ -129,6 +133,10 @@ def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, 
                         else:
                             screen = pygame.display.set_mode(
                                 (var.screen_width, var.screen_height), pygame.DOUBLEBUF | pygame.FULLSCREEN)
+                    elif buttons[i] == "HISTORY":
+                        var.whole_history = save_file.load_history()
+                        var.history_open = True
+                        print("History opened")
                     else:
                         print("Button not found")
 
