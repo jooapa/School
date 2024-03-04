@@ -64,7 +64,7 @@ dash_cooldown_time = 5 * 1.8
 dash_indicator_fake_cooldown = 0
 dash_speed = 400
 
-invincibility_time_max = 1
+invincibility_time_max = 3
 invincibility_time_max_limit = 3
 player_health_max_limit = 200
 coins = 1000

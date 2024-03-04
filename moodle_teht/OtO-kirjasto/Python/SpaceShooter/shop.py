@@ -23,9 +23,9 @@ def return_create_shop_buttons():
         buttons, button_rects, button_texts, buttons_decs = create_shop_buttons(buttons, button_size, 250, font_size, 200, buttons_text, buttons_desc)
         
     elif menu_showing == "power_ups":
-        buttons = ["AMMO", "Movement speed", "Invincibility time", "BACK2"]
-        buttons_text = ["AMMO", "Movement speed", "Invincibility time", "BACK"]
-        buttons_desc = ["Buy ammo", "Buy movement speed", "Buy invincibility time", "Back to main menu"]
+        buttons = ["Dash Speed", "Invincibility time", "BACK2"]
+        buttons_text = ["Dash Speed", "Invincibility time", "BACK"]
+        buttons_desc = ["Buy Dash Speed", "Buy invincibility time", "Back to main menu"]
         button_size = pygame.math.Vector2(200, 100)
         buttons, button_rects, button_texts, buttons_decs = create_shop_buttons(
             buttons, button_size, 250, font_size, 200, buttons_text, buttons_desc)
@@ -107,6 +107,10 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
                 show_info_box(screen, "kakku_MK4", mouse_pos)
             elif buttons[i] == "kakku_MK5":
                 show_info_box(screen, "kakku_MK5", mouse_pos)
+            elif buttons[i] == "Dash Speed":
+                show_info_box(screen, "Dash Speed", mouse_pos)
+            elif buttons[i] == "Invincibility time":
+                show_info_box(screen, "Invincibility time", mouse_pos)
             
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
@@ -161,6 +165,14 @@ def handle_shop_button_clicks(buttons, button_rects, screen):
                     elif buttons[i] == "kakku_MK5":
                         buy_upgrade("kakku_MK5")
                         return
+                    elif buttons[i] == "Dash Speed":
+                        buy_upgrade("Dash Speed")
+                        return
+                    elif buttons[i] == "Invincibility time":
+                        buy_upgrade("Invincibility time")
+                        return
+
+                    save_file.save_variables()
                     print(buttons[i])
 
 # Function to render background and handle shopkeeper changes
@@ -262,8 +274,10 @@ def get_upgrade_details(upgrade):
     elif upgrade.startswith("kakku_"):
         new_upgrade = upgrade[6:]
         gun_type = "kakku_sinko"
-    else:
-        return "Invalid upgrade"
+    elif upgrade == "Dash Speed":
+        return "Dash Speed:\n\nCost: 500 \nplayer's Dash Speed: " + str(var.dash_speed) + " / 1000"
+    elif upgrade == "Invincibility time":
+        return "Invincibility time\n\nCost: 200 \n player's invincibility time: " + str(var.invincibility_time_max) + " / 6 \nIncreases the duration of \ninvincibility after taking damage: " + str(var.invincibility_time_max) + " / 6"
     
     if upgrade in var.bought_weapons:
         if gun_type == "raka_ase":
@@ -308,6 +322,25 @@ def buy_upgrade(upgrade):
     elif upgrade.startswith("kakku_"):
         new_upgrade = upgrade[6:]
         gun_type = "kakku_sinko"
+    elif upgrade == "Dash Speed":
+        cost = 500
+        if var.dash_speed < 1000 and var.coins >= cost:
+            var.coins -= cost
+            var.dash_speed += 100
+            print("dash speed increased to", var.dash_speed)
+            return "Upgrade bought"
+        print("Not enough coins for Dash Speed")
+        return "Not enough coins"
+    elif upgrade == "Invincibility time":
+        cost = 200
+        print(var.invincibility_time_max < 6, var.coins >= cost)
+        if var.invincibility_time_max != 6 and var.coins >= cost:
+            var.coins -= cost
+            var.invincibility_time_max += 1
+            print("invincibility time increased to", var.invincibility_time_max)
+            return "Upgrade bought"
+        print("Not enough coins for Invincibility time")
+        return "Not enough coins"
     else:
         return "Invalid upgrade"
     

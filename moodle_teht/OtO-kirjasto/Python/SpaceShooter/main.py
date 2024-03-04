@@ -237,7 +237,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE and outro.outro_type == "" and not var.history_open and not on_final_round:
+            if event.key == pygame.K_ESCAPE and outro.outro_type == "" and not var.history_open and not on_final_round and not var.tutorial_open:
                 if not shop.have_tsar_bomba:
                     if not intro.intro_done:
                         intro.intro_done = True
@@ -752,6 +752,8 @@ while running:
                 elif var.history_open:
                     change_bg_music("history")
                     ui_screen.history_screen(screen)
+                elif var.tutorial_open:
+                    ui_screen.tutorial_screen(screen)
                 else:
                     change_bg_music("menu")
                     menu_screen.main_screen(screen, player, enemies, bullets)

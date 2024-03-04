@@ -17,7 +17,8 @@ def save_variables():
         var.coins,
         var.dash_speed,
         var.best_round,
-        var.bg_volume
+        var.bg_volume,
+        var.invincibility_time_max
     ]
     
     with open("pig", "wb") as file:
@@ -41,6 +42,7 @@ def load_variables():
         var.dash_speed = variables[8]
         var.best_round = variables[9]
         var.bg_volume = variables[10]
+        var.invincibility_time_max = variables[11]
                 
     except FileNotFoundError:
         print("No save file found")

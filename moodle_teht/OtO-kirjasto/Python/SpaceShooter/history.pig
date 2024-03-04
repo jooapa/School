@@ -58,3 +58,13 @@
 | Coins Collected: 155 |
 | Enemies Killed: 31 |
 
+| Date: 04.03.2024 11:25 |
+| Round: 3 |
+| Coins Collected: 0 |
+| Enemies Killed: 0 |
+
+| Date: 04.03.2024 11:49 |
+| Round: 2 |
+| Coins Collected: 0 |
+| Enemies Killed: 0 |
+

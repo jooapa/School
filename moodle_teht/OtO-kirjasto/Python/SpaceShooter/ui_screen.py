@@ -179,3 +179,47 @@ def history_screen(screen):
         line_text_x = 50
         line_text_y = 50 * i
         screen.blit(line_text, (line_text_x, line_text_y))
+        
+def tutorial_screen(screen):
+    screen.fill((0, 0, 0))
+    # button to top right corner
+    button_pos = pygame.math.Vector2(0, 0)
+    button_pos.x = var.screen_width - 100
+    button_pos.y = 0
+    button_size = pygame.math.Vector2(100, 100)
+    button_rect = pygame.Rect(0, 0, 0, 0)
+    button_rect.center = button_pos
+    button_rect.size = button_size
+    button_icon = pygame.image.load("img/ico/QUIT.png").convert_alpha()
+    button_icon = pygame.transform.scale(button_icon, (button_rect.size[0], button_rect.size[1]))
+    screen.blit(button_icon, button_rect)
+    
+    # if pressed
+    if button_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
+        var.tutorial_open = False
+        
+    header_font = pygame.font.SysFont("Arial", 60)
+    header_text = header_font.render("Tutorial", True, (255, 255, 255))
+    header_text_x = var.screen_width // 2 - header_text.get_width() // 2
+    header_text_y = 0
+    
+    screen.blit(header_text, (header_text_x, header_text_y))
+    
+    # render tutorial text
+    tutorial_text = [
+                    "The goal of the game is to survive as long as possible.",
+                    "You can move the player with the arrow keys or WASD.",
+                    "You can shoot with the left click.",
+                    "You can buy upgrades from the shop.",
+                    "You can pause the game with the escape key.",
+                    "Dash with the left shift.",
+                    
+                    "\non round 20 something special happens...\n \n \n"
+                    "Good luck!"
+                    ]
+    for i in range(len(tutorial_text)):
+        line_font = pygame.font.SysFont("Arial", 40)
+        line_text = line_font.render(tutorial_text[i], True, (255, 255, 255))
+        line_text_x = 50
+        line_text_y = 50 * (i + 1)
+        screen.blit(line_text, (line_text_x, line_text_y))

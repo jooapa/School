@@ -123,6 +123,7 @@ def handle_main_screen_buttons(buttons, button_rects, player, enemies, bullets, 
                         var.shop_open = True
                         print("Shop opened")
                     elif buttons[i] == "TUTORIAL":
+                        var.tutorial_open = True
                         print("Tutorial opened")
                     elif buttons[i] == "QUIT":
                         pygame.quit()
