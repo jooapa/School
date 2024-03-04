@@ -312,7 +312,6 @@ def get_upgrade_details(upgrade):
             cost = var.kakku_sinko[new_upgrade]["Cost"]
         
         return f"You don't own this Weapon. \nDamage: {damage}\nFire Rate: {fire_rate}\nReload Time: {reload_time}\nMagazine Size: {magazine_size}\nSpeed: {speed}\nCost: {cost}"
-    background1
     
 def buy_upgrade(upgrade):
     if upgrade.startswith("raka_"):
