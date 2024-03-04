@@ -275,10 +275,9 @@ def get_upgrade_details(upgrade):
         new_upgrade = upgrade[6:]
         gun_type = "kakku_sinko"
     elif upgrade == "Dash Speed":
-        return "Dash Speed:\n\nCost: 500 \nplayer's Dash Speed: " + str(var.dash_speed) + " / 1000"
+        return " Dash Speed:\n\nCost: 500 \n Dash Speed: " + str(var.dash_speed) + " / 1000"
     elif upgrade == "Invincibility time":
-        return "Invincibility time\n\nCost: 200 \n player's invincibility time: " + str(var.invincibility_time_max) + " / 6 \nIncreases the duration of \ninvincibility after taking damage: " + str(var.invincibility_time_max) + " / 6"
-    
+        return " Invincibility time\n\nCost: 200 \n invincibility time: " + str(var.invincibility_time_max) + "s / 6s \n Increases duration of invincibility \n after taking damage: " + str(var.invincibility_time_max) + "s / 6s"
     if upgrade in var.bought_weapons:
         if gun_type == "raka_ase":
             damage = var.raka_ase[new_upgrade]["Damage"]
