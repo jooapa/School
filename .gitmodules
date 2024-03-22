@@ -1,3 +1,6 @@
 [submodule "moodle_teht/OtO-kirjasto/Python/klinoff-lang"]
 	path = moodle_teht/OtO-kirjasto/Python/klinoff-lang
 	url = https://github.com/jooapa/klinoff-lang.git
+[submodule "moodle_teht/OtO-kirjasto/Liikenne_kone"]
+	path = moodle_teht/OtO-kirjasto/Liikenne_kone
+	url = https://github.com/jooapa/Liikenne_kone.git
