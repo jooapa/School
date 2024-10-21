@@ -7,6 +7,7 @@ from shop import shop_menu_btns
 from explosion import Explosion
 from roundsys import calculate_enemy_health
 import ui_screen
+import ka
 
 # Initialize pygame
 pygame.init()
@@ -438,7 +439,7 @@ while running:
                 
         # detect collision between player and enemy
         for _enemy_ in enemies:
-            # if enemy plus camera_offset is near player_pos, remove enemy
+            # if enemy p
             enemy_y = _enemy_.get_y()
             enemy_x = _enemy_.get_x()
             player_y = var.player_pos.y
