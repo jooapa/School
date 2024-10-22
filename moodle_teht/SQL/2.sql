@@ -37,15 +37,15 @@ SELECT * FROM `products` WHERE (Unit LIKE "%box%" OR Unit LIKE "%can%") AND Pric
 
 --8 | Select employees who have been born in 50s or 60s and whose lastname does not start with letters A, B, C or D. Order the result set by employees firstname in descending order.
 --------------------------------------------------
-
+SELECT * FROM `employees` WHERE (YEAR(BirthDate) BETWEEN 1950 AND 1960) AND LastName NOT LIKE 'A%' AND LastName NOT LIKE 'B%' AND LastName NOT LIKE 'C%' AND LastName NOT LIKE 'D%' ORDER BY FirstName DESC;
 --------------------------------------------------
 
 --9 | Select products with missing price. ProductID, ProductName, Unit and Price should be included in the result set. Use alias name Incomplete for the column.
 --------------------------------------------------
-
+SELECT ProductID, ProductName, Unit, Price AS Incomplete FROM `products` WHERE Price IS NULL;
 --------------------------------------------------
 
 --10 | Select products with ProductID in range 50-80. Then show only 10 rows starting from ProductID 60 (included in result set).
 --------------------------------------------------
-
+SELECT * FROM `products` WHERE ProductID BETWEEN 50 AND 80 LIMIT 10 OFFSET 10;
 --------------------------------------------------
