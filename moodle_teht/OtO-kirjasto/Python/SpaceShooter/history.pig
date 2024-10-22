@@ -68,3 +68,13 @@
 | Coins Collected: 0 |
 | Enemies Killed: 0 |
 
+| Date: 21.10.2024 10:30 |
+| Round: 2 |
+| Coins Collected: 10 |
+| Enemies Killed: 2 |
+
+| Date: 21.10.2024 10:35 |
+| Round: 1 |
+| Coins Collected: 0 |
+| Enemies Killed: 0 |
+

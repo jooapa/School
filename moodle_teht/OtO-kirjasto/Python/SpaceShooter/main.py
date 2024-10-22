@@ -7,7 +7,6 @@ from shop import shop_menu_btns
 from explosion import Explosion
 from roundsys import calculate_enemy_health
 import ui_screen
-import ka
 
 # Initialize pygame
 pygame.init()
