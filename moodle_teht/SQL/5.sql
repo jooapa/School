@@ -8,7 +8,13 @@
 --     - City
 
 -- --------------------------------------------------
-
+CREATE TABLE offices (
+    OfficeID INT PRIMARY KEY,
+    OfficeName VARCHAR(255),
+    Address VARCHAR(255),
+    PostalCode VARCHAR(20),
+    City VARCHAR(100)
+);
 -- --------------------------------------------------
 
 ##################################################
@@ -18,7 +24,17 @@
 -- Important: If you get an error (code 1452), run the following command for the current session before connection creation:
 --     - SET FOREIGN_KEY_CHECKS=0;
 -- --------------------------------------------------
+SET FOREIGN_KEY_CHECKS=0;
 
+ALTER TABLE employees
+ADD COLUMN OfficeID INT,
+ADD CONSTRAINT fk_office
+    FOREIGN KEY (OfficeID)
+    REFERENCES offices(OfficeID)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+SET FOREIGN_KEY_CHECKS=1;
 -- --------------------------------------------------
 
 ##################################################
@@ -27,13 +43,47 @@
 -- 	- Add a new column: manager (use data type int)
 -- 	- Create another connection between offices and employees tables so that each office will have one employee working as a manager.
 -- --------------------------------------------------
+ALTER TABLE employees
+DROP FOREIGN KEY fk_office;
 
+ALTER TABLE offices
+MODIFY COLUMN OfficeID INT AUTO_INCREMENT;
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_office
+    FOREIGN KEY (OfficeID)
+    REFERENCES offices(OfficeID)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+ALTER TABLE offices
+ADD COLUMN manager INT;
+
+ALTER TABLE offices
+ADD CONSTRAINT fk_manager
+    FOREIGN KEY (manager)
+    REFERENCES employees(EmployeeID)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL;
 -- --------------------------------------------------
 
 ##################################################
 -- 4 | Create input validation check using TRIGGER to offices table. OfficeName field value should not begin with a word office (for example, officenorth should not be accepted while northoffice will be accepted).
 -- --------------------------------------------------
+DELIMITER //
 
+CREATE TRIGGER check_office_name
+BEFORE INSERT ON offices
+FOR EACH ROW
+BEGIN
+    IF NEW.OfficeName LIKE 'office%' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Office name cannot start with word office';
+    END IF;
+END;
+//
+
+DELIMITER ;
 -- --------------------------------------------------
 
 ##################################################
@@ -44,7 +94,13 @@
 -- 	- City
 -- 	- SurfaceArea (number with one decimal in square meters)
 -- --------------------------------------------------
-
+CREATE TABLE warehouses (
+    WarehouseID INT PRIMARY KEY AUTO_INCREMENT,
+    Address VARCHAR(255),
+    PostalCode VARCHAR(20),
+    City VARCHAR(100),
+    SurfaceArea DECIMAL(10, 1)
+);
 -- --------------------------------------------------
 
 ##################################################
@@ -52,7 +108,17 @@
 --     - UPDATE CASCADE
 --     - DELETE NO ACTION
 -- --------------------------------------------------
+SET FOREIGN_KEY_CHECKS=0;
 
+ALTER TABLE suppliers
+ADD COLUMN WarehouseID INT,
+ADD CONSTRAINT fk_warehouse
+    FOREIGN KEY (WarehouseID)
+    REFERENCES warehouses(WarehouseID)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+SET FOREIGN_KEY_CHECKS=1;
 -- --------------------------------------------------
 
 ##################################################
@@ -60,7 +126,9 @@
 -- 	- LastUpdated (automatic datetime value when new data is inserted or existing data is updated)
 -- 	- AdditionalInfo (should store large amount of text data)
 -- --------------------------------------------------
-
+ALTER TABLE warehouses
+ADD COLUMN LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ADD COLUMN AdditionalInfo TEXT;
 -- --------------------------------------------------
 
 ##################################################
@@ -69,13 +137,35 @@
 -- 	- Shelf (shelf identifier, ie. A1, A2 etc.)
 -- 	- Quantity (number of product units that have been stored)
 -- --------------------------------------------------
-
+CREATE TABLE storages (
+    StorageID INT PRIMARY KEY AUTO_INCREMENT,
+    Shelf VARCHAR(10),
+    Quantity INT
+);
 -- --------------------------------------------------
 
 ##################################################
 -- 9 | Connect the storages table with products and warehouses tables. One row in storages table will tell how many units of what product is stored in which warehouse (and of course the specific location in that warehouse created earlier with shelf identifier). Use a primary key column StorageID for this table with integer data type and auto increment feature.
 -- --------------------------------------------------
+SET FOREIGN_KEY_CHECKS=0;
 
+ALTER TABLE products
+ADD COLUMN StorageID INT,
+ADD CONSTRAINT fk_storage
+    FOREIGN KEY (StorageID)
+    REFERENCES storages(StorageID)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+ALTER TABLE warehouses
+ADD COLUMN StorageID INT,
+ADD CONSTRAINT fk_storage
+    FOREIGN KEY (StorageID)
+    REFERENCES storages(StorageID)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+SET FOREIGN_KEY_CHECKS=1;
 -- --------------------------------------------------
 
 ##################################################
@@ -83,5 +173,22 @@
 -- 	- Quantity cannot be negative and cannot exceed the value of 5000000.
 -- 	- Shelf identifiers must be in format XY where X can only be a letter in range A-Z inclusive and Y a number in range 0-9 inclusive (for example, AX1 should not be accepted).
 -- --------------------------------------------------
+DELIMITER //
 
+CREATE TRIGGER check_storage
+BEFORE INSERT ON storages
+FOR EACH ROW
+BEGIN
+    IF NEW.Quantity < 0 OR NEW.Quantity > 5000000 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Quantity must be within the range of 0 to 5000000';
+
+    IF NEW.Shelf NOT REGEXP '^[A-Z][0-9]$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Shelf ID must follow the format XY';
+    END IF;
+END;
+//
+
+DELIMITER ;
 -- --------------------------------------------------
