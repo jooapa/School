@@ -1,11 +1,19 @@
 -- ====== Exercise 6 - SQL Basics 5 ======
 
+-- northwind bd exercises
 -- 1 | Create the following offices:
 -- 	- Saint Louis office (address: Palm st 16, postalcode: 63107, city: Saint Louis, manager: Robert King)
 -- 	- Springfield office (address: Ohio Ave 3, postalcode: 62702, city: Springfield, manager: Nancy Davolio)
 -- 	- Kansas City office (address: Beverly st 80, postalcode: 66204, city: Kansas City, manager: Adam West)
 -- --------------------------------------------------
-
+INSERT INTO offices (OfficeName, Address, PostalCode, City, Manager)
+VALUES 
+    ('Saint Louis office', 'Palm st 16', '63107', 'Saint Louis', 
+        (SELECT EmployeeID FROM employees WHERE FirstName = 'Robert' AND LastName = 'King')),
+    ('Springfield office', 'Ohio Ave 3', '62702', 'Springfield', 
+        (SELECT EmployeeID FROM employees WHERE FirstName = 'Nancy' AND LastName = 'Davolio')),
+    ('Kansas City office', 'Beverly st 80', '66204', 'Kansas City', 
+        (SELECT EmployeeID FROM employees WHERE FirstName = 'Adam' AND LastName = 'West'));
 -- --------------------------------------------------
 
 ##################################################
@@ -16,7 +24,18 @@
 -- 	- Quincy warehouse (address: 3100 Payson Rd, postalcode: 62305, city: Quincy, surfacearea: 280m2, supplier: Tropical Fruits)
 -- 	- Cameron warehouse (address: 650 E Grand Ave, postalcode: 64429, city: Cameron, surfacearea: 310m2, supplier: Bigfoot Breweries)
 -- --------------------------------------------------
-
+INSERT INTO warehouses (Address, PostalCode, City, SurfaceArea, SupplierID)
+VALUES 
+    ('Grant Ave 400', '64068', 'Liberty', 200.0, 
+        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'New Orleans Cajun Delights')),
+    ('1030 SE Forest Ridge Ct', '64014', 'Blue Springs', 350.0, 
+        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Tasty Roots')),
+    ('800 W Champain St', '65026', 'Eldon', 400.0, 
+        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'New Orleans Cajun Delights')),
+    ('3100 Payson Rd', '62305', 'Quincy', 280.0, 
+        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Tropical Fruits')),
+    ('650 E Grand Ave', '64429', 'Cameron', 310.0, 
+        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Bigfoot Breweries'));
 -- --------------------------------------------------
 
 ##################################################
