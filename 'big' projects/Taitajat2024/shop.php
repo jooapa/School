@@ -79,7 +79,7 @@
                 // get database credentials
                 $servername = "localhost";
                 $username = "taitaja_2633";
-                $password = "Vss449#uo";
+                $password = "Vss449#uo"; // Edit: Can't do anything with this
                 $data = "taitaja_2633";
 
                 // try to connect to database
