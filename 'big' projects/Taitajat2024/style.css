@@ -1,0 +1,359 @@
+@font-face {
+    font-family: Raleway;
+    src: url(font/raleway/Raleway-Regular.ttf);
+}
+
+@font-face {
+    font-family: RalewayBold;
+    src: url(font/raleway/Raleway-Bold.ttf);
+}
+
+@font-face {
+    font-family: RalewayLight;
+    src: url(font/raleway/Raleway-Light.ttf);
+}
+
+.root {
+    /* colors */
+    --background: #ffffff;
+    --dark-background: #5e5e5e;
+    --text : #002809    ;
+    --text-light : #656565;
+    --hover-color: #4d4d4d;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    background: #002809;
+}
+
+header #header-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    font-family: Raleway;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+        padding: 0 5vw 0 5vw;
+    }
+
+header #header-content #header-logo {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-items: left;
+    justify-content: left;
+}
+
+header #header-content #header-logo .logo {
+    height: 150px;
+    width: auto;
+}
+
+header #header-content #header-search #cart-div a img {
+    height: 50px;
+    width: auto;
+    margin: 0 0 0 20px;
+
+}
+
+header #header-content #header-search {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-items: right;
+    justify-content: right;
+    gap: 20px;
+}
+
+header #header-content #header-search #search-button a button {
+    height: 50px;
+    width: 200px;
+    background: #98CA4A;
+    border-radius: 5px;
+    font-family: Raleway;
+    font-size: 20px;
+    color: #ffffff;
+    text-align: center;
+}
+
+header #header-content #header-search #search-button:hover, header #header-content #header-search #search-button:active, header #header-content #header-search #search-button:focus {
+    background: #B9C56C;
+}
+
+/* For the deader button and logo */
+@media only screen and (max-width: 600px) {
+    header #header-content #header-search #search-button a button {
+        height: 30px;
+        width: 120px;
+        font-size: 15px;
+    }
+
+    header #header-content #header-search #cart-div a img {
+        height: 40px;
+    }
+
+    header #header-content #header-logo .logo {
+        height: 100px;
+    }
+}
+
+
+content {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    background: #ffffff;
+}
+
+content h1 {
+    font-family: Raleway;
+    font-size: 50px;
+    text-align: center;
+    padding: 0;
+}
+
+content h5 {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    color: #002809;
+}
+
+#hero-banner h5 {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    color: #C3AA79;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+/* mask for the main page image */
+content .banner-image .mask {
+    position: absolute;
+    mask: url(img/wave.svg) no-repeat center / contain;
+    -webkit-mask: url(img/wave.svg) no-repeat center / contain;
+    z-index: -1;
+    transform: translateY(-40%);
+    width: 100%;
+    height: auto;
+}
+
+content .banner-image .mask img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    transform: translateY(0%);
+}
+
+content #hero-button {
+    height: 50px;
+    width: 200px;
+    background: #656565;
+    border-radius: 5px;
+    font-family: Raleway;
+    font-size: 20px;
+    color: #ffffff;
+    text-align: center;
+}
+
+content #hero-button:hover, content #hero-button:active, content #hero-button:focus {
+    background: #4d4d4d;
+}
+
+content #toimi {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+
+}
+
+content #toimi h4{
+    font-family: Raleway;
+    font-size: 50px;
+    text-align: center;
+    padding: 0;
+    color: var(--text)
+}
+
+content #toimi .items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0 7vw 0 7vw;
+}
+
+content #toimi .toimi-item {
+    width: 300px;
+}
+
+content #toimi .toimi-item img {
+    width: 50px;
+    height: auto;
+}
+
+content #toimi .toimi-item h3 {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0;
+    color: var(--text);
+}
+
+content #toimi .toimi-item h5 {
+    font-family: Raleway;
+    font-size: 15px;
+    text-align: center;
+    padding: 0;
+}
+
+footer {
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 20px 0 20px 0;
+    background: #002809;
+    width: 100%;
+}
+
+footer h5 {
+    font-family: Raleway;
+    font-size: 13px;
+    text-align: center;
+    padding: 0;
+    margin: 2px;
+    color: #ffffff;
+}
+
+footer h3 {
+    font-family: Raleway;
+    font-size: 10px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    color: #a6a6a6;
+}
+
+/* SHOP */
+
+#shop {
+    font-family: Raleway;
+    font-size: 20px;
+    padding: 0;
+    background: #ffffff;
+}
+
+#shop #shop-content {
+    padding: 30px;
+    text-align: left;
+}
+
+#shop #shop-content #intro-text h5 {
+    font-family: Raleway;
+    font-size: 35px;
+    padding: 0;
+}
+
+#info-input input {
+    border: 1x solid #000000;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+#shop #shop-content #products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    font-family: Raleway;
+    font-size: 20px;
+    text-align: center;
+    padding: 0 7vw 0 7vw;
+}
+
+#shop #shop-content #products .product {
+    display: grid;
+    align-items: center;
+    grid-template-rows: 1fr 10px 1fr;
+    width: 300px;
+    height: 200px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#shop #shop-content #products .product .product-text {
+    font-family: RalewayBold;
+    font-size: 20px;
+    text-align: left;
+    text-wrap: wrap;
+    padding: 0;
+    color: #98CA4A
+}
+
+#shop #shop-content #products .product .product-type {
+    font-family: Raleway;
+    font-size: 15px;
+    text-align: left;
+    padding: 0 0 10px 0;
+    color: #B9C56C
+}
+
+#shop #shop-content #products .product .info {
+    font-family: Raleway;
+    font-size: 12px;
+    text-align: left;
+    padding: 0;
+    color: #C3AA79
+}
+
+.price {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    font-family: Raleway;
+    align-items: center;
+    font-size: 12px;
+    text-align: left;
+    padding: 0;
+    color: #002809
+}
+
+.add-to-cart {
+    padding: 5px 10px;
+    background-color: #98CA4A;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.product-price {
+    font-family: RalewayBold;
+    font-size: 20px;
+    text-align: left;
+    padding: 0;
+    color: var(--text);
+}
+
