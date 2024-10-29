@@ -24,18 +24,27 @@ VALUES
 -- 	- Quincy warehouse (address: 3100 Payson Rd, postalcode: 62305, city: Quincy, surfacearea: 280m2, supplier: Tropical Fruits)
 -- 	- Cameron warehouse (address: 650 E Grand Ave, postalcode: 64429, city: Cameron, surfacearea: 310m2, supplier: Bigfoot Breweries)
 -- --------------------------------------------------
-INSERT INTO warehouses (Address, PostalCode, City, SurfaceArea, SupplierID)
+ALTER TABLE suppliers
+ADD COLUMN WarehouseID INT;
+
+-- Step 2: Insert the warehouses
+INSERT INTO warehouses (Address, PostalCode, City, SurfaceArea)
 VALUES 
-    ('Grant Ave 400', '64068', 'Liberty', 200.0, 
-        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'New Orleans Cajun Delights')),
-    ('1030 SE Forest Ridge Ct', '64014', 'Blue Springs', 350.0, 
-        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Tasty Roots')),
-    ('800 W Champain St', '65026', 'Eldon', 400.0, 
-        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'New Orleans Cajun Delights')),
-    ('3100 Payson Rd', '62305', 'Quincy', 280.0, 
-        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Tropical Fruits')),
-    ('650 E Grand Ave', '64429', 'Cameron', 310.0, 
-        (SELECT SupplierID FROM suppliers WHERE SupplierName = 'Bigfoot Breweries'));
+    ('Grant Ave 400', '64068', 'Liberty', 200),
+    ('1030 SE Forest Ridge Ct', '64014', 'Blue Springs', 350),
+    ('800 W Champain St', '65026', 'Eldon', 400),
+    ('3100 Payson Rd', '62305', 'Quincy', 280),
+    ('650 E Grand Ave', '64429', 'Cameron', 310);
+
+-- Step 3: Update the WarehouseID column in the suppliers table
+UPDATE suppliers s
+JOIN warehouses w ON 
+    (w.Address = 'Grant Ave 400' AND s.SupplierName = 'New Orleans Cajun Delights') OR
+    (w.Address = '1030 SE Forest Ridge Ct' AND s.SupplierName = 'Tasty Roots') OR
+    (w.Address = '800 W Champain St' AND s.SupplierName = 'New Orleans Cajun Delights') OR
+    (w.Address = '3100 Payson Rd' AND s.SupplierName = 'Tropical Fruits') OR
+    (w.Address = '650 E Grand Ave' AND s.SupplierName = 'Bigfoot Breweries')
+SET s.WarehouseID = w.WarehouseID;
 -- --------------------------------------------------
 
 ##################################################
@@ -50,7 +59,20 @@ VALUES
 -- 		* product: Sun-Dried Tomatoes, quantity: 95000, shelf: A1
 -- 		* product: Almond Milk, quantity: 15000, shelf: Q7
 -- --------------------------------------------------
-
+INSERT INTO storages (ProductID, WarehouseID, Quantity, Shelf)
+VALUES 
+    ((SELECT ProductID FROM products WHERE ProductName = 'Chang'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = 'Grant Ave 400'), 16000, 'A7'),
+    ((SELECT ProductID FROM products WHERE ProductName = 'Tofu'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = 'Grant Ave 400'), 12000, 'T8'),
+    ((SELECT ProductID FROM products WHERE ProductName = 'Maxilaku'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = '1030 SE Forest Ridge Ct'), 50000, 'B5'),
+    ((SELECT ProductID FROM products WHERE ProductName = 'Ipoh Coffee'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = '1030 SE Forest Ridge Ct'), 35000, 'C9'),
+    ((SELECT ProductID FROM products WHERE ProductName = 'Sun-Dried Tomatoes'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = '800 W Champain St'), 95000, 'A1'),
+    ((SELECT ProductID FROM products WHERE ProductName = 'Almond Milk'), 
+        (SELECT WarehouseID FROM warehouses WHERE Address = '800 W Champain St'), 15000, 'Q7');
 -- --------------------------------------------------
 
 ##################################################
@@ -58,41 +80,59 @@ VALUES
 -- 	- address: 1500 Knotts St
 -- 	- postalcode: 62703
 -- --------------------------------------------------
-
+UPDATE offices
+SET Address = '1500 Knotts St', PostalCode = '62703'
+WHERE OfficeName = 'Springfield office';
 -- --------------------------------------------------
 
 ##################################################
 -- 5 | Manager of Kansas City office has left the company and Laura Callahan will be the new manager. Do the update using subquery (tip: get the employeeid for manager column using subquery)!
 -- --------------------------------------------------
-
+UPDATE offices
+SET Manager = (SELECT EmployeeID FROM employees WHERE FirstName = 'Laura' AND LastName = 'Callahan')
+WHERE OfficeName = 'Kansas City office';
 -- --------------------------------------------------
 
 ##################################################
 -- 6 | Double the quantity of Tofu and move the product to W8 shelf which has more space for the greater quantity in Liberty Warehouse.
 -- --------------------------------------------------
-
+UPDATE storages
+SET Quantity = Quantity * 2, Shelf = 'W8'
+WHERE ProductID = (SELECT ProductID FROM products WHERE ProductName = 'Tofu') AND
+    WarehouseID = (SELECT WarehouseID FROM warehouses WHERE Address = 'Grant Ave 400');
 -- --------------------------------------------------
 
 ##################################################
 -- 7 | Create a copy of the storages table. New table should be called storages_backup.
 -- --------------------------------------------------
-
+CREATE TABLE storages_backup AS SELECT * FROM storages;
 -- --------------------------------------------------
 
 ##################################################
 -- 8 | Copy the data from storages table into storages_backup table.
 -- --------------------------------------------------
-
+INSERT INTO storages_backup
+SELECT * FROM storages;
 -- --------------------------------------------------
 
 ##################################################
 -- 9 | The lease for the warehouse in Liberty is coming to an end and the supplier plans to move the products to a larger warehouse in Eldon (Do this same update into the storages_backup table too!). Transfer the Liberty warehouse products to Eldon and remove the Liberty warehouse from the warehouses table.
 -- --------------------------------------------------
+UPDATE storages
+SET WarehouseID = (SELECT WarehouseID FROM warehouses WHERE Address = '800 W Champain St')
+WHERE WarehouseID = (SELECT WarehouseID FROM warehouses WHERE Address = 'Grant Ave 400');
 
+UPDATE storages_backup
+SET WarehouseID = (SELECT WarehouseID FROM warehouses WHERE Address = '800 W Champain St')
+WHERE WarehouseID = (SELECT WarehouseID FROM warehouses WHERE Address = 'Grant Ave 400');
+
+DELETE FROM warehouses
+WHERE Address = 'Grant Ave 400';
 -- --------------------------------------------------
 
 ##################################################
 -- 10 | Remove all products from storages table with 0 as a quantity value.
 -- --------------------------------------------------
-
+DELETE FROM storages
+WHERE Quantity = 0;
 -- --------------------------------------------------
