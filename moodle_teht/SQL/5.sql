@@ -149,23 +149,24 @@ CREATE TABLE storages (
 -- --------------------------------------------------
 SET FOREIGN_KEY_CHECKS=0;
 
-ALTER TABLE products
-ADD COLUMN StorageID INT,
-ADD CONSTRAINT fk_storage
-    FOREIGN KEY (StorageID)
-    REFERENCES storages(StorageID)
+ALTER TABLE storages
+ADD COLUMN ProductID INT,
+ADD CONSTRAINT fk_product
+    FOREIGN KEY (ProductID)
+    REFERENCES products(ProductID)
     ON UPDATE CASCADE
     ON DELETE NO ACTION;
 
-ALTER TABLE warehouses
-ADD COLUMN StorageID INT,
-ADD CONSTRAINT fk_storage
-    FOREIGN KEY (StorageID)
-    REFERENCES storages(StorageID)
+ALTER TABLE storages
+ADD COLUMN WarehouseID INT,
+ADD CONSTRAINT fk_warehouse
+    FOREIGN KEY (WarehouseID)
+    REFERENCES warehouses(WarehouseID)
     ON UPDATE CASCADE
     ON DELETE NO ACTION;
 
 SET FOREIGN_KEY_CHECKS=1;
+
 -- --------------------------------------------------
 
 ##################################################
@@ -182,7 +183,7 @@ BEGIN
     IF NEW.Quantity < 0 OR NEW.Quantity > 5000000 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Quantity must be within the range of 0 to 5000000';
-
+    END IF;
     IF NEW.Shelf NOT REGEXP '^[A-Z][0-9]$' THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Shelf ID must follow the format XY';
