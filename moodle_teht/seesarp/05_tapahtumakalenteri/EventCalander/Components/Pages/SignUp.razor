@@ -1,0 +1,53 @@
+﻿@page "/signup"
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject Api Api
+@inject NavigationManager nav
+<PageTitle>Sign Up</PageTitle>
+
+<EditForm Model="Model" OnValidSubmit="Submit">
+	<AntiforgeryToken />
+
+	First Name:
+	<InputText
+		@bind-Value="Model.FirstName"
+		placeholder="Username">
+		First Name
+	</InputText>
+
+	Last name:
+	<InputText
+		@bind-Value="Model.LastName"
+		placeholder="Username">
+		Last Name
+	</InputText>
+
+	Email:
+	<InputText
+		@bind-Value="Model.Email"
+		placeholder="Email">
+		Email
+	</InputText>
+
+	Password:
+
+	<InputText
+		@bind-Value="Model.PasswordHash"
+		placeholder="Password">
+		Password
+	</InputText>
+	<div>
+		<button type="submit">Sign Up</button>
+	</div>
+</EditForm>
+
+@code {
+	User Model = new User();
+
+	async Task Submit()
+	{
+		await Api.SignUp(Model);
+
+		nav.NavigateTo("/login");
+	}
+}

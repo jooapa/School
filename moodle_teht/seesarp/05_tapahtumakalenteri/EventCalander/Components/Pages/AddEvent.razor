@@ -1,0 +1,95 @@
+﻿@page "/add-event"
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject Api Api
+@inject NavigationManager nav
+<PageTitle>Add Event</PageTitle>
+
+<EditForm Model="Model" OnValidSubmit="Submit">
+    <AntiforgeryToken />
+    <DataAnnotationsValidator />
+    <div>
+        <label>
+            Title:
+            <InputText @bind-Value="Model!.Title" />
+            <ValidationMessage For="@(() => Model!.Title)" />
+        </label>
+        <label>
+            Description
+            <InputText @bind-Value="Model!.Description" />
+            <ValidationMessage For="@(() => Model!.Description)" />
+        </label>
+        <label>
+            StartDate:
+            <InputDate @bind-Value="Model!.StartDate" />
+            <ValidationMessage For="@(() => Model!.StartDate)" />
+        </label>
+        <label>
+            EndDate:
+            <InputDate @bind-Value="Model!.EndDate" />
+            <ValidationMessage For="@(() => Model!.EndDate)" />
+        </label>
+        <label>
+            Location:
+            <InputText @bind-Value="Model!.Location" />
+            <ValidationMessage For="@(() => Model!.Location)" />
+        </label>
+        <label>
+            Category:
+            <select @bind="Model!.CategoryId">
+                <option value="">-- Select Category --</option>
+                @if (categories != null)
+                {
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+            <ValidationMessage For="@(() => Model!.CategoryId)" />
+        </label>
+        <label>
+            Temp User:
+            <InputNumber @bind-Value="Model!.CreatedBy" />
+        </label>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private Event? Model { get; set; }
+    private string? work = null;
+    private List<Category>? categories;
+    private List<User>? users;
+    private bool loading = true;
+
+    protected override void OnInitialized()
+    {
+        work = null;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        Model ??= new();
+        Model.CreatedBy = 1;
+        categories = (await Api.GetCategories()).ToList();
+        // users = (await Api.GetUsers()).ToList();
+    }
+
+    private async Task Submit()
+    {
+        if (Model != null)
+        {
+            work = "Adding event";
+            await Api.AddEvent(Model);
+            // work = JsonSerializer.Serialize(Model, new JsonSerializerOptions { WriteIndented = true });
+            nav.NavigateTo("/event-manager");
+            // work = Model.CategoryId.ToString();
+        }
+    }
+}

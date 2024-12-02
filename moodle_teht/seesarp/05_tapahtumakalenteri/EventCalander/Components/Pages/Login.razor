@@ -1,0 +1,39 @@
+﻿@page "/login"
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject Api Api
+@inject NavigationManager nav
+<PageTitle>Login</PageTitle>
+
+<EditForm Model="Model" OnValidSubmit="Submit">
+	<AntiforgeryToken />
+
+	Email:
+	<InputText @bind-Value="Model.Email"
+			   placeholder="Email">
+		Email
+	</InputText>
+
+	Password:
+	<InputText @bind-Value="Model.PasswordHash"
+			   placeholder="Password">
+		Password
+	</InputText>
+	<div>
+		<button type="submit">Log in</button>
+	</div>
+</EditForm>
+
+@code {
+	User Model = new User();
+	string roope;
+	async Task Submit()
+	{
+		string otp = await Api.Login(Model.Email, Model.PasswordHash);
+
+		if (otp != "Login successful")
+			roope = otp;
+		else
+			nav.NavigateTo("/login");
+	}
+}

@@ -1,0 +1,168 @@
+﻿@page "/event-manager"
+@using EventCalander
+@rendermode InteractiveServer
+@inject Api Api
+@inject NavigationManager nav
+@inject IJSRuntime JS
+
+<PageTitle>Event Manager</PageTitle>
+
+<h3>Event Manager</h3>
+
+@if (editing)
+{
+    <div>
+		<EditForm Model="curEvent" OnValidSubmit="Submit">
+			<AntiforgeryToken />
+			<DataAnnotationsValidator />
+			<div>
+				<p>
+					Event will be automatically updated
+				</p>
+				<label>
+					Title:
+					<InputText @bind-Value="curEvent.Title" />
+					<ValidationMessage For="@(() => curEvent.Title)" />
+				</label>
+				<label>
+					Description:
+					<InputText @bind-Value="curEvent.Description" />
+					<ValidationMessage For="@(() => curEvent.Description)" />
+				</label>
+				<label>
+					StartDate:
+					<InputDate @bind-Value="curEvent.StartDate" />
+					<ValidationMessage For="@(() => curEvent.StartDate)" />
+				</label>
+				<label>
+					EndDate:
+					<InputDate @bind-Value="curEvent.EndDate" />
+					<ValidationMessage For="@(() => curEvent.EndDate)" />
+				</label>
+				<label>
+					Location:
+					<InputText @bind-Value="curEvent.Location" />
+					<ValidationMessage For="@(() => curEvent.Location)" />
+				</label>
+				<label>
+					Category:
+					<select @bind="curEvent.CategoryId">
+						<option value="">-- Select Category --</option>
+						@if (categories != null)
+						{
+							@foreach (var category in categories)
+							{
+								<option value="@category.Id">@category.Name</option>
+							}
+						}
+					</select>
+					<ValidationMessage For="@(() => curEvent.CategoryId)" />
+				</label>
+				<label>
+					Temp User:
+					<InputNumber @bind-Value="curEvent.CreatedBy" />
+				</label>
+			</div>
+		</EditForm>
+	</div>
+    
+}
+@if (events == null || categories == null)
+{
+    <p>Loading...</p>
+}
+else if (!events.Any())
+{
+    <p>No events found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eventItem in events)
+            {
+                <tr>
+                    <td>@eventItem.Title</td>
+                    <td>@eventItem.Description</td>
+                    <td>@eventItem.StartDate</td>
+                    <td>@eventItem.EndDate</td>
+                    <td>@eventItem.Location</td>
+                    <td>@GetCategoryName(eventItem.CategoryId)</td>
+                    <td>@GetUserName(eventItem.CreatedBy)</td>
+					<td>
+						<button @onclick="() => EditEvent(eventItem)">Edit</button>
+					</td>
+				</tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+	private List<Event>? events;
+	private List<Category>? categories;
+	private List<User>? users;
+	private bool editing = false;
+	private Event curEvent = new Event();
+
+	protected override async Task OnInitializedAsync()
+	{
+		events = (await Api.GetEvents()).ToList();
+		categories = (await Api.GetCategories()).ToList();
+		users = (await Api.GetUsers()).ToList();
+	}
+
+	private string GetCategoryName(int categoryId)
+	{
+		var category = categories?.FirstOrDefault(c => c.Id == categoryId);
+		return category?.Name ?? "Unknown";
+	}
+
+	private string GetUserName(int userId)
+	{
+		var user = users?.FirstOrDefault(u => u.Id == userId);
+		return user?.FirstName + " " + user?.LastName ?? "Unknown";
+	}
+
+	private async Task EditEvent(Event evn)
+	{
+		if (evn == null)
+		{
+			Console.WriteLine("EditEvent called with null event");
+			return;
+		}
+		Console.WriteLine("EditEvent called");
+		editing = true;
+		curEvent = evn;
+
+		// goto top
+		JS.InvokeVoidAsync("window.scrollTo(0, 0);");
+	}
+
+
+    private async Task Submit()
+	{
+		if (curEvent.Id == 0)
+		{
+			await Api.AddEvent(curEvent);
+		}
+		else
+		{
+			await Api.UpdateEvent(curEvent);
+		}
+		editing = false;
+		curEvent = new Event();
+		events = (await Api.GetEvents()).ToList();
+	}
+}
