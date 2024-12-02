@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipboarder</title>
+</head>
+<body>
+    <input text="text" id="input" placeholder="Type here">
+    <button id="copy">Copy</button>
+
+    <script>
+        document.getElementById('copy').addEventListener('click', function() {
+            var input = document.getElementById('input');
+            input.select();
+            document.execCommand('copy');
+        });
+    </script>
+</body>
+</html>

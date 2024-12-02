@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FullScreener</title>
+    <style>
+        #fullscreen {
+            padding: 40px;
+            font-size: 100px;
+            cursor: pointer;
+        }
+        #lol {
+            font-size: 100px;
+        }
+    </style>
+</head>
+<body>
+    <button id="fullscreen">Taika nappi</button>
+    <h1 id="lol"></h1>
+    <script>
+        document.getElementById('fullscreen').addEventListener('click', function() {
+            document.getElementById('lol').innerText = "😱";
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
