@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poke-Thing</title>
+</head>
+<body>
+    <form>
+        <input type="text" id="input" placeholder="Type here">
+        <button type="submit" id="search">Search</button>
+    </form>
+
+    <h1 id="name"></h1>
+    <img id="img" src="" alt="">
+    <img id="shiny" src="" alt="">
+    <p id="type"></p>
+    <p id="height"></p>
+    <p id="weight"></p>
+    <audio id="audio" controls>
+        <source src="">
+    </audio>
+
+    <br>
+
+    <p>Abilities</p>
+    <ul id="abilities"></ul>
+
+    <button onclick="prevPokemon()"><</button>
+    <button onclick="nextPokemon()">></button>
+
+    <script>
+        let id = 1;
+        let lastid = 0;
+        getLastPokemonById();
+        addStuff(id);
+
+        function nextPokemon() {
+            if (id < lastid) {
+                id++;
+                addStuff(id);
+            }
+            else {
+                id = 1;
+            }
+        }
+
+        function prevPokemon() {
+            if (id > 1) {
+                id--;
+                addStuff(id);
+            }
+            else {
+                id = lastid;
+            }
+        }
+
+        function getLastPokemonById() {
+            fetch(`https://pokeapi.co/api/v2/pokemon?limit=100000`)
+                .then(response => response.json())
+                .then(data => {
+                    lastid = data.count - 1;
+                });
+        }
+
+        function getColorByType(type) {
+            switch (type) {
+                case 'normal':
+                    return 'grey';
+                case 'fighting':
+                    return 'red';
+                case 'flying':
+                    return 'skyblue';
+                case 'poison':
+                    return 'purple';
+                case 'ground':
+                    return 'brown';
+                case 'rock':
+                    return 'brown';
+                case 'bug':
+                    return 'green';
+                case 'ghost':
+                    return 'black';
+                case 'steel':
+                    return 'grey';
+                case 'fire':
+                    return 'red';
+                case 'water':
+                    return 'blue';
+                case 'grass':
+                    return 'green';
+                case 'electric':
+                    return 'yellow';
+                case 'psychic':
+                    return 'pink';
+                case 'ice':
+                    return 'lightblue';
+                case 'dragon':
+                    return 'purple';
+                case 'dark':
+                    return 'black';
+                case 'fairy':
+                    return 'pink';
+                case 'stellar':
+                    return 'yellow';
+                case 'unknown':
+                    return 'grey';
+                default:
+                    return 'black';
+            }
+        }
+
+        function addStuff(input) {
+            document.getElementById("name").innerText = "Loading...";
+            document.getElementById("type").innerText = "Loading...";
+            document.getElementById("type").style.color = "white";
+            document.getElementById("height").innerText = "Loading...";
+            document.getElementById("weight").innerText = "Loading...";
+            document.getElementById('img').src = "";
+            document.getElementById('shiny').src = "";
+
+            fetch(`https://pokeapi.co/api/v2/pokemon?offset=${input-1}`)
+                .then(response => response.json())
+                .then(data => {
+                    fetch(data.results[0].url)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('name').innerText = data.name;
+                            document.getElementById('img').src = data.sprites.front_default;
+                            document.getElementById('shiny').src = data.sprites.front_shiny;
+                            document.getElementById('type').innerText = `Type: ${data.types[0].type.name}`;
+                            document.getElementById('type').style.color = getColorByType(data.types[0].type.name);
+                            document.getElementById('height').innerText = `Height: ${data.height}`;
+                            document.getElementById('weight').innerText = `Weight: ${data.weight}`;
+                            document.getElementById('audio').src = data.cries.latest;
+                            document.getElementById('abilities').innerHTML = "";
+                            data.abilities.forEach(ability => {
+                                const li = document.createElement('li');
+                                li.innerText = ability.ability.name;
+                                document.getElementById('abilities').appendChild(li);
+                            });
+                        });
+                });
+            
+            
+        }
+
+        document.getElementById('search').addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('input').value;
+            addStuff(input);
+        });
+    </script>
+</body>
+</html>
