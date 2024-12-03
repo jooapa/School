@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miskan Trivia Show 2002 Max Edition</title>
+    <style>
+        /* Add some basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Miskan Trivia Show 2002 Max Edition</h1>
+    <div id="menu">
+        <form id="quiz-form">
+            <label for="amount">Number of Questions:</label>
+            <input type="number" id="amount" name="amount" value="10" min="1" max="50">
+            <br>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <!-- Categories will be populated by JavaScript -->
+            </select>
+            <br>
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty" name="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <br>
+            <label for="type">Type:</label>
+            <select id="type" name="type">
+                <option value="multiple">Multiple Choice</option>
+                <option value="boolean">True/False</option>
+            </select>
+            <br>
+            <button type="button" id="start-quiz">Start Quiz</button>
+        </form>
+    </div>
+    <div id="quiz" class="hidden">
+        <div id="question-container">
+            <p id="question"></p>
+            <div id="answers"></div>
+        </div>
+        <p id="score">Score: 0</p>
+        <p id="timer">Time left: <span id="time">30</span> seconds</p>
+    </div>
+    <div id="result" class="hidden">
+        <h2>Quiz Completed!</h2>
+        <p>Your final score is <span id="final-score"></span>.</p>
+        <div id="score"></div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('quiz-form');
+        const startButton = document.getElementById('start-quiz');
+        const quizContainer = document.getElementById('quiz');
+        const questionContainer = document.getElementById('question-container');
+        const questionElement = document.getElementById('question');
+        const answersElement = document.getElementById('answers');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('time');
+        /// Variables
+        /// [question, correct_answer, [incorrect_answers]]
+        let answeredQuestions = [];
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer;
+
+        // Fetch categories from Open Trivia API
+        fetch('https://opentdb.com/api_category.php')
+            .then(response => response.json())
+            .then(data => {
+                const categorySelect = document.getElementById('category');
+                data.trivia_categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            });
+
+        startButton.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            document.getElementById('result').classList.add('hidden');
+            const amount = form.amount.value;
+            const category = form.category.value;
+            const difficulty = form.difficulty.value;
+            const type = form.type.value;
+
+            fetch(`https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=${type}`)
+                .then(response => response.json())
+                .then(data => {
+                    questions = data.results;
+                    currentQuestionIndex = 0;
+                    score = 0;
+                    scoreElement.textContent = `Score: ${score}`;
+                    form.parentElement.classList.add('hidden');
+                    quizContainer.classList.remove('hidden');
+                    showQuestion();
+                });
+        }
+
+        function showQuestion() {
+            resetState();
+            const question = questions[currentQuestionIndex];
+            questionElement.innerHTML = question.question; // Use innerHTML instead of textContent
+            const answers = [...question.incorrect_answers, question.correct_answer];
+            answers.sort(() => Math.random() - 0.5); // Shuffle answers
+            answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerHTML = answer; // Use innerHTML instead of textContent
+                button.addEventListener('click', selectAnswer);
+                answersElement.appendChild(button);
+            });
+            startTimer();
+        }
+
+        function resetState() {
+            clearInterval(timer);
+            timerElement.textContent = '30';
+            while (answersElement.firstChild) {
+                answersElement.removeChild(answersElement.firstChild);
+            }
+        }
+
+        function startTimer() {
+            let timeLeft = 30;
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const correct = questions[currentQuestionIndex].correct_answer;
+            if (selectedButton.textContent === correct) {
+                score++;
+                scoreElement.textContent = `Score: ${score}`;
+            }
+            
+            // add to answeredQuestions
+            answeredQuestions.push([questions[currentQuestionIndex].question, selectedButton.textContent, correct]);
+
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                quizContainer.classList.add('hidden');
+                form.parentElement.classList.remove('hidden');
+                document.getElementById('final-score').textContent = score;
+                document.getElementById('result').classList.remove('hidden');
+                // score
+                let scoreText = '';
+                answeredQuestions.forEach((question, index) => {
+                    scoreText += `<p>Question ${index + 1}: ${question[0]}</p>`;
+                    scoreText += `<p>Your answer: ${question[1]}</p>`;
+                    scoreText += `<p>Correct answer: ${question[2]}</p>`;
+                    scoreText += '<br>';
+                });
+                document.getElementById('score').innerHTML = scoreText;
+            }
+        }
+    });
+</script>
+
+
+</body>
+
+</html>
