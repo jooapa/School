@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <button onclick="btn()">Get Random Programming Joke</button>
+    <p id="author"></p>
+    <p id="quote"></p>
+    
+    <script>
+
+        function btn() {
+            fetch('https://programming-quotesapi.vercel.app/api/random')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('author').innerHTML = data.author;
+                    document.getElementById('quote').innerHTML = data.quote;
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Dog Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Dog Image</h1>
+    <select id="breedSelect">
+        <option value="">Select Breed</option>
+    </select>
+    <button onclick="fetchDogImage()">Get Random Dog Image</button>
+    <div id="dogImageContainer">
+        <img id="dogImage" src="" alt="Random Dog">
+    </div>
+
+    <script>
+        const breedSelect = document.getElementById('breedSelect');
+        const dogImage = document.getElementById('dogImage');
+
+        // Fetch the list of dog breeds
+        fetch('https://dog.ceo/api/breeds/list/all')
+            .then(response => response.json())
+            .then(data => {
+                const breeds = data.message;
+                for (const breed in breeds) {
+                    const option = document.createElement('option');
+                    option.value = breed;
+                    option.textContent = breed;
+                    breedSelect.appendChild(option);
+                }
+            });
+
+        function fetchDogImage() {
+            const selectedBreed = breedSelect.value;
+            let url = 'https://dog.ceo/api/breeds/image/random';
+            if (selectedBreed) {
+                url = `https://dog.ceo/api/breed/${selectedBreed}/images/random`;
+            }
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    dogImage.src = data.message;
+                });
+        }
+    </script>
+</body>
+</html>

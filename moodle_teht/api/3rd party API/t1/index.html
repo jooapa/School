@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <button onclick="btn()">Get Cat Fact</button>
+    <p id="fact"></p>
+
+    <button onclick="btn2()">Get Random Cat Breed</button>
+    <p id="fact1"></p>
+
+    <script>
+        
+        function btn() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://catfact.ninja/fact', true);
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var cat = JSON.parse(this.responseText);
+                    document.getElementById('fact').innerHTML = cat.fact;
+                }
+            }
+            xhr.send();
+        }
+        
+        function btn2() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.thecatapi.com/v1/breeds', true);
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var cat = JSON.parse(this.responseText);
+                    var random = Math.floor(Math.random() * cat.length);
+                    document.getElementById('fact1').innerHTML = cat[random].name;
+                }
+            }
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
