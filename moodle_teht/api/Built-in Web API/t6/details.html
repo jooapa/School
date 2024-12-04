@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+        
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        
+            h1 {
+                text-align: center;
+            }
+        
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+                display: block;
+                margin: 0 auto 20px;
+            }
+        
+            p {
+                margin: 10px 0;
+            }
+        
+            .back {
+                display: block;
+                width: 100px;
+                margin: 20px auto;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                cursor: pointer;
+            }
+        
+            .back:hover {
+                background-color: #0056b3;
+            }
+        </style>
+</head>
+<body>
+    <img id="img" src="" alt="Anime image">
+    <div class="container">
+        <h1 id="title">Title</h1>
+        <p id="synopsis">Synopsis</p>
+        <br>
+        <p id="type">Type</p>
+        <p id="episodes">Episodes</p>
+        <p id="status">Status</p>
+        <p id="aired">Aired</p>
+        <p id="rating">Rating</p>
+        <p id="score">Score</p>
+    </div>
+
+
+    <button class="back">Back</button>
+    <script>
+        // get malid from url
+        const urlParams = new URLSearchParams(window.location.search);
+        const malId = new URLSearchParams(window.location.search).get('id');
+        let a = 0;
+        async function fetchAnimeDetails(malId) {
+            try {
+                const response = await fetch(`https://api.jikan.moe/v4/anime/${malId}`);
+                const anime = await response.json();
+                a = anime;
+            } catch (error) {
+                console.error('Error fetching anime details:', error);
+            }
+
+            const title = document.getElementById('title');
+            const synopsis = document.getElementById('synopsis');
+            const type = document.getElementById('type');
+            const episodes = document.getElementById('episodes');
+            const status = document.getElementById('status');
+            const aired = document.getElementById('aired');
+            const rating = document.getElementById('rating');
+            const score = document.getElementById('score');
+
+            title.textContent = a.data.title;
+            synopsis.textContent = a.data.synopsis;
+            type.textContent = `Type: ${a.data.type}`;
+            episodes.textContent = `Episodes: ${a.data.episodes}`;
+            status.textContent = `Status: ${a.data.status}`;
+            aired.textContent = `Aired: ${a.data.aired.string}`;
+            rating.textContent = `Rating: ${a.data.rating}`;
+            score.textContent = `Score: ${a.data.score}`;
+            document.getElementById('img').src = a.data.images.jpg.image_url;
+        }
+        
+        fetchAnimeDetails(malId)
+
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('back')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+
+    </script>
+</body>
+</html>
