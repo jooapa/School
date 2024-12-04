@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>klinoff??</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('pig.png');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 3em;
+            color: #333;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            text-align: center;
+        }
+
+        .results.show {
+            opacity: 1;
+        }
+
+        .result-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            font-size: 1.5em;
+            color: #000000;
+            margin: 10px 0;
+        }
+
+        .result-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Are you real Klinoff??</h1>
+        <button onclick="dox()">Prove it</button>
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        function dox() {
+            fetch('http://ip-api.com/json/?fields=61439')
+                .then(response => response.json())
+                .then(data => {
+                    const resultsContainer = document.getElementById('results');
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.classList.add('show');
+
+                    const importantKeys = ['country', 'regionName', 'city', 'zip', 'query'];
+                    importantKeys.forEach((key, index) => {
+                        const item = document.createElement('pre');
+                        item.className = 'result-item';
+                        item.innerText = `${data[key]}`;
+                        resultsContainer.appendChild(item);
+
+                        setTimeout(() => {
+                            item.classList.add('show');
+                        }, index * 500);
+                    });
+                });
+        }
+    </script>
+</body>
+
+</html>
