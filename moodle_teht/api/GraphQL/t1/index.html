@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aapo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        input[type="country"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body onload="onLoad()">
+    <input type="country" id="country" name="country" placeholder="Enter country code">
+    <button onclick="getCountry()">Get country</button>
+    <p id="name"></p>
+    <p id="native"></p>
+    <p id="emoji"></p>
+    <p id="currency"></p>
+    <p id="languages"></p>
+
+    <script>
+        const aapo = "https://countries.trevorblades.com/";
+
+        function onLoad() {
+            document.getElementById("name").style.display = "none";
+            document.getElementById("native").style.display = "none";
+            document.getElementById("emoji").style.display = "none";
+            document.getElementById("currency").style.display = "none";
+            document.getElementById("languages").style.display = "none";
+        }
+
+        function getCountry() {
+            const country = document.getElementById("country").value;
+            const query = `
+                query {
+                    country(code: "${country.toUpperCase()}") {
+                        name
+                        native
+                        emoji
+                        currency
+                        languages {
+                            code
+                            name
+                        }
+                    }
+                }
+            `;
+
+            fetch(aapo, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data.country === null) {
+                        document.getElementById("name").style.display = "block";
+                        document.getElementById("name").innerText = "Country not found";
+                        document.getElementById("native").style.display = "none";
+                        document.getElementById("emoji").style.display = "none";
+                        document.getElementById("currency").style.display = "none";
+                        document.getElementById("languages").style.display = "none";
+                        return;
+                    }
+                    document.getElementById("name").style.display = "block";
+                    document.getElementById("name").innerText = `Name: ${data.data.country.name}`;
+                    document.getElementById("native").style.display = "block";
+                    document.getElementById("native").innerText = `Native: ${data.data.country.native}`;
+                    document.getElementById("emoji").style.display = "block";
+                    document.getElementById("emoji").innerText = `Emoji: ${data.data.country.emoji}`;
+                    document.getElementById("currency").style.display = "block";
+                    document.getElementById("currency").innerText = `Currency: ${data.data.country.currency}`;
+                    document.getElementById("languages").style.display = "block";
+                    document.getElementById("languages").innerText = `Languages: ${data.data.country.languages
+                        .map(lang => lang.name).join(", ")}`;
+                });
+        }
+    </script>
+</body>
+
+</html>
