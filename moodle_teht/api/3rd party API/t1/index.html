@@ -1,12 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+    </style>
 </head>
+
 <body>
-    
+
     <button onclick="btn()">Get Cat Fact</button>
     <p id="fact"></p>
 
@@ -14,11 +45,10 @@
     <p id="fact1"></p>
 
     <script>
-        
         function btn() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://catfact.ninja/fact', true);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (this.status == 200) {
                     var cat = JSON.parse(this.responseText);
                     document.getElementById('fact').innerHTML = cat.fact;
@@ -26,11 +56,11 @@
             }
             xhr.send();
         }
-        
+
         function btn2() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://api.thecatapi.com/v1/breeds', true);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (this.status == 200) {
                     var cat = JSON.parse(this.responseText);
                     var random = Math.floor(Math.random() * cat.length);
@@ -41,4 +71,5 @@
         }
     </script>
 </body>
+
 </html>
