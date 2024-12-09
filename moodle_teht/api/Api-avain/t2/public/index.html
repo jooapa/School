@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ai odd</title>
+</head>
+
+<body>
+    <h1>Odd or Even Number Checker using AI</h1>
+    <form id="generate-form">
+        <label for="prompt">Enter your prompt:</label>
+        <input type="number" id="prompt" name="prompt" required>
+        <button type="submit">is number odd or even?</button>
+    </form>
+    <h2>Generated Content:</h2>
+    <p id="response"></p>
+
+    <script>
+        document.getElementById('generate-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt })
+            });
+
+            const data = await response.json();
+            document.getElementById('response').innerText = data.response;
+        });
+    </script>
+</body>
+
+</html>
