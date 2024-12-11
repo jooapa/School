@@ -1,26 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ai odd</title>
+    <title>AI Parillinen tai Pariton Tarkistin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .intro,
+        .form-container,
+        .loading,
+        .result {
+            display: none;
+        }
+
+        .intro.active,
+        .form-container.active,
+        .loading.active,
+        .result.active {
+            display: block;
+        }
+
+        .intro p {
+            font-size: 1.5em;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        label,
+        input,
+        button {
+            display: block;
+            margin: 10px auto;
+            font-size: 1.2em;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background: #3498db;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        h2 {
+            margin-top: 30px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        p {
+            font-size: 1.5em;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Odd or Even Number Checker using AI</h1>
-    <form id="generate-form">
-        <label for="prompt">Enter your prompt:</label>
-        <input type="number" id="prompt" name="prompt" required>
-        <button type="submit">is number odd or even?</button>
-    </form>
-    <h2>Generated Content:</h2>
-    <p id="response"></p>
+    <div class="intro active">
+        <h1>Tervetuloa AI Parillinen tai Pariton Tarkistimeen</h1>
+        <p>Tutustu tekoälyn voimaan tarkistamalla, onko numero parillinen vai pariton!</p>
+
+        <p>
+            mutta ensiksi, <br>
+            jotta voit avata tekoälyn, sinun täytyy syöttää API-avain avauksen salasanan.
+        </p>
+
+        <h2>
+            Mikä on ilmosen etunimi?
+        </h2>
+        <input type="text" id="prompt" name="prompt" required>
+        <button onclick="checkPassword()">Tarkista</button>
+        <p id="response1"></p>
+    </div>
+
+    <div class="form-container">
+        <form id="generate-form">
+            <label for="prompt">Syötä numero:</label>
+            <input type="number" id="promptnum" name="prompt" required>
+            <button type="submit">Onko numero parillinen vai pariton?</button>
+        </form>
+    </div>
+
+    <div class="loading">
+        <h2>Ladataan...</h2>
+    </div>
+
+    <div class="result">
+        <h2>Sofistikoituneen tekoälyn vastaus:</h2>
+        <p id="response"></p>
+        <button onclick="location.reload()">Oletko valmis tarkistamaan uutta lukua?</button>
+    </div>
 
     <script>
+        function checkPassword() {
+            const prompt = document.getElementById('prompt').value.toLowerCase();
+            fetch('/check-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response1').innerHTML = 
+                    "<i>" + data.response + "</i>";
+                    if (data.response.includes("Oikea")) {
+                        showForm();
+                    }
+                });
+        }
+        function showForm() {
+            document.querySelector('.intro').classList.remove('active');
+            document.querySelector('.form-container').classList.add('active');
+        }
+
         document.getElementById('generate-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const prompt = document.getElementById('prompt').value;
+            document.querySelector('.form-container').classList.remove('active');
+            document.querySelector('.loading').classList.add('active');
+
+            const prompt = document.getElementById('promptnum').value;
 
             const response = await fetch('/generate', {
                 method: 'POST',
@@ -31,6 +183,8 @@
             });
 
             const data = await response.json();
+            document.querySelector('.loading').classList.remove('active');
+            document.querySelector('.result').classList.add('active');
             document.getElementById('response').innerText = data.response;
         });
     </script>
