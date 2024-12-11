@@ -155,10 +155,11 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('response1').innerHTML = 
-                    "<i>" + data.response + "</i>";
                     if (data.response.includes("Oikea")) {
                         showForm();
+                    } else {
+                        document.getElementById('response1').innerHTML =
+                            "<i style='color: lightgrey;'>Väärä etunimi, yritä uudelleen! <br> Hintti: se alkaa <strong>'A'</strong> ja loppuu <strong>'i'</strong></i>";
                     }
                 });
         }

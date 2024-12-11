@@ -40,7 +40,7 @@ app.post("/generate", async (req, res) => {
     const genAI = new GoogleGenerativeAI(encrypted);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt =
-        "Esitä olevan Klinoff (angry birds possu), joka kertoo henkilölle nimeltä aleksi että onko numero '" + 
+        "Esitä olevan Klinoff, joka kertoo henkilölle nimeltä aleksi että onko numero '" + 
         req.body.prompt + 
         "' parillinen tai pariton.";
   
