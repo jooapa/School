@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>miska</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        select,
+        button {
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #result h2 {
+            margin-top: 0;
+        }
+
+        .field {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .field:last-child {
+            border-bottom: none;
+        }
+
+        .field p {
+            margin: 5px 0;
+        }
+
+        .field-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .field-value {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body onload="onLoad()">
+    <h1>Star Wars Planets Data Analysis</h1>
+    <select name="planets" id="planets">
+        <option value="">LOADING...</option>
+    </select>
+
+    <button onclick="analyze()">Analyze</button>
+    <div id="result"></div>
+    <script>
+        // https://swapi-graphql.netlify.app/.netlify/functions/index
+
+        const query = `
+        query Query {
+            allPlanets{
+                planets {
+                    name
+                    id
+                }
+            }
+            }
+        `;
+
+        function onLoad() {
+            fetch('https://swapi-graphql.netlify.app/.netlify/functions/index', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query }),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    const planets = res.data.allPlanets.planets;
+                    const select = document.getElementById('planets');
+                    select.innerHTML = '';
+                    planets.forEach((planet) => {
+                        const option = document.createElement('option');
+                        option.value = planet.id;
+                        option.text = planet.name;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        function analyze() {
+            const planet = document.getElementById('planets').value;
+            const query = `
+            query Query {
+                planet(id: "${planet}") {
+                    name
+                    diameter
+                    rotationPeriod
+                    orbitalPeriod
+                    gravity
+                    population
+                    climates
+                    terrains
+                    surfaceWater
+                    residentConnection {
+                        residents {
+                            name
+                        }
+                    }
+                }
+            }
+            `;
+
+            fetch('https://swapi-graphql.netlify.app/.netlify/functions/index', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query }),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    const planet = res.data.planet;
+                    const result = document.getElementById('result');
+                    result.innerHTML = `
+                    <h2>${planet.name}</h2>
+                    <div class="field">
+                        <p class="field-label">Diameter:</p>
+                        <p class="field-value">${planet.diameter}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Rotation Period:</p>
+                        <p class="field-value">${planet.rotationPeriod}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Orbital Period:</p>
+                        <p class="field-value">${planet.orbitalPeriod}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Gravity:</p>
+                        <p class="field-value">${planet.gravity}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Population:</p>
+                        <p class="field-value">${planet.population}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Climates:</p>
+                        <p class="field-value">${planet.climates.join(', ')}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Terrains:</p>
+                        <p class="field-value">${planet.terrains.join(', ')}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Surface Water:</p>
+                        <p class="field-value">${planet.surfaceWater}</p>
+                    </div>
+                    <div class="field">
+                        <p class="field-label">Residents:</p>
+                        <p class="field-value">${planet.residentConnection.residents.map((resident) => resident.name).join(', ')}</p>
+                    </div>
+                    `;
+                });
+        }
+    </script>
+</body>
+
+</html>
