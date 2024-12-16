@@ -230,54 +230,46 @@
             const csa = await getCoordsFromCity(city);
             return csa;
         }
-    async function getPopulationDensity(lat, lon, radius) {
-        try {
-            // Convert radius to km for query
-            const radiusKm = radius / 1000;
+        async function getPopulationDensity(lat, lon, radius) {
+            try {
+                // GeoNames API with username (you need to register at geonames.org)
+                const GEONAMES_USERNAME = 'aatu'; // Replace with your username
+                const radiusKm = radius / 1000;
 
-            // Overpass API query to get population data within radius
-            const query = `
-            [out:json][timeout:25];
-            (
-                area[name][population](around:${radiusKm},${lat},${lon});
-                way[population](around:${radiusKm},${lat},${lon});
-                relation[population](around:${radiusKm},${lat},${lon});
-            );
-            out body;`;
+                const response = await fetch(
+                    `http://api.geonames.org/findNearbyPlaceNameJSON?` +
+                    `lat=${lat}&lng=${lon}&radius=${radiusKm}&maxRows=10&username=${GEONAMES_USERNAME}`
+                );
 
-            const encodedQuery = encodeURIComponent(query);
-            const url = `https://overpass-api.de/api/interpreter?data=${encodedQuery}`;
+                const data = await response.json();
 
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network response was not ok');
-
-            const data = await response.json();
-
-            // Sum up population from all elements
-            let totalPopulation = 0;
-            data.elements.forEach(element => {
-                if (element.tags && element.tags.population) {
-                    const pop = parseInt(element.tags.population);
-                    if (!isNaN(pop)) totalPopulation += pop;
+                if (!data.geonames || data.geonames.length === 0) {
+                    throw new Error('No population data found');
                 }
-            });
 
-            // Calculate area and density
-            const areaInKm2 = Math.PI * Math.pow(radiusKm, 2);
-            const density = totalPopulation / areaInKm2;
+                // Calculate total population in radius
+                let totalPopulation = data.geonames.reduce((sum, place) => {
+                    return sum + (parseInt(place.population) || 0);
+                }, 0);
 
-            return {
-                population: totalPopulation,
-                density: Math.round(density),
-                area: Math.round(areaInKm2)
-            };
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('error').innerHTML =
-                `Error: Could not fetch population data. ${error.message}`;
-            return null;
+                // Calculate area in km²
+                const areaKm2 = Math.PI * Math.pow(radiusKm, 2);
+
+                // Adjust population based on radius overlap
+                const adjustedPopulation = Math.round(totalPopulation * (radiusKm / 10));
+                const density = Math.round(adjustedPopulation / areaKm2);
+
+                return {
+                    population: adjustedPopulation,
+                    density: density,
+                    area: Math.round(areaKm2)
+                };
+            } catch (error) {
+                console.error('Population data error:', error);
+                document.getElementById('error').innerHTML = 'Could not fetch population data';
+                return null;
+            }
         }
-    }
 
         document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById('place').value = "Helsinki";
@@ -317,8 +309,7 @@
 
                 const populationData = await getPopulationDensity(csa[0], csa[1], circle.getRadius());
                 if (populationData) {
-                    const popMessage = `Estimated affected population: ${populationData.population.toLocaleString()}
-                          (${populationData.density}/km²)`;
+                    const popMessage = `Estimated affected population: ${populationData.population.toLocaleString()}`;
                     document.getElementById('error').innerHTML = popMessage;
                 }
             });
