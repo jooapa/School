@@ -5,6 +5,15 @@ const mapStyles = {
     topo: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
 };
 
+const NUCLEAR_EFFECTS = {
+    FALLOUT: { color: '#00ff00', opacity: 0.1, order: 1, delay : 1000 },
+    RADIATION: { color: '#9932cc', opacity: 0.1, order: 2, delay : 700 },
+    THERMAL: { color: '#ffff00', opacity: 0.1, order: 3, delay : 500 },
+    MODERATE_BLAST: { color: '#ffa500', opacity: 0.1, order: 4, delay : 400 },
+    SEVERE_BLAST: { color: '#ff4500', opacity: 0.1, order: 5, delay : 200 },
+    FIREBALL: { color: '#ff0000', opacity: 0.1, order: 6, delay : 0 }
+};
+
 const canvas = document.createElement('canvas');
 canvas.style.position = 'fixed';
 canvas.style.top = '0';
@@ -60,7 +69,25 @@ function calculateAtomicBombRadiusInMetersWithKilotons(kilotons) {
     return 0.1 * Math.cbrt(kilotons) * 1000;
 }
 
+function calculateEffectRadius(kilotons, effect) {
+    switch(effect) {
+        case 'FIREBALL':
+            return Math.pow(kilotons, 0.4) * 100; // Fireball radius
+        case 'SEVERE_BLAST':
+            return Math.pow(kilotons, 0.5) * 300; // Severe damage
+        case 'MODERATE_BLAST':
+            return Math.pow(kilotons, 0.5) * 600; // Moderate damage
+        case 'THERMAL':
+            return Math.pow(kilotons, 0.5) * 1200; // Thermal effects
+        case 'RADIATION':
+            return Math.pow(kilotons, 0.5) * 1500; // Initial radiation
+        case 'FALLOUT':
+            return Math.pow(kilotons, 0.5) * 2000; // Fallout initial
+    }
+}
+
 let circle;
+let circles = {};
 //http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 let city = document.getElementById('place').value;
 
@@ -168,12 +195,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     marker = L.marker([11160.1695, 21114.9354]).addTo(map);
 
     // Initial circle
-    circle = L.circle([11160.1695, 21114.9354], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: calculateAtomicBombRadiusInMetersWithKilotons(15)
-    }).addTo(map);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            document.getElementById('calculateBtn').click();
+        }
+    });
+
+    function easeOutCirc(x) {
+        return Math.sqrt(1 - Math.pow(x - 1, 2));
+    }
 
     // Add click event listener to button
     document.getElementById('calculateBtn').addEventListener('click', async function () {
@@ -182,12 +213,44 @@ document.addEventListener("DOMContentLoaded", async function () {
         audio.play();
         
         const kilotons = document.getElementById('kilotons').value;
-        circle.setRadius(calculateAtomicBombRadiusInMetersWithKilotons(kilotons));
+        // circle.setRadius(calculateAtomicBombRadiusInMetersWithKilotons(kilotons));
+        // animate circle 0 to radius
         getCoordsFromCity(document.getElementById('place').value).then((csa) => {
             map.setView(csa, 13);
             marker.setLatLng(csa);
             circle.setLatLng(csa);
         });
+
+        let startTime = Date.now();
+        const duration = 2000; // 2 seconds
+
+        const interval = setInterval(() => {
+            const currentTime = Date.now();
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            
+            if (progress === 1) {
+                clearInterval(interval);
+                return;
+            }
+
+            const eased = easeOutCirc(progress);
+            
+            Object.keys(NUCLEAR_EFFECTS).forEach(effect => {
+                const finalRadius = calculateEffectRadius(kilotons, effect);
+                const currentRadius = finalRadius * eased;
+                
+                if (!circles[effect]) {
+                    circles[effect] = L.circle(csa, {
+                        color: NUCLEAR_EFFECTS[effect].color,
+                        fillColor: NUCLEAR_EFFECTS[effect].color,
+                        fillOpacity: NUCLEAR_EFFECTS[effect].opacity,
+                        radius: currentRadius
+                    }).addTo(map);
+                } else {
+                    circles[effect].setRadius(currentRadius);
+                }
+            });
+        }, 16);
 
         const populationData = await getPopulationDensity(csa[0], csa[1], circle.getRadius());
         if (populationData) {
@@ -195,4 +258,41 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById('error').innerHTML = popMessage;
         }
     });
+
+    // Add legend
+    const legend = L.control({position: 'bottomright'});
+    legend.onAdd = function(map) {
+        const div = L.DomUtil.create('div', 'legend');
+        div.innerHTML = `
+            <style>
+                .legend {
+                    background: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                }
+                .legend-item {
+                    margin: 5px 0;
+                }
+                .legend-color {
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 5px;
+                }
+            </style>
+        `;
+        
+        Object.entries(NUCLEAR_EFFECTS).forEach(([key, value]) => {
+            div.innerHTML += `
+                <div class="legend-item">
+                    <span class="legend-color" style="background: ${value.color}"></span>
+                    ${key.replace('_', ' ')}
+                </div>
+            `;
+        });
+        
+        return div;
+    };
+    legend.addTo(map);
 });
