@@ -1,0 +1,126 @@
+body {
+    font-family: 'VT323', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #000;
+    color: #25aa25;
+    text-shadow: 0 0 5px #00ff00;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 2px solid #808080;
+    background: #000080;
+    padding: 4px;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px white;
+}
+
+#map {
+    height: 500px;
+    margin-bottom: 20px;
+    border: 2px solid #808080;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf;
+}
+
+.controls {
+    background: #c0c0c0;
+    padding: 20px;
+    border: 2px outset #fff;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+input {
+    padding: 8px;
+    border: 2px inset #fff;
+    background: #000;
+    color: #22be22;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+}
+
+button {
+    padding: 8px;
+    border: 2px outset #fff;
+    background: #000;
+    color: #22be22;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#calculateBtn {
+    background-color: #ff0000;
+    color: #fff;
+    border: 2px outset #ff0000;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    text-transform: uppercase;
+    animation: blink 1s infinite;
+}
+
+#calculateBtn:hover {
+    background-color: #cc0000;
+    border-style: inset;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* CRT screen curve effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.2) 100%);
+    pointer-events: none;
+    z-index: 9998;
+}
+
+select.retro-input {
+    padding: 8px;
+    border: 2px inset #fff;
+    background: #000;
+    color: #00ff00;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    width: 200px;
+}

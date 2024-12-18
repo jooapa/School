@@ -1,3 +1,4 @@
+
 const mapStyles = {
     default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
@@ -163,6 +164,10 @@ document.addEventListener('keydown', function (event) {
 
 document.addEventListener("DOMContentLoaded", async function () {
     // MUSIC
+    fetch("http://localhost:1234/all").then((response) => {
+        console.log(response);
+    });
+
     const themeButton = document.getElementById('playTheme');
     const themeSound = document.getElementById('themeSound');
 
