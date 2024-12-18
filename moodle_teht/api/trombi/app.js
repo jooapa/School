@@ -7,12 +7,12 @@ const mapStyles = {
 };
 
 const NUCLEAR_EFFECTS = {
-    FALLOUT: { color: '#00ff00', opacity: 0.1, order: 1, delay : 1000 },
-    RADIATION: { color: '#9932cc', opacity: 0.1, order: 2, delay : 700 },
-    THERMAL: { color: '#ffff00', opacity: 0.1, order: 3, delay : 500 },
-    MODERATE_BLAST: { color: '#ffa500', opacity: 0.1, order: 4, delay : 400 },
-    SEVERE_BLAST: { color: '#ff4500', opacity: 0.1, order: 5, delay : 200 },
-    FIREBALL: { color: '#ff0000', opacity: 0.1, order: 6, delay : 0 }
+    FIREBALL: { color: '#ff0000', opacity: 0.1, order: 1, addedDuration: 0 },
+    SEVERE_BLAST: { color: '#ff4500', opacity: 0.1, order: 2, addedDuration: 200 },
+    MODERATE_BLAST: { color: '#ffa500', opacity: 0.1, order: 3, addedDuration: 400 },
+    THERMAL: { color: '#ffff00', opacity: 0.1, order: 4, addedDuration: 500 },
+    RADIATION: { color: '#9932cc', opacity: 0.1, order: 5, addedDuration: 700 },
+    FALLOUT: { color: '#00ff00', opacity: 0.1, order: 6, addedDuration: 1000 }
 };
 
 const canvas = document.createElement('canvas');
@@ -162,11 +162,28 @@ document.addEventListener('keydown', function (event) {
     audio.play();
 });
 
+document.getElementById('didyouknow').addEventListener('click', function () {
+    var randfact = "";
+    fetch("http://localhost:1234/random")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        randfact = data.fact;
+        document.getElementById('rah').innerHTML = randfact;
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
+});
+
+
 document.addEventListener("DOMContentLoaded", async function () {
     // MUSIC
-    fetch("http://localhost:1234/all").then((response) => {
-        console.log(response);
-    });
+
 
     const themeButton = document.getElementById('playTheme');
     const themeSound = document.getElementById('themeSound');
@@ -213,34 +230,36 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Add click event listener to button
     document.getElementById('calculateBtn').addEventListener('click', async function () {
-        //SOUND 
         const audio = new Audio('assets/PSUUUUUUUUUUUUUUUUUUUUUUUSHSH.wav');
         audio.play();
         
         const kilotons = document.getElementById('kilotons').value;
-        // circle.setRadius(calculateAtomicBombRadiusInMetersWithKilotons(kilotons));
-        // animate circle 0 to radius
-        getCoordsFromCity(document.getElementById('place').value).then((csa) => {
-            map.setView(csa, 13);
-            marker.setLatLng(csa);
-            circle.setLatLng(csa);
-        });
+        const csa = await getCoordsFromCity(document.getElementById('place').value);
+        
+        // Update map view and marker
+        map.setView(csa, 13);
+        marker.setLatLng(csa);
 
         let startTime = Date.now();
         const duration = 2000; // 2 seconds
 
-        const interval = setInterval(() => {
-            const currentTime = Date.now();
-            const progress = Math.min((currentTime - startTime) / duration, 1);
-            
-            if (progress === 1) {
-                clearInterval(interval);
-                return;
-            }
+        Object.keys(NUCLEAR_EFFECTS).forEach(effect => {
+        const baseDuration = 2000;
+        const totalDuration = baseDuration + NUCLEAR_EFFECTS[effect].addedDuration;
+        const startDelay = NUCLEAR_EFFECTS[effect].order * 200; // Stagger start times
 
-            const eased = easeOutCirc(progress);
-            
-            Object.keys(NUCLEAR_EFFECTS).forEach(effect => {
+        setTimeout(() => {
+            const animationStart = Date.now();
+            const interval = setInterval(() => {
+                const currentTime = Date.now();
+                const progress = Math.min((currentTime - animationStart) / totalDuration, 1);
+                
+                if (progress === 1) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const eased = easeOutCirc(progress);
                 const finalRadius = calculateEffectRadius(kilotons, effect);
                 const currentRadius = finalRadius * eased;
                 
@@ -252,10 +271,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                         radius: currentRadius
                     }).addTo(map);
                 } else {
+                    circles[effect].setLatLng(csa);
                     circles[effect].setRadius(currentRadius);
                 }
-            });
-        }, 16);
+            }, 16);
+        }, startDelay);
+    });
 
         const populationData = await getPopulationDensity(csa[0], csa[1], circle.getRadius());
         if (populationData) {

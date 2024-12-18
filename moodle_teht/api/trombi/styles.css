@@ -115,6 +115,10 @@ body::before {
     z-index: 9998;
 }
 
+a {
+    color: #2241be;
+}
+
 select.retro-input {
     padding: 8px;
     border: 2px inset #fff;
