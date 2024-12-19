@@ -1,9 +1,10 @@
-# Nuke Simulator 3000
+# Nuke simulaattori 3000
 
-## Running the simulator
+## Simulaattorin käyttöönotto
 
-just run the html file in your browser
-and to run the sophisticated backend, run backend/dist/cpp-backend-server.exe
+Avaa html-tiedosto lemppari selaimessa
+ja käynnistääksesi bäkkäri, runnaa backend/dist/cpp-backend-server.exe
 
+Palvelin on portissa 1234, vain Windowsille.
 
-Server is running on port 1234, only for Windows.
+ja muuten käyttää leaflettiä (leaflet), openweathermapia(kaupungin nimi -> koordinaatit) ja geonamesia (populaatiomäärä)

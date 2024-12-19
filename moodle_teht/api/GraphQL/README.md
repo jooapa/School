@@ -1,0 +1,1 @@
+on tää GraphQL kyllä kivaa hommaa, eipä tarvi tätä enää ikinä käyttää. niin sanotusti ei tuu ikänä
